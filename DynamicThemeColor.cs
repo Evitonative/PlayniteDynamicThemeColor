@@ -13,6 +13,7 @@ using MaterialColorUtilities.Quantize;
 using MaterialColorUtilities.Score;
 using Playnite.SDK;
 using Playnite.SDK.Events;
+using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 
 namespace DynamicThemeColor
@@ -52,87 +53,8 @@ namespace DynamicThemeColor
         
         public override void OnGameSelected(OnGameSelectedEventArgs args)
         {
-            var activeView = PlayniteApi.MainView.ActiveDesktopView;
-            var settings = Settings.Settings;
-            
-            if (activeView == DesktopView.List && !settings.ApplyInListView ||
-                activeView == DesktopView.Details && !settings.ApplyInDetailsView ||
-                activeView == DesktopView.Grid && !settings.ApplyInGridView)
-            {
-                ApplyFallbackPalette();
-                return;
-            }
-            
             var game = args.NewValue?.FirstOrDefault();
-            if (game == null)
-            {
-                ApplyFallbackPalette();
-                return;
-            }
-            
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _cts = new CancellationTokenSource();
-            var token = _cts.Token;
-
-            if (_paletteCache.TryGetValue(game.Id, out var cachedPalette))
-            {
-                ApplyPalette(cachedPalette);
-                return;
-            }
-            
-            var preferCover = Settings.Settings.PreferCoverArt;
-            var imageRelPath = preferCover 
-                ? !string.IsNullOrEmpty(game.CoverImage) ? game.CoverImage : game.BackgroundImage
-                : !string.IsNullOrEmpty(game.BackgroundImage) ? game.BackgroundImage : game.CoverImage;
-            
-            if (string.IsNullOrEmpty(imageRelPath) ||
-                imageRelPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                imageRelPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) 
-            {
-                ApplyFallbackPalette();
-                return;
-            }
-
-            var filePath = PlayniteApi.Database.GetFullFilePath(imageRelPath);
-            if (!File.Exists(filePath))
-            {
-                ApplyFallbackPalette();
-                return;
-            }
-
-            Task.Run(() =>
-            {
-                try
-                {
-                    if (token.IsCancellationRequested) return;
-
-                    var maxColors = Settings.Settings.ColorSelectionRange;
-                    var coreColor = GetColorFromImage(filePath, game.Id, maxColors);
-
-                    if (coreColor == 0)
-                    {
-                        if (!token.IsCancellationRequested) ApplyFallbackPalette();
-                        return;
-                    }
-
-                    if (token.IsCancellationRequested) return;
-
-                    var palette = CorePalette.Of(coreColor);
-                    _paletteCache[game.Id] = palette;
-
-                    PlayniteApi.MainView.UIDispatcher.Invoke(() =>
-                    {
-                        if (token.IsCancellationRequested) return;
-                        ApplyPalette(palette);
-                    });
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, $"Failed to extract color for {game.Name}");
-                }
-
-            }, token);
+            UpdateTheme(game);
         }
 
         private void ApplyFallbackPalette()
@@ -250,14 +172,100 @@ namespace DynamicThemeColor
             return brush;
         }
 
-        public void ClearCache()
+        public void ClearCache(bool silent = false)
         {
             _paletteCache.Clear();
+
+            if (silent) return;
             PlayniteApi.Dialogs.ShowMessage(
                 ResourceProvider.GetString("LOCDynamicThemeColorCacheCleared"), 
                 "Dynamic Theme Color"
             );
         }
         
+        public void RefreshTheme()
+        {
+            var game = PlayniteApi.MainView.SelectedGames?.FirstOrDefault();
+            UpdateTheme(game);
+        }
+
+        private void UpdateTheme(Game game)
+        {
+            var activeView = PlayniteApi.MainView.ActiveDesktopView;
+            var settings = Settings.Settings;
+            
+            if (activeView == DesktopView.List && !settings.ApplyInListView ||
+                activeView == DesktopView.Details && !settings.ApplyInDetailsView ||
+                activeView == DesktopView.Grid && !settings.ApplyInGridView ||
+                game == null)
+            {
+                ApplyFallbackPalette();
+                return;
+            }
+
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
+            var token = _cts.Token;
+
+            if (_paletteCache.TryGetValue(game.Id, out var cachedPalette))
+            {
+                ApplyPalette(cachedPalette);
+                return;
+            }
+            
+            var preferCover = Settings.Settings.PreferCoverArt;
+            var imageRelPath = preferCover 
+                ? !string.IsNullOrEmpty(game.CoverImage) ? game.CoverImage : game.BackgroundImage
+                : !string.IsNullOrEmpty(game.BackgroundImage) ? game.BackgroundImage : game.CoverImage;
+            
+            if (string.IsNullOrEmpty(imageRelPath) ||
+                imageRelPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                imageRelPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) 
+            {
+                ApplyFallbackPalette();
+                return;
+            }
+
+            var filePath = PlayniteApi.Database.GetFullFilePath(imageRelPath);
+            if (!File.Exists(filePath))
+            {
+                ApplyFallbackPalette();
+                return;
+            }
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    if (token.IsCancellationRequested) return;
+
+                    var maxColors = Settings.Settings.ColorSelectionRange;
+                    var coreColor = GetColorFromImage(filePath, game.Id, maxColors);
+
+                    if (coreColor == 0)
+                    {
+                        if (!token.IsCancellationRequested) ApplyFallbackPalette();
+                        return;
+                    }
+
+                    if (token.IsCancellationRequested) return;
+
+                    var palette = CorePalette.Of(coreColor);
+                    _paletteCache[game.Id] = palette;
+
+                    PlayniteApi.MainView.UIDispatcher.Invoke(() =>
+                    {
+                        if (token.IsCancellationRequested) return;
+                        ApplyPalette(palette);
+                    });
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, $"Failed to extract color for {game.Name}");
+                }
+
+            }, token);
+        }
     }
 }

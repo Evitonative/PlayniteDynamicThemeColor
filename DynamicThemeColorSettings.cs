@@ -75,7 +75,7 @@ namespace DynamicThemeColor
             var savedSettings = plugin.LoadPluginSettings<DynamicThemeColorSettings>();
             Settings = savedSettings ?? new DynamicThemeColorSettings();
             
-            ClearCacheCommand = new RelayCommand(() => _plugin.ClearCache());
+            ClearCacheCommand = new RelayCommand(() => _plugin.ClearCache(silent: false));
         }
 
         public void BeginEdit()
@@ -91,6 +91,8 @@ namespace DynamicThemeColor
         public void EndEdit()
         {
             _plugin.SavePluginSettings(Settings);
+            _plugin.ClearCache(silent: true);
+            _plugin.RefreshTheme();
         }
 
         public bool VerifySettings(out List<string> errors)
