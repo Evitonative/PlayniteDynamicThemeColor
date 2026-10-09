@@ -1,0 +1,62 @@
+<UserControl x:Class="DynamicThemeColor.DynamicThemeColorSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="600">
+    <StackPanel Margin="20">
+        <!-- Fallback Settings -->
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorFallbackHeader}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+        
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorFallbackLabel}" Margin="0,0,0,5" Foreground="{DynamicResource TextBrush}"/>
+        <TextBox Text="{Binding Settings.DefaultSeedColorHex}" Width="150" HorizontalAlignment="Left" />
+        
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorFallbackDescription}" 
+                   TextWrapping="Wrap" 
+                   Margin="0,5,0,0" 
+                   Foreground="{DynamicResource TextBrushDarker}" />
+
+        <!-- Image Source Section -->
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorPreferCoverHeader}" FontWeight="Bold" Margin="0,25,0,10" Foreground="{DynamicResource TextBrush}"/>
+        <CheckBox Content="{DynamicResource LOCDynamicThemeColorPreferCoverLabel}" 
+                  IsChecked="{Binding Settings.PreferCoverArt}" 
+                  Foreground="{DynamicResource TextBrush}"/>
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorPreferCoverDesc}" 
+                   TextWrapping="Wrap" 
+                   Margin="0,5,0,0" 
+                   Foreground="{DynamicResource TextBrushDarker}" />
+
+        <!-- Color Variety Section -->
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorRangeHeader}" FontWeight="Bold" Margin="0,25,0,10" Foreground="{DynamicResource TextBrush}"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+            <TextBlock Text="{DynamicResource LOCDynamicThemeColorRangeLabel}" Margin="0,0,10,0" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="{Binding Settings.ColorSelectionRange}" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+        </StackPanel>
+        <Slider Minimum="1" 
+                Maximum="5" 
+                TickFrequency="1" 
+                IsSnapToTickEnabled="True" 
+                Value="{Binding Settings.ColorSelectionRange}" 
+                Width="150" 
+                HorizontalAlignment="Left" />
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorRangeDesc}" 
+                   TextWrapping="Wrap" 
+                   Margin="0,5,0,0" 
+                   Foreground="{DynamicResource TextBrushDarker}" />
+        
+        <!-- Cache Management Section -->
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorCacheHeader}" FontWeight="Bold" Margin="0,25,0,10" Foreground="{DynamicResource TextBrush}"/>
+        
+        <Button Content="{DynamicResource LOCDynamicThemeColorCacheButton}" 
+                Command="{Binding ClearCacheCommand}" 
+                Width="150" 
+                HorizontalAlignment="Left" 
+                Padding="4"/>
+                
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorCacheDescription}" 
+                   TextWrapping="Wrap" 
+                   Margin="0,5,0,0" 
+                   Foreground="{DynamicResource TextBrushDarker}" />
+    </StackPanel>
+</UserControl>

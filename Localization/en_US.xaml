@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="LOCDynamicThemeColorFallbackHeader">Fallback Theme Color</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorFallbackLabel">Default Seed Color (Hex format, e.g. #1c1836):</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorFallbackDescription">This color is used to generate the color palette when a game has no local background or cover art.</sys:String>
+    
+    <sys:String x:Key="LOCDynamicThemeColorPreferCoverHeader">Image Source Priority</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorPreferCoverLabel">Prefer Cover Art over Background Image</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorPreferCoverDesc">When checked, the plugin will extract colors from the game's cover. If unchecked (or if the cover is missing), it uses the background.</sys:String>
+
+    <sys:String x:Key="LOCDynamicThemeColorRangeHeader">Color Selection Variety</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorRangeLabel">Top Colors to Pick From:</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorRangeDesc">Set to 1 to always use the most dominant color. Higher values will deterministically pick from the top N colors to add variety across your library.</sys:String>
+    
+    <sys:String x:Key="LOCDynamicThemeColorCacheHeader">Cache Management</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorCacheButton">Clear Color Cache</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorCacheDescription">Clears the in-memory cache. Use this if you changed a game's artwork and the old colors are still showing.</sys:String>
+    
+    <sys:String x:Key="LOCDynamicThemeColorCacheCleared">Color cache cleared successfully.</sys:String>
+</ResourceDictionary>

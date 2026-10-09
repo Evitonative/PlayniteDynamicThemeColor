@@ -1,0 +1,8 @@
+Third-Party Licenses
+
+This project includes or redistributes binary components from third-party libraries:
+
+MaterialColorUtilities (https://github.com/albi005/MaterialColorUtilities)
+	Licensed under the Apache License, Version 2.0.
+	Copyright (c) 2021-present albi005
+	Copyright (c) 2021 Google LLC
