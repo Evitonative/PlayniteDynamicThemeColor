@@ -14,6 +14,12 @@
     <sys:String x:Key="LOCDynamicThemeColorRangeLabel">Top Colors to Pick From:</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorRangeDesc">Set to 1 to always use the most dominant color. Higher values will deterministically pick from the top N colors to add variety across your library.</sys:String>
     
+    <sys:String x:Key="LOCDynamicThemeColorViewHeader">Dynamic Color Views</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorApplyInListLabel">Apply dynamic colors in List View</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorApplyInDetailsLabel">Apply dynamic colors in Details View</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorApplyInGridLabel">Apply dynamic colors in Grid View</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorApplyViewsDesc">Uncheck a view to disable image color extraction there. The plugin will instead use your Fallback Theme Color, giving you a consistent, static theme.</sys:String>
+    
     <sys:String x:Key="LOCDynamicThemeColorCacheHeader">Cache Management</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorCacheButton">Clear Color Cache</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorCacheDescription">Clears the in-memory cache. Use this if you changed a game's artwork and the old colors are still showing.</sys:String>

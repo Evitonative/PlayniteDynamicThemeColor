@@ -48,8 +48,21 @@ namespace DynamicThemeColor
             return new DynamicThemeColorSettingsView();
         }
 
+        
+        
         public override void OnGameSelected(OnGameSelectedEventArgs args)
         {
+            var activeView = PlayniteApi.MainView.ActiveDesktopView;
+            var settings = Settings.Settings;
+            
+            if (activeView == DesktopView.List && !settings.ApplyInListView ||
+                activeView == DesktopView.Details && !settings.ApplyInDetailsView ||
+                activeView == DesktopView.Grid && !settings.ApplyInGridView)
+            {
+                ApplyFallbackPalette();
+                return;
+            }
+            
             var game = args.NewValue?.FirstOrDefault();
             if (game == null)
             {

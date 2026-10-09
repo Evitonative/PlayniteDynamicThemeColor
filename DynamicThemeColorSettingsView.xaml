@@ -45,6 +45,28 @@
                    Margin="0,5,0,0" 
                    Foreground="{DynamicResource TextBrushDarker}" />
         
+        <!-- View Rules Section -->
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorViewHeader}" FontWeight="Bold" Margin="0,25,0,10" Foreground="{DynamicResource TextBrush}"/>
+
+        <CheckBox Content="{DynamicResource LOCDynamicThemeColorApplyInListLabel}" 
+                  IsChecked="{Binding Settings.ApplyInListView}" 
+                  Foreground="{DynamicResource TextBrush}" 
+                  Margin="0,0,0,5"/>
+          
+        <CheckBox Content="{DynamicResource LOCDynamicThemeColorApplyInDetailsLabel}" 
+                  IsChecked="{Binding Settings.ApplyInDetailsView}" 
+                  Foreground="{DynamicResource TextBrush}" 
+                  Margin="0,0,0,5"/>
+          
+        <CheckBox Content="{DynamicResource LOCDynamicThemeColorApplyInGridLabel}" 
+                  IsChecked="{Binding Settings.ApplyInGridView}" 
+                  Foreground="{DynamicResource TextBrush}"/>
+          
+        <TextBlock Text="{DynamicResource LOCDynamicThemeColorApplyViewsDesc}" 
+                   TextWrapping="Wrap" 
+                   Margin="0,5,0,0" 
+                   Foreground="{DynamicResource TextBrushDarker}" />
+        
         <!-- Cache Management Section -->
         <TextBlock Text="{DynamicResource LOCDynamicThemeColorCacheHeader}" FontWeight="Bold" Margin="0,25,0,10" Foreground="{DynamicResource TextBrush}"/>
         

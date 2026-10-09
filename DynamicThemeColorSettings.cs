@@ -9,6 +9,10 @@ namespace DynamicThemeColor
         private string _defaultSeedColorHex = "#1cd8fc";
         private bool _preferCoverArt = true;
         private int _colorSelectionRange = 1;
+        
+        private bool _applyInListView = true;
+        private bool _applyInDetailsView = true;
+        private bool _applyInGridView = true;
 
         public string DefaultSeedColorHex
         {
@@ -26,6 +30,24 @@ namespace DynamicThemeColor
         {
             get => _colorSelectionRange;
             set => SetValue(ref _colorSelectionRange, value);
+        }
+        
+        public bool ApplyInListView
+        {
+            get => _applyInListView;
+            set => SetValue(ref _applyInListView, value);
+        }
+
+        public bool ApplyInDetailsView
+        {
+            get => _applyInDetailsView;
+            set => SetValue(ref _applyInDetailsView, value);
+        }
+
+        public bool ApplyInGridView
+        {
+            get => _applyInGridView;
+            set => SetValue(ref _applyInGridView, value);
         }
     }
 
