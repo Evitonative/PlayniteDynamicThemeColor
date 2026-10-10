@@ -15,7 +15,6 @@ using Playnite.SDK;
 using Playnite.SDK.Events;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
-using Style = MaterialColorUtilities.Palettes.Style;
 
 namespace DynamicThemeColor
 {
@@ -107,6 +106,7 @@ namespace DynamicThemeColor
                 ("PopupBackgroundBrush", CreateFrozenBrush(palette.Neutral[10])),
                 ("CheckBoxCheckMarkBrush", CreateFrozenBrush(accentColor)),
                 ("ExpanderBackgroundBrush", Brushes.Transparent),
+                // ReSharper disable once StringLiteralTypo
                 ("WindowBackgourndBrush", CreateFrozenBrush(palette.Neutral[8])),
                 ("WindowBackgroundBrush", CreateFrozenBrush(palette.Neutral[8]))
             );
@@ -130,6 +130,9 @@ namespace DynamicThemeColor
                 ("SecondaryBrush", CreateFrozenBrush(palette.NeutralVariant[30])),
                 ("BottomButtonHighlightBrush", CreateFrozenBrush(palette.Primary[70]))
             );
+
+            if (Settings.Settings.EnableHarmonyDetailsPanelBrush)
+                ApplyBrushes(("DetailsViewPanelBackgroundBrush", CreateFrozenBrush(palette.NeutralVariant[15])));
         }
         
         private static void ApplyBrushes(params (string resource, Brush brush)[] brushes)
@@ -148,12 +151,18 @@ namespace DynamicThemeColor
             bitmap.DecodePixelWidth = 128;
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.EndInit();
-            bitmap.Freeze();
+            
+            var convertedBitmap = new FormatConvertedBitmap();
+            convertedBitmap.BeginInit();
+            convertedBitmap.Source = bitmap;
+            convertedBitmap.DestinationFormat = PixelFormats.Bgra32;
+            convertedBitmap.EndInit();
+            convertedBitmap.Freeze();
 
-            var width = bitmap.PixelWidth;
-            var height = bitmap.PixelHeight;
+            var width = convertedBitmap.PixelWidth;
+            var height = convertedBitmap.PixelHeight;
             var pixels = new uint[width * height];
-            bitmap.CopyPixels(pixels, width * 4, 0);
+            convertedBitmap.CopyPixels(pixels, width * 4, 0);
 
             var quantiserResult = QuantizerCelebi.Quantize(pixels, 128);
             var rankedColors = Scorer.Score(quantiserResult);

@@ -4,6 +4,7 @@ using MaterialColorUtilities.Palettes;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 
+// ReSharper disable RedundantDefaultMemberInitializer
 namespace DynamicThemeColor
 {
     public class DynamicThemeColorSettings : ObservableObject
@@ -65,6 +66,14 @@ namespace DynamicThemeColor
             get => _useSeedColorForGlyph;
             set => SetValue(ref _useSeedColorForGlyph, value);
         }
+        
+        // Theme Specific
+        private bool _enableHarmonyDetailsPanelBrush = false;
+        public bool EnableHarmonyDetailsPanelBrush
+        {
+            get => _enableHarmonyDetailsPanelBrush;
+            set => SetValue(ref _enableHarmonyDetailsPanelBrush, value);
+        }
     }
 
     public class DynamicThemeColorSettingsViewModel : ObservableObject, ISettings
@@ -73,7 +82,9 @@ namespace DynamicThemeColor
         private DynamicThemeColorSettings EditingClone { get; set; }
         private DynamicThemeColorSettings _settings;
         
+        // ReSharper disable once UnusedMember.Global
         public Array AvailableStyles { get; } = Enum.GetValues(typeof(Style));
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public RelayCommand ClearCacheCommand { get; }
         
         private bool _hasChanges;
@@ -81,6 +92,7 @@ namespace DynamicThemeColor
         public DynamicThemeColorSettings Settings
         {
             get => _settings;
+            // ReSharper disable once MemberCanBePrivate.Global
             set
             {
                 if (_settings != null) _settings.PropertyChanged -= Settings_PropertyChanged;
@@ -99,7 +111,11 @@ namespace DynamicThemeColor
             var savedSettings = plugin.LoadPluginSettings<DynamicThemeColorSettings>();
             Settings = savedSettings ?? new DynamicThemeColorSettings();
             
-            ClearCacheCommand = new RelayCommand(() => _plugin.ClearCache(silent: false));
+            ClearCacheCommand = new RelayCommand(() =>
+            {
+                _plugin.ClearCache(silent: false);
+                _plugin.RefreshTheme();
+            });
         }
         
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -150,6 +166,14 @@ namespace DynamicThemeColor
         public void EndEdit()
         {
             _plugin.SavePluginSettings(Settings);
+
+            if (EditingClone.EnableHarmonyDetailsPanelBrush && !Settings.EnableHarmonyDetailsPanelBrush)
+            {
+                _plugin.PlayniteApi.Dialogs.ShowMessage(
+                    ResourceProvider.GetString("LOCDynamicThemeColorRestartRequiredMsg"),
+                    ResourceProvider.GetString("LOCDynamicThemeColorRestartRequiredTitle")
+                );
+            }
         }
 
         public bool VerifySettings(out List<string> errors)

@@ -5,6 +5,7 @@
     <!-- Headers -->
     <sys:String x:Key="LOCDynamicThemeColorViewsHeader">Active Views</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorGenerationHeader">Theme Generation</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorThemeSpecificHeader">Theme Specific</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorAdvancedHeader">Advanced</sys:String>
 
     <!-- View Options -->
@@ -13,21 +14,28 @@
     <sys:String x:Key="LOCDynamicThemeColorApplyList">Apply in List View</sys:String>
 
     <!-- Generation Options -->
-    <sys:String x:Key="LOCDynamicThemeColorPaletteStyle">Palette Style:</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorPaletteStyleTooltip">default: TonalSpot. Content preserves image vibrancy better. Expressive shifts hues for a creative look.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorPaletteStyle">Theme Style:</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorPaletteStyleTooltip" xml:space="preserve">default: TonalSpot&#x0a;&#x0a;TonalSpot creates a standard muted theme.&#x0a;Content preserves the image's vibrant colors.&#x0a;Expressive shifts colors for a more creative look.</sys:String>
 
     <sys:String x:Key="LOCDynamicThemeColorPreferCover">Prefer Cover Art</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorPreferCoverTooltip">default: checked. If checked, colors will be extracted from the cover image first. If unchecked, the background image is prioritized.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorPreferCoverTooltip" xml:space="preserve">default: checked&#x0a;&#x0a;If checked, colors will be extracted from the cover image first.&#x0a;If unchecked, the background image is used instead.</sys:String>
 
     <sys:String x:Key="LOCDynamicThemeColorSelectionRange">Color Selection Range:</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorSelectionRangeTooltip">default: 1. How many dominant colors to consider when finding the best match.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorSelectionRangeTooltip" xml:space="preserve">default: 1&#x0a;&#x0a;How many dominant colors to consider when finding the best match.</sys:String>
 
     <sys:String x:Key="LOCDynamicThemeColorFallbackHex">Fallback Color (Hex):</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorFallbackHexTooltip">The default color used when a game has no artwork or the view is disabled. (e.g. #1cd8fc)</sys:String>
     
-    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyph">Use Seed Color for Glyphs</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyphTooltip">default: not checked. If checked, accent elements like play buttons and checkmarks will bypass the palette generation and use the pure extracted color directly.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyph">Use Original Color for Accents</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyphTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;If checked, colorful elements like play buttons and checkmarks will use the exact color&#x0a;pulled from the image instead of blending into the background theme.&#x0a;&#x0a;This may result in poor contrast for text inside buttons.</sys:String>
 
+    <!-- Theme Specific Settings -->
+    <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanel">Override Details Panel Background</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanelTooltip" xml:space="preserve">Replaces Harmony's default texture with a solid dynamic color.&#x0a;&#x0a;Disabling this requires a Playnite restart to take effect.</sys:String>
+    
+    <sys:String x:Key="LOCDynamicThemeColorRestartRequiredTitle">Restart Required</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorRestartRequiredMsg" xml:space="preserve">A theme setting was changed that requires Playnite to restart to take effect.&#x0a;&#x0a;Please restart Playnite when you are ready.</sys:String>
+    
     <!-- Advanced -->
     <sys:String x:Key="LOCDynamicThemeColorClearCacheBtn">Clear Color Cache</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorClearCacheTooltip">Forces the plugin to re-extract colors from all images the next time a game is selected.</sys:String>

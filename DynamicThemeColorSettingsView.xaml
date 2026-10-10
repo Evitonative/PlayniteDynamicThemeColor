@@ -9,7 +9,7 @@
         <StackPanel Margin="20">
             
             <!-- View Targets -->
-            <TextBlock Text="{DynamicResource LOCDynamicThemeColorViewsHeader}" FontWeight="Bold" Margin="0,0,0,10" />
+            <TextBlock Text="{DynamicResource LOCDynamicThemeColorViewsHeader}" FontWeight="Bold" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,10" />
             <StackPanel Margin="10,0,0,20">
                 <CheckBox IsChecked="{Binding Settings.ApplyInDetailsView}" Margin="0,0,0,5">
                     <TextBlock Text="{DynamicResource LOCDynamicThemeColorApplyDetails}" />
@@ -23,13 +23,13 @@
             </StackPanel>
             
             <!-- Color Generation -->
-            <TextBlock Text="{DynamicResource LOCDynamicThemeColorGenerationHeader}" FontWeight="Bold" Margin="0,0,0,10" />
+            <TextBlock Text="{DynamicResource LOCDynamicThemeColorGenerationHeader}" FontWeight="Bold" Foreground="{DynamicResource TextBrushDarker}" Margin="0,0,0,10" />
             
             <Grid Margin="10,0,0,20">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="180" /> <!-- Labels -->
-                    <ColumnDefinition Width="150" /> <!-- Controls -->
-                    <ColumnDefinition Width="Auto" /> <!-- Tooltips -->
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight="32" Height="Auto" />
@@ -101,6 +101,33 @@
                 <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Settings.UseSeedColorForGlyph}" VerticalAlignment="Center" />
                 <TextBlock Grid.Row="4" Grid.Column="2" Text="ⓘ" ToolTip="{DynamicResource LOCDynamicThemeColorUseSeedGlyphTooltip}" Opacity="0.6" Cursor="Help" VerticalAlignment="Center" Margin="10,0,0,0" />
             </Grid>
+            
+            <!-- Theme Specific Settings -->
+            <Expander Header="{DynamicResource LOCDynamicThemeColorThemeSpecificHeader}" IsExpanded="False" Margin="0,15,0,0">
+                <StackPanel Margin="10,10,0,0">
+                    
+                    <!-- Harmony Section -->
+                    <TextBlock Text="Harmony" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrushDarker}" />
+                    
+                    <Grid Margin="10,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition MinHeight="32" Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Panel Override Toggle -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource LOCDynamicThemeColorHarmonyDetailsPanel}" VerticalAlignment="Center" />
+                        <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Settings.EnableHarmonyDetailsPanelBrush}" VerticalAlignment="Center" />
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="ⓘ" ToolTip="{DynamicResource LOCDynamicThemeColorHarmonyDetailsPanelTooltip}" Opacity="0.6" Cursor="Help" VerticalAlignment="Center" Margin="10,0,0,0" />
+                    </Grid>
+
+                </StackPanel>
+            </Expander>
+            
             
             <!-- Advanced Settings -->
             <Expander Header="{DynamicResource LOCDynamicThemeColorAdvancedHeader}" IsExpanded="False">
