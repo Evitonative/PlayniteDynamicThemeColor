@@ -15,6 +15,7 @@ using Playnite.SDK;
 using Playnite.SDK.Events;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
+using Style = MaterialColorUtilities.Palettes.Style;
 
 namespace DynamicThemeColor
 {
@@ -48,8 +49,6 @@ namespace DynamicThemeColor
         {
             return new DynamicThemeColorSettingsView();
         }
-
-        
         
         public override void OnGameSelected(OnGameSelectedEventArgs args)
         {
@@ -57,6 +56,11 @@ namespace DynamicThemeColor
             UpdateTheme(game);
         }
 
+        private CorePalette GetPalette(uint seedArgb)
+        {
+            return CorePalette.Of(seedArgb, Settings.Settings.PaletteStyle);
+        }
+        
         private void ApplyFallbackPalette()
         {
             var hexString = Settings?.Settings?.DefaultSeedColorHex;
@@ -65,7 +69,7 @@ namespace DynamicThemeColor
             if (ColorConverter.ConvertFromString(hexString) is Color color)
             {
                 var seedArgb = (uint)((color.A << 24) | (color.R << 16) | (color.G << 8) | color.B);
-                var palette = CorePalette.Of(seedArgb);
+                var palette = GetPalette(seedArgb);
                 PlayniteApi.MainView.UIDispatcher.Invoke(() =>
                 {
                     ApplyPalette(palette);
@@ -251,7 +255,7 @@ namespace DynamicThemeColor
 
                     if (token.IsCancellationRequested) return;
 
-                    var palette = CorePalette.Of(coreColor);
+                    var palette = GetPalette(coreColor);
                     _paletteCache[game.Id] = palette;
 
                     PlayniteApi.MainView.UIDispatcher.Invoke(() =>

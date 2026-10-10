@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using MaterialColorUtilities.Palettes;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 
@@ -7,6 +9,7 @@ namespace DynamicThemeColor
     public class DynamicThemeColorSettings : ObservableObject
     {
         private string _defaultSeedColorHex = "#1cd8fc";
+        private Style _paletteStyle = Style.TonalSpot;
         private bool _preferCoverArt = true;
         private int _colorSelectionRange = 1;
         
@@ -18,6 +21,12 @@ namespace DynamicThemeColor
         {
             get => _defaultSeedColorHex;
             set => SetValue(ref _defaultSeedColorHex, value);
+        }
+        
+        public Style PaletteStyle 
+        { 
+            get => _paletteStyle; 
+            set => SetValue(ref _paletteStyle, value); 
         }
         
         public bool PreferCoverArt
@@ -57,6 +66,7 @@ namespace DynamicThemeColor
         private DynamicThemeColorSettings EditingClone { get; set; }
         private DynamicThemeColorSettings _settings;
         
+        public Array AvailableStyles { get; } = Enum.GetValues(typeof(Style));
         public RelayCommand ClearCacheCommand { get; }
         
         public DynamicThemeColorSettings Settings
