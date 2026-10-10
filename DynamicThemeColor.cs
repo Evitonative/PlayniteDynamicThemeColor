@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using MaterialColorUtilities.Palettes;
 using MaterialColorUtilities.Quantize;
 using MaterialColorUtilities.Score;
+using MaterialColorUtilities.Utils;
 using Playnite.SDK;
 using Playnite.SDK.Events;
 using Playnite.SDK.Models;
@@ -82,15 +83,22 @@ namespace DynamicThemeColor
 
         private void ApplyPalette(CorePalette palette, uint seedArgb)
         {
-            var accentColor = Settings.Settings.UseSeedColorForGlyph 
-                ? seedArgb 
-                : palette.Primary[80];
+            var accentColor = palette.Primary[80];
+            var onAccentColor = palette.Primary[10];
+            
+            if (Settings.Settings.UseSeedColorForGlyph)
+            {
+                accentColor = seedArgb;
+                
+                var lightness = ColorUtils.LStarFromArgb(accentColor);
+                onAccentColor = lightness <= 40 ? palette.Primary[90] : palette.Primary[10];
+            }
             
             ApplyBrushes(
                 ("ControlBackgroundBrush", CreateFrozenBrush(palette.Neutral[20], 64)),
                 ("TextBrush", CreateFrozenBrush(palette.Neutral[90])),
                 ("TextBrushDarker", CreateFrozenBrush(palette.NeutralVariant[70])),
-                ("TextBrushDark", CreateFrozenBrush(palette.Primary[10])),
+                ("TextBrushDark", CreateFrozenBrush(onAccentColor)),
                 ("NormalBrush", CreateFrozenBrush(palette.Neutral[20])),
                 ("NormalBrushDark", CreateFrozenBrush(palette.Neutral[12])),
                 ("NormalBorderBrush", Brushes.Transparent),
@@ -117,7 +125,7 @@ namespace DynamicThemeColor
             ApplyBrushes(
                 ("WindowBackgroundBrush", CreateFrozenBrush(palette.Neutral[8])),
                 ("MainWindowBackgroundBrush", CreateFrozenBrush(palette.Neutral[8])),
-                ("PlayButtonTextBrush", CreateFrozenBrush(palette.Primary[10])),
+                ("PlayButtonTextBrush", CreateFrozenBrush(onAccentColor)),
                 ("ButtonMouseOverBackgroundBrush", CreateFrozenBrush(palette.Neutral[35])),
                 ("MainPanelBackgroundBrush", CreateFrozenBrush(palette.Neutral[8])),
                 ("SidebarBackgroundBrush", CreateFrozenBrush(palette.Neutral[90], 13)),
