@@ -1,20 +1,24 @@
 # Dynamic Theme Color
-A [Playnite](https://playnite.link/) addon that dynamically changes your interface theme colors based on the cover or background artwork of the currently selected game.
+A [Playnite](https://playnite.link/) Add-on that dynamically changes your interface theme colors based on the cover or background artwork of the currently selected game.
 
 [Demo Video](https://github.com/user-attachments/assets/1a31d9a6-2b8c-4903-a4b4-1f580e853880)
 
-This plugin natively supports Playnite's Default theme and the [Harmony](https://github.com/darklinkpower/Harmony) theme. Other themes may or may not work depending on how they manage their colors.
+This Add-on natively supports Playnite's Default theme and the [Harmony](https://github.com/darklinkpower/Harmony) theme. 
+Other themes may or may not work depending on how they manage their colors.
 
 > [!note]
 > I do not plan to officially support additional themes, but pull requests are welcome!
 
 ## Features
-* **Dynamic Theming:** Instantly extracts and applies color palettes from game artwork.
+* **Dynamic Theming:** Extracts color palettes from game artwork and applies them in real-time.
+* **Non-Destructive:** All changes are memory-only and will not overwrite your installed theme.
 * **Configuration:**
-  * **Image Priority:** Choose whether the plugin prioritizes Cover Art or Background Images for color extraction.
-  * **Color Variety:** Adjust the deterministic variety slider to pick from a wider range of dominant colors, rather than always forcing the single most dominant one.
-  * **Custom Fallback Color:** Define a custom hex color to use when a game has no artwork, or when navigating disabled views.
-  * **View-Specific Rules:** Enable or disable dynamic colors per view to keep text legible during rapid scrolling.
+  * **Theme Styles:** Different theme styles from more muted colors to hue-shifted palletes.
+  * **Accent Overrides:** Bypass blending and use the extracted color for UI accents.
+  * **Image Priority:** Prioritizes Cover Art or Background Images for color extraction.
+  * **Color Variety:** Deterministic variety slider for a wider range of dominant colors.
+  * **View-Specific Rules:** Enable or disable dynamic colors per view.
+  * **Custom Fallback Color:** Define a custom color when a game has no artwork, or when navigating disabled views.
 
 ## Installation
 1. Download the `.pext` file from the [Latest Release](https://github.com/Evitonative/PlayniteDynamicThemeColor/releases/latest) page.
@@ -22,7 +26,7 @@ This plugin natively supports Playnite's Default theme and the [Harmony](https:/
 3. Confirm the installation in Playnite and restart the application when prompted.
 
 > [!note]
-> This addon is not currently available via Playnite's integrated Add-on browser because the Playnite team is temporarily pausing new add-on submissions. Manual installation is required.
+> This Add-on is not currently available via Playnite's integrated Add-on browser because the Playnite team is temporarily pausing new add-on submissions. Manual installation is required.
 
 ## License & Copyright
 **Dynamic Theme Color**
