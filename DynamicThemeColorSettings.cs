@@ -88,6 +88,14 @@ namespace DynamicThemeColor
             get => _enableHarmonyDetailsPanelBrush;
             set => SetValue(ref _enableHarmonyDetailsPanelBrush, value);
         }
+        
+        // Advanced
+        private bool _alwaysEnabledContrastImprovements = false;
+        public bool AlwaysEnabledContrastImprovements
+        {
+            get => _alwaysEnabledContrastImprovements;
+            set => SetValue(ref _alwaysEnabledContrastImprovements, value);
+        }
     }
 
     public class DynamicThemeColorSettingsViewModel : ObservableObject, ISettings

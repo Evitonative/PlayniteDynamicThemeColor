@@ -43,6 +43,9 @@
     <sys:String x:Key="LOCDynamicThemeColorRestartRequiredMsg" xml:space="preserve">A theme setting was changed that requires Playnite to restart to take effect.&#x0a;&#x0a;Please restart Playnite when you are ready.</sys:String>
     
     <!-- Advanced -->
+    <sys:String x:Key="LOCDynamicThemeColorContrastImprovementsAlways">Always Use Contrast Improvements</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorContrastImprovementsAlwaysTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;Always applies the contrast improvements for the "Use Original Color for Accents" option .&#x0a;This may have unintended side effects.&#x0a;Try this if you have contrast issues.&#x0a;Does nothing when "Use Original Color for Accents" is enabled.</sys:String>
+    
     <sys:String x:Key="LOCDynamicThemeColorClearCacheBtn">Clear Color Cache</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorClearCacheTooltip">Forces the plugin to re-extract colors from all images the next time a game is selected.</sys:String>
     

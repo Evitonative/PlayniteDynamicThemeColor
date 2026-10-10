@@ -87,7 +87,7 @@ namespace DynamicThemeColor
             var accentColor = palette.Primary[80];
             var onAccentColor = palette.Primary[10];
             
-            if (Settings.Settings.UseSeedColorForGlyph)
+            if (Settings.Settings.UseSeedColorForGlyph || Settings.Settings.AlwaysEnabledContrastImprovements)
             {
                 accentColor = seedArgb;
                 

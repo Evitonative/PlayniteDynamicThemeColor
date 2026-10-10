@@ -188,6 +188,22 @@
             <!-- Advanced Settings -->
             <Expander Header="{DynamicResource LOCDynamicThemeColorAdvancedHeader}" IsExpanded="False">
                 <StackPanel Margin="10,10,0,0">
+                    <Grid Margin="10,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition MinHeight="32" Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Always Contrast Improvements -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource LOCDynamicThemeColorContrastImprovementsAlways}" VerticalAlignment="Center" />
+                        <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Settings.AlwaysEnabledContrastImprovements}" VerticalAlignment="Center" />
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="ⓘ" ToolTip="{DynamicResource LOCDynamicThemeColorContrastImprovementsAlwaysTooltip}" Foreground="{DynamicResource TextBrushDarker}" Cursor="Help" VerticalAlignment="Center" Margin="10,0,0,0" />
+                    </Grid>
+                    
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <Button Content="{DynamicResource LOCDynamicThemeColorClearCacheBtn}" Command="{Binding ClearCacheCommand}" Padding="15,5" />
                         <TextBlock Text="ⓘ" ToolTip="{DynamicResource LOCDynamicThemeColorClearCacheTooltip}" Foreground="{DynamicResource TextBrushDarker}" Cursor="Help" VerticalAlignment="Center" Margin="10,0,0,0" />
