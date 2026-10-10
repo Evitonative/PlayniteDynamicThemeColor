@@ -30,10 +30,10 @@
     <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyphTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;If checked, colorful elements like play buttons and checkmarks will use the exact color&#x0a;pulled from the image instead of blending into the background theme.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
     
     <sys:String x:Key="LOCDynamicThemeColorSaturation">Saturation</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorSaturationTooltip" xml:space="preserve">default: 1.0&#x0a;&#x0a;Boost (or reduce) the saturation of the accent color.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorSaturationTooltip" xml:space="preserve">default: 0.00&#x0a;&#x0a;Boost (or reduce) the saturation of the accent color.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
     
     <sys:String x:Key="LOCDynamicThemeColorLightness">Lightness</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorLightnessTooltip" xml:space="preserve">default: 1.0&#x0a;&#x0a;Boost (or reduce) the lightness of the accent color.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorLightnessTooltip" xml:space="preserve">default: 0.00&#x0a;&#x0a;Boost (or reduce) the lightness of the accent color.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
 
     <!-- Theme Specific Settings -->
     <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanel">Override Details Panel Background</sys:String>
