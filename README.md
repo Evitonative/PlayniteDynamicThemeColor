@@ -28,6 +28,26 @@ Other themes may or may not work depending on how they manage their colors.
 > [!note]
 > This Add-on is not currently available via Playnite's integrated Add-on browser because the Playnite team is temporarily pausing new add-on submissions. Manual installation is required.
 
+## Theme Support
+The Add-on has been tested with default and Harmony theme. Other themes may or may not work.
+On the default theme some button may have illegible hover text colors, I can't do anything about that without modifying the theme.
+
+### Harmony
+Harmony hard codes the color of the `Install` and `More` buttons, meaning this add-on cannot change them.
+If you want them to change you have a couple options. You need to edit the `DerivedStyles\PlayButton.xaml` file.
+In there search for `#363742` or go to line 68. You should find this:
+
+```xaml
+<Style x:Key="ContextButtonViews" TargetType="{x:Type Button}">
+    <Setter Property="Background" Value="#363742" />
+    <Setter Property="Foreground" Value="{DynamicResource GlyphBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
+```
+
+You can replace `#363742` with one of the following.
+- `{DynamicResource ControlBackgroundBrush}`: This is background used by the Edit and Favourite buttons.
+- `{DynamicResource SecondaryBrush}`: Is not used by the theme (or I couldn't find it). It for the most part also uses a fitting color.
+
 ## License & Copyright
 **Dynamic Theme Color**
 Copyright (C) 2026 Evito
