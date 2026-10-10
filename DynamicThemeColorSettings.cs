@@ -67,6 +67,20 @@ namespace DynamicThemeColor
             set => SetValue(ref _useSeedColorForGlyph, value);
         }
         
+        private double _saturationSlider = 0.0;
+        public double SaturationSlider 
+        { 
+            get => _saturationSlider; 
+            set { _saturationSlider = value; OnPropertyChanged(); } 
+        }
+        
+        private double _lightnessSlider = 0.0;
+        public double LightnessSlider 
+        { 
+            get => _lightnessSlider; 
+            set { _lightnessSlider = value; OnPropertyChanged(); } 
+        }
+        
         // Theme Specific
         private bool _enableHarmonyDetailsPanelBrush = false;
         public bool EnableHarmonyDetailsPanelBrush

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using MaterialColorUtilities.ColorAppearance;
 using MaterialColorUtilities.Palettes;
 using MaterialColorUtilities.Quantize;
 using MaterialColorUtilities.Score;
@@ -94,6 +95,11 @@ namespace DynamicThemeColor
                 onAccentColor = lightness <= 40 ? palette.Primary[90] : palette.Primary[10];
             }
             
+            var satMult = Settings.Settings.SaturationSlider;
+            var lightMult = Settings.Settings.LightnessSlider;
+            accentColor = ApplyColorAdjustments(accentColor, satMult, lightMult);
+            //onAccentColor = ApplyColorAdjustments(onAccentColor, satMult, lightMult);
+            
             ApplyBrushes(
                 ("ControlBackgroundBrush", CreateFrozenBrush(palette.Neutral[20], 64)),
                 ("TextBrush", CreateFrozenBrush(palette.Neutral[90])),
@@ -142,6 +148,44 @@ namespace DynamicThemeColor
             if (Settings.Settings.EnableHarmonyDetailsPanelBrush)
                 ApplyBrushes(("DetailsViewPanelBackgroundBrush", CreateFrozenBrush(palette.NeutralVariant[15])));
         }
+
+        private static uint ApplyColorAdjustments(uint argb, double satSlider, double lightSlider)
+        {
+            if (Math.Abs(satSlider) < 0.005 && Math.Abs(lightSlider) < 0.005) return argb;
+
+            var a = (byte)(argb >> 24);
+            var r = (byte)(argb >> 16);
+            var g = (byte)(argb >> 8);
+            var b = (byte)argb;
+
+            var luma = 0.299 * r + 0.587 * g + 0.114 * b;
+            
+            var satMult = 1.0 + satSlider;
+
+            var outR = luma + (r - luma) * satMult;
+            var outG = luma + (g - luma) * satMult;
+            var outB = luma + (b - luma) * satMult;
+
+            if (lightSlider < 0)
+            {
+                var darkenMult = 1.0 + lightSlider;
+                outR *= darkenMult;
+                outG *= darkenMult;
+                outB *= darkenMult;
+            }
+            else if (lightSlider > 0)
+            {
+                outR += (255 - outR) * lightSlider;
+                outG += (255 - outG) * lightSlider;
+                outB += (255 - outB) * lightSlider;
+            }
+
+            var finalR = (byte)Math.Max(0, Math.Min(255, Math.Round(outR)));
+            var finalG = (byte)Math.Max(0, Math.Min(255, Math.Round(outG)));
+            var finalB = (byte)Math.Max(0, Math.Min(255, Math.Round(outB)));
+
+            return (uint)((a << 24) | (finalR << 16) | (finalG << 8) | finalB);
+        }
         
         private static void ApplyBrushes(params (string resource, Brush brush)[] brushes)
         {
@@ -151,7 +195,7 @@ namespace DynamicThemeColor
             }
         }
 
-        private static uint GetColorFromImage(string imagePath, Guid gameId, int maxColors)
+        private uint GetColorFromImage(string imagePath, Guid gameId, int maxColors)
         {
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -182,7 +226,9 @@ namespace DynamicThemeColor
             var topColors = rankedColors.Take(maxColors).ToList();
             var index = (int)((uint)gameId.GetHashCode() % (uint)topColors.Count);
 
-            return topColors[index];
+            var pickedColor = topColors[index];
+            
+            return ApplyColorAdjustments(pickedColor, Settings.Settings.SaturationSlider, Settings.Settings.LightnessSlider);
         }
 
         private static SolidColorBrush CreateFrozenBrush(uint argb, byte a = 255)

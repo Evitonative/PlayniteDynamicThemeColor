@@ -14,20 +14,26 @@
     <sys:String x:Key="LOCDynamicThemeColorApplyList">Apply in List View</sys:String>
 
     <!-- Generation Options -->
-    <sys:String x:Key="LOCDynamicThemeColorPaletteStyle">Theme Style:</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorPaletteStyle">Theme Style</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorPaletteStyleTooltip" xml:space="preserve">default: TonalSpot&#x0a;&#x0a;TonalSpot creates a standard muted theme.&#x0a;Content preserves the image's vibrant colors.&#x0a;Expressive shifts colors for a more creative look.</sys:String>
 
     <sys:String x:Key="LOCDynamicThemeColorPreferCover">Prefer Cover Art</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorPreferCoverTooltip" xml:space="preserve">default: checked&#x0a;&#x0a;If checked, colors will be extracted from the cover image first.&#x0a;If unchecked, the background image is used instead.</sys:String>
 
-    <sys:String x:Key="LOCDynamicThemeColorSelectionRange">Color Selection Range:</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorSelectionRange">Color Selection Range</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorSelectionRangeTooltip" xml:space="preserve">default: 1&#x0a;&#x0a;How many dominant colors to consider when finding the best match.</sys:String>
 
-    <sys:String x:Key="LOCDynamicThemeColorFallbackHex">Fallback Color (Hex):</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorFallbackHex">Fallback Color (Hex)</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorFallbackHexTooltip">The default color used when a game has no artwork or the view is disabled. (e.g. #1cd8fc)</sys:String>
     
     <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyph">Use Original Color for Accents</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyphTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;If checked, colorful elements like play buttons and checkmarks will use the exact color&#x0a;pulled from the image instead of blending into the background theme.&#x0a;&#x0a;This may result in poor contrast for text inside buttons.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyphTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;If checked, colorful elements like play buttons and checkmarks will use the exact color&#x0a;pulled from the image instead of blending into the background theme.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
+    
+    <sys:String x:Key="LOCDynamicThemeColorSaturation">Saturation</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorSaturationTooltip" xml:space="preserve">default: 1.0&#x0a;&#x0a;Boost (or reduce) the saturation of the accent color.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
+    
+    <sys:String x:Key="LOCDynamicThemeColorLightness">Lightness</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorLightnessTooltip" xml:space="preserve">default: 1.0&#x0a;&#x0a;Boost (or reduce) the lightness of the accent color.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
 
     <!-- Theme Specific Settings -->
     <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanel">Override Details Panel Background</sys:String>

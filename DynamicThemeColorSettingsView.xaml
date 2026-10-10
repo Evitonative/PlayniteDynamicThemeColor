@@ -37,6 +37,8 @@
                     <RowDefinition MinHeight="32" Height="Auto" />
                     <RowDefinition MinHeight="32" Height="Auto" />
                     <RowDefinition MinHeight="32" Height="Auto" />
+                    <RowDefinition MinHeight="32" Height="Auto" />
+                    <RowDefinition MinHeight="32" Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <!-- Palette Style -->
@@ -97,9 +99,63 @@
                 <TextBlock Grid.Row="3" Grid.Column="2" Text="ⓘ" ToolTip="{DynamicResource LOCDynamicThemeColorFallbackHexTooltip}" Foreground="{DynamicResource TextBrushDarker}" Cursor="Help" VerticalAlignment="Center" Margin="10,0,0,10" />
                 
                 <!-- Use Seed Color for Glyphs -->
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource LOCDynamicThemeColorUseSeedGlyph}" VerticalAlignment="Center" />
-                <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Settings.UseSeedColorForGlyph}" VerticalAlignment="Center" />
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource LOCDynamicThemeColorUseSeedGlyph}" VerticalAlignment="Center" Margin="0,0,0,10" />
+                <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Settings.UseSeedColorForGlyph}" VerticalAlignment="Center" Margin="0,0,0,10" />
                 <TextBlock Grid.Row="4" Grid.Column="2" Text="ⓘ" ToolTip="{DynamicResource LOCDynamicThemeColorUseSeedGlyphTooltip}" Foreground="{DynamicResource TextBrushDarker}" Cursor="Help" VerticalAlignment="Center" Margin="10,0,0,0" />
+                
+                <!-- Saturation -->
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="{DynamicResource LOCDynamicThemeColorSaturation}" VerticalAlignment="Center" Margin="0,0,0,10" />
+
+                <Grid Grid.Row="5" Grid.Column="1" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+    
+                    <Slider Grid.Column="0" 
+                            Minimum="-1" 
+                            Maximum="4" 
+                            TickFrequency="0.01" 
+                            IsSnapToTickEnabled="True" 
+                            Value="{Binding Settings.SaturationSlider}" 
+                            VerticalAlignment="Center" 
+                            Margin="0,0,10,0" />
+            
+                    <TextBlock Grid.Column="1" 
+                               Text="{Binding Settings.SaturationSlider, StringFormat={}{0:F2}}" 
+                               VerticalAlignment="Center" 
+                               MinWidth="20" 
+                               TextAlignment="Right" />
+                </Grid>
+
+                <TextBlock Grid.Row="5" Grid.Column="2" Text="ⓘ" ToolTip="{DynamicResource LOCDynamicThemeColorSaturationTooltip}" Foreground="{DynamicResource TextBrushDarker}" Cursor="Help" VerticalAlignment="Center" Margin="10,0,0,10" />
+
+                <!-- Lightness -->
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="{DynamicResource LOCDynamicThemeColorLightness}" VerticalAlignment="Center" Margin="0,0,0,10" />
+
+                <Grid Grid.Row="6" Grid.Column="1" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+    
+                    <Slider Grid.Column="0" 
+                            Minimum="-1" 
+                            Maximum="1" 
+                            TickFrequency="0.01" 
+                            IsSnapToTickEnabled="True" 
+                            Value="{Binding Settings.LightnessSlider}" 
+                            VerticalAlignment="Center" 
+                            Margin="0,0,10,0" />
+            
+                    <TextBlock Grid.Column="1" 
+                               Text="{Binding Settings.LightnessSlider, StringFormat={}{0:F2}}" 
+                               VerticalAlignment="Center" 
+                               MinWidth="20" 
+                               TextAlignment="Right" />
+                </Grid>
+
+                <TextBlock Grid.Row="6" Grid.Column="2" Text="ⓘ" ToolTip="{DynamicResource LOCDynamicThemeColorLightnessTooltip}" Foreground="{DynamicResource TextBrushDarker}" Cursor="Help" VerticalAlignment="Center" Margin="10,0,0,10" />
             </Grid>
             
             <!-- Theme Specific Settings -->
