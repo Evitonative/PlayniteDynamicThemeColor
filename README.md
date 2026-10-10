@@ -1,6 +1,8 @@
 # Dynamic Theme Color
 A [Playnite](https://playnite.link/) addon that dynamically changes your interface theme colors based on the cover or background artwork of the currently selected game.
 
+[Demo Video](https://github.com/user-attachments/assets/1a31d9a6-2b8c-4903-a4b4-1f580e853880)
+
 This plugin natively supports Playnite's Default theme and the [Harmony](https://github.com/darklinkpower/Harmony) theme. Other themes may or may not work depending on how they manage their colors.
 
 > [!note]
