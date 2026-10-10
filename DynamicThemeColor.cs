@@ -26,7 +26,7 @@ namespace DynamicThemeColor
 
         private DynamicThemeColorSettingsViewModel Settings { get; set; }
         
-        private readonly ConcurrentDictionary<Guid, CorePalette> _paletteCache = new ConcurrentDictionary<Guid, CorePalette>();
+        private readonly ConcurrentDictionary<Guid, (CorePalette Palette, uint SeedColor)> _paletteCache = new ConcurrentDictionary<Guid, (CorePalette, uint)>();
         private CancellationTokenSource _cts;
 
         public override Guid Id { get; } = Guid.Parse("a7a76873-8465-4273-a8a6-d460550ce627");
@@ -72,7 +72,7 @@ namespace DynamicThemeColor
                 var palette = GetPalette(seedArgb);
                 PlayniteApi.MainView.UIDispatcher.Invoke(() =>
                 {
-                    ApplyPalette(palette);
+                    ApplyPalette(palette, seedArgb);
                 });
             }
             else
@@ -81,8 +81,12 @@ namespace DynamicThemeColor
             }
         }
 
-        private void ApplyPalette(CorePalette palette)
+        private void ApplyPalette(CorePalette palette, uint seedArgb)
         {
+            var accentColor = Settings.Settings.UseSeedColorForGlyph 
+                ? seedArgb 
+                : palette.Primary[80];
+            
             ApplyBrushes(
                 ("ControlBackgroundBrush", CreateFrozenBrush(palette.Neutral[20], 64)),
                 ("TextBrush", CreateFrozenBrush(palette.Neutral[90])),
@@ -92,8 +96,8 @@ namespace DynamicThemeColor
                 ("NormalBrushDark", CreateFrozenBrush(palette.Neutral[12])),
                 ("NormalBorderBrush", Brushes.Transparent),
                 ("HoverBrush", CreateFrozenBrush(palette.Primary[40], 80)),
-                ("GlyphBrush", CreateFrozenBrush(palette.Primary[80])),
-                ("HighlightGlyphBrush", CreateFrozenBrush(palette.Primary[80])),
+                ("GlyphBrush", CreateFrozenBrush(accentColor)),
+                ("HighlightGlyphBrush", CreateFrozenBrush(accentColor)),
                 ("PopupBorderBrush", CreateFrozenBrush(palette.NeutralVariant[35])),
                 ("TooltipBackgroundBrush", CreateFrozenBrush(palette.Neutral[15])),
                 ("ButtonBackgroundBrush", CreateFrozenBrush(palette.Neutral[25])),
@@ -101,7 +105,7 @@ namespace DynamicThemeColor
                 ("PanelSeparatorBrush", CreateFrozenBrush(palette.Neutral[90], 13)),
                 ("WindowPanelSeparatorBrush", Brushes.Transparent),
                 ("PopupBackgroundBrush", CreateFrozenBrush(palette.Neutral[10])),
-                ("CheckBoxCheckMarkBrush", CreateFrozenBrush(palette.Primary[80])),
+                ("CheckBoxCheckMarkBrush", CreateFrozenBrush(accentColor)),
                 ("ExpanderBackgroundBrush", Brushes.Transparent),
                 ("WindowBackgourndBrush", CreateFrozenBrush(palette.Neutral[8])),
                 ("WindowBackgroundBrush", CreateFrozenBrush(palette.Neutral[8]))
@@ -120,8 +124,8 @@ namespace DynamicThemeColor
                 ("SidebarItemBackgroundBrush", CreateFrozenBrush(palette.Neutral[90], 13)),
                 ("TopPanelSearchBoxBackgroundBrush", CreateFrozenBrush(palette.Neutral[15])),
                 ("DetailsViewBarBackgroundBrush", CreateFrozenBrush(palette.Neutral[90], 15)),
-                ("OpaqueHighlightBrush", CreateFrozenBrush(palette.Primary[80], 64)),
-                ("OpaqueGrayHighlightBrush", CreateFrozenBrush(palette.Primary[80], 64)),
+                ("OpaqueHighlightBrush", CreateFrozenBrush(accentColor, 64)),
+                ("OpaqueGrayHighlightBrush", CreateFrozenBrush(accentColor, 64)),
                 ("OpaqueHighlightBrushBright", CreateFrozenBrush(palette.Primary[90], 64)),
                 ("SecondaryBrush", CreateFrozenBrush(palette.NeutralVariant[30])),
                 ("BottomButtonHighlightBrush", CreateFrozenBrush(palette.Primary[70]))
@@ -214,7 +218,7 @@ namespace DynamicThemeColor
 
             if (_paletteCache.TryGetValue(game.Id, out var cachedPalette))
             {
-                ApplyPalette(cachedPalette);
+                ApplyPalette(cachedPalette.Palette, cachedPalette.SeedColor);
                 return;
             }
             
@@ -245,9 +249,9 @@ namespace DynamicThemeColor
                     if (token.IsCancellationRequested) return;
 
                     var maxColors = Settings.Settings.ColorSelectionRange;
-                    var coreColor = GetColorFromImage(filePath, game.Id, maxColors);
+                    var seedArgb = GetColorFromImage(filePath, game.Id, maxColors);
 
-                    if (coreColor == 0)
+                    if (seedArgb == 0)
                     {
                         if (!token.IsCancellationRequested) ApplyFallbackPalette();
                         return;
@@ -255,13 +259,13 @@ namespace DynamicThemeColor
 
                     if (token.IsCancellationRequested) return;
 
-                    var palette = GetPalette(coreColor);
-                    _paletteCache[game.Id] = palette;
+                    var palette = GetPalette(seedArgb);
+                    _paletteCache[game.Id] = (palette, seedArgb);
 
                     PlayniteApi.MainView.UIDispatcher.Invoke(() =>
                     {
                         if (token.IsCancellationRequested) return;
-                        ApplyPalette(palette);
+                        ApplyPalette(palette, seedArgb);
                     });
                 }
                 catch (Exception e)

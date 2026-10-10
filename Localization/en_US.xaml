@@ -2,27 +2,35 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <sys:String x:Key="LOCDynamicThemeColorFallbackHeader">Fallback Theme Color</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorFallbackLabel">Default Seed Color (Hex format, e.g. #1c1836):</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorFallbackDescription">This color is used to generate the color palette when a game has no local background or cover art.</sys:String>
-    
-    <sys:String x:Key="LOCDynamicThemeColorPreferCoverHeader">Image Source Priority</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorPreferCoverLabel">Prefer Cover Art over Background Image</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorPreferCoverDesc">When checked, the plugin will extract colors from the game's cover. If unchecked (or if the cover is missing), it uses the background.</sys:String>
+    <!-- Headers -->
+    <sys:String x:Key="LOCDynamicThemeColorViewsHeader">Active Views</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorGenerationHeader">Theme Generation</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorAdvancedHeader">Advanced</sys:String>
 
-    <sys:String x:Key="LOCDynamicThemeColorRangeHeader">Color Selection Variety</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorRangeLabel">Top Colors to Pick From:</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorRangeDesc">Set to 1 to always use the most dominant color. Higher values will deterministically pick from the top N colors to add variety across your library.</sys:String>
+    <!-- View Options -->
+    <sys:String x:Key="LOCDynamicThemeColorApplyDetails">Apply in Details View</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorApplyGrid">Apply in Grid View</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorApplyList">Apply in List View</sys:String>
+
+    <!-- Generation Options -->
+    <sys:String x:Key="LOCDynamicThemeColorPaletteStyle">Palette Style:</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorPaletteStyleTooltip">default: TonalSpot. Content preserves image vibrancy better. Expressive shifts hues for a creative look.</sys:String>
+
+    <sys:String x:Key="LOCDynamicThemeColorPreferCover">Prefer Cover Art</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorPreferCoverTooltip">default: checked. If checked, colors will be extracted from the cover image first. If unchecked, the background image is prioritized.</sys:String>
+
+    <sys:String x:Key="LOCDynamicThemeColorSelectionRange">Color Selection Range:</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorSelectionRangeTooltip">default: 1. How many dominant colors to consider when finding the best match.</sys:String>
+
+    <sys:String x:Key="LOCDynamicThemeColorFallbackHex">Fallback Color (Hex):</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorFallbackHexTooltip">The default color used when a game has no artwork or the view is disabled. (e.g. #1cd8fc)</sys:String>
     
-    <sys:String x:Key="LOCDynamicThemeColorViewHeader">Dynamic Color Views</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorApplyInListLabel">Apply dynamic colors in List View</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorApplyInDetailsLabel">Apply dynamic colors in Details View</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorApplyInGridLabel">Apply dynamic colors in Grid View</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorApplyViewsDesc">Uncheck a view to disable image color extraction there. The plugin will instead use your Fallback Theme Color, giving you a consistent, static theme.</sys:String>
-    
-    <sys:String x:Key="LOCDynamicThemeColorCacheHeader">Cache Management</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorCacheButton">Clear Color Cache</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorCacheDescription">Clears the in-memory cache. Use this if you changed a game's artwork and the old colors are still showing.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyph">Use Seed Color for Glyphs</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyphTooltip">default: not checked. If checked, accent elements like play buttons and checkmarks will bypass the palette generation and use the pure extracted color directly.</sys:String>
+
+    <!-- Advanced -->
+    <sys:String x:Key="LOCDynamicThemeColorClearCacheBtn">Clear Color Cache</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorClearCacheTooltip">Forces the plugin to re-extract colors from all images the next time a game is selected.</sys:String>
     
     <sys:String x:Key="LOCDynamicThemeColorCacheCleared">Color cache cleared successfully.</sys:String>
 </ResourceDictionary>
