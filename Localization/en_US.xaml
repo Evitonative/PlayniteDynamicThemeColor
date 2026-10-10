@@ -31,7 +31,7 @@
 
     <!-- Theme Specific Settings -->
     <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanel">Override Details Panel Background</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanelTooltip" xml:space="preserve">Replaces Harmony's default texture with a solid dynamic color.&#x0a;&#x0a;Disabling this requires a Playnite restart to take effect.</sys:String>
+    <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanelTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;Replaces Harmony's default texture with a solid dynamic color.&#x0a;&#x0a;Disabling this requires a Playnite restart to take effect.</sys:String>
     
     <sys:String x:Key="LOCDynamicThemeColorRestartRequiredTitle">Restart Required</sys:String>
     <sys:String x:Key="LOCDynamicThemeColorRestartRequiredMsg" xml:space="preserve">A theme setting was changed that requires Playnite to restart to take effect.&#x0a;&#x0a;Please restart Playnite when you are ready.</sys:String>
