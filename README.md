@@ -5,13 +5,15 @@ A [Playnite](https://playnite.link/) Add-on that dynamically changes your interf
 See the add-on in action in [this video by u/shawak456 on Reddit](https://www.reddit.com/r/playnite/comments/1x32l0j/theres_finally_an_addon_for_dynamic_ui_color/).
 
 > [!IMPORTANT]
-> The add-on is designed and tested for Playnite's Default theme and [Harmony](https://github.com/darklinkpower/Harmony).
+> The add-on is designed and tested for Playnite's Default theme and [Harmony](https://github.com/darklinkpower/Harmony) in **Desktop Mode**.
 > Other themes may not react to changes made by this add-on.
+>
+> Fullscreen Mode has no supported themes and you may want to disable the add-on when switching into fullscreen.
 > 
 > ↳ *See [Theme Compatibility](#-theme-compatibility) below for details.*
 
 > [!NOTE]
-> I do not plan to officially support additional themes, but pull requests are welcome!
+> I do not plan to officially support additional themes or Fullscreen Mode, but pull requests are welcome!
 >
 > This add-on aims to be non-destructive, so actual modifications to theme-files will never be included.
 
