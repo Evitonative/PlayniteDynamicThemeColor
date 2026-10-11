@@ -26,7 +26,9 @@ namespace DynamicThemeColor
 
         private DynamicThemeColorSettingsViewModel Settings { get; set; }
         
+        // ReSharper disable once CollectionNeverUpdated.Local
         private readonly ConcurrentDictionary<Guid, (CorePalette Palette, uint SeedColor)> _paletteCache = new ConcurrentDictionary<Guid, (CorePalette, uint)>();
+        
         private CancellationTokenSource _cts;
 
         public override Guid Id { get; } = Guid.Parse("a7a76873-8465-4273-a8a6-d460550ce627");
@@ -56,11 +58,105 @@ namespace DynamicThemeColor
             UpdateTheme(game);
         }
 
-        private CorePalette GetPalette(uint seedArgb)
+        public void RefreshTheme()
         {
-            return CorePalette.Of(seedArgb, Settings.Settings.PaletteStyle);
+            var game = PlayniteApi.MainView.SelectedGames?.FirstOrDefault();
+            UpdateTheme(game);
         }
-        
+
+        public void ClearCache(bool silent = false)
+        {
+            _paletteCache.Clear();
+
+            if (silent) return;
+            PlayniteApi.Dialogs.ShowMessage(
+                ResourceProvider.GetString("LOCDynamicThemeColorCacheCleared"), 
+                "Dynamic Theme Color"
+            );
+        }
+
+        private void UpdateTheme(Game game)
+        {
+            var activeView = PlayniteApi.MainView.ActiveDesktopView;
+            var settings = Settings.Settings;
+            
+            if (activeView == DesktopView.List && !settings.ApplyInListView ||
+                activeView == DesktopView.Details && !settings.ApplyInDetailsView ||
+                activeView == DesktopView.Grid && !settings.ApplyInGridView ||
+                game == null)
+            {
+                ApplyFallbackPalette();
+                return;
+            }
+
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
+            var token = _cts.Token;
+
+            if (_paletteCache.TryGetValue(game.Id, out var cachedPalette))
+            {
+                ApplyPalette(cachedPalette.Palette, cachedPalette.SeedColor);
+                return;
+            }
+            
+            var preferCover = Settings.Settings.PreferCoverArt;
+            var imageRelPath = preferCover 
+                ? !string.IsNullOrEmpty(game.CoverImage) ? game.CoverImage : game.BackgroundImage
+                : !string.IsNullOrEmpty(game.BackgroundImage) ? game.BackgroundImage : game.CoverImage;
+            
+            if (string.IsNullOrEmpty(imageRelPath) ||
+                imageRelPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                imageRelPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) 
+            {
+                ApplyFallbackPalette();
+                return;
+            }
+
+            var filePath = PlayniteApi.Database.GetFullFilePath(imageRelPath);
+            if (!File.Exists(filePath))
+            {
+                ApplyFallbackPalette();
+                return;
+            }
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    if (token.IsCancellationRequested) return;
+
+                    var maxColors = Settings.Settings.ColorSelectionRange;
+                    var seedArgb = GetColorFromImage(filePath, game.Id, maxColors);
+
+                    if (seedArgb == 0)
+                    {
+                        if (!token.IsCancellationRequested) ApplyFallbackPalette();
+                        return;
+                    }
+
+                    if (token.IsCancellationRequested) return;
+
+                    var palette = GetPalette(seedArgb);
+                    
+#if !DEBUG
+                        _paletteCache[game.Id] = (palette, seedArgb);
+#endif
+
+                    PlayniteApi.MainView.UIDispatcher.Invoke(() =>
+                    {
+                        if (token.IsCancellationRequested) return;
+                        ApplyPalette(palette, seedArgb);
+                    });
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, $"Failed to extract color for {game.Name}");
+                }
+
+            }, token);
+        }
+
         private void ApplyFallbackPalette()
         {
             var hexString = Settings?.Settings?.DefaultSeedColorHex;
@@ -179,9 +275,45 @@ namespace DynamicThemeColor
             }
         }
 
-        private static bool IsTheme(string theme, string currentTheme)
+        private uint GetColorFromImage(string imagePath, Guid gameId, int maxColors)
         {
-            return !(currentTheme.IndexOf(theme, StringComparison.OrdinalIgnoreCase) < 0);
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(Path.GetFullPath(imagePath));
+            bitmap.DecodePixelWidth = 128;
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            
+            var convertedBitmap = new FormatConvertedBitmap();
+            convertedBitmap.BeginInit();
+            convertedBitmap.Source = bitmap;
+            convertedBitmap.DestinationFormat = PixelFormats.Bgra32;
+            convertedBitmap.EndInit();
+            convertedBitmap.Freeze();
+
+            var width = convertedBitmap.PixelWidth;
+            var height = convertedBitmap.PixelHeight;
+            var pixels = new uint[width * height];
+            convertedBitmap.CopyPixels(pixels, width * 4, 0);
+
+            var quantiserResult = QuantizerCelebi.Quantize(pixels, 128);
+            var rankedColors = Scorer.Score(quantiserResult);
+            
+            if (rankedColors.Count == 0) return 0;
+            
+            if (maxColors <= 1) return rankedColors.FirstOrDefault();
+            
+            var topColors = rankedColors.Take(maxColors).ToList();
+            var index = (int)((uint)gameId.GetHashCode() % (uint)topColors.Count);
+
+            var pickedColor = topColors[index];
+            
+            return ApplyColorAdjustments(pickedColor, Settings.Settings.SaturationSlider, Settings.Settings.LightnessSlider);
+        }
+
+        private CorePalette GetPalette(uint seedArgb)
+        {
+            return CorePalette.Of(seedArgb, Settings.Settings.PaletteStyle);
         }
 
         private static uint ApplyColorAdjustments(uint argb, double satSlider, double lightSlider)
@@ -230,42 +362,6 @@ namespace DynamicThemeColor
             }
         }
 
-        private uint GetColorFromImage(string imagePath, Guid gameId, int maxColors)
-        {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(Path.GetFullPath(imagePath));
-            bitmap.DecodePixelWidth = 128;
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            
-            var convertedBitmap = new FormatConvertedBitmap();
-            convertedBitmap.BeginInit();
-            convertedBitmap.Source = bitmap;
-            convertedBitmap.DestinationFormat = PixelFormats.Bgra32;
-            convertedBitmap.EndInit();
-            convertedBitmap.Freeze();
-
-            var width = convertedBitmap.PixelWidth;
-            var height = convertedBitmap.PixelHeight;
-            var pixels = new uint[width * height];
-            convertedBitmap.CopyPixels(pixels, width * 4, 0);
-
-            var quantiserResult = QuantizerCelebi.Quantize(pixels, 128);
-            var rankedColors = Scorer.Score(quantiserResult);
-            
-            if (rankedColors.Count == 0) return 0;
-            
-            if (maxColors <= 1) return rankedColors.FirstOrDefault();
-            
-            var topColors = rankedColors.Take(maxColors).ToList();
-            var index = (int)((uint)gameId.GetHashCode() % (uint)topColors.Count);
-
-            var pickedColor = topColors[index];
-            
-            return ApplyColorAdjustments(pickedColor, Settings.Settings.SaturationSlider, Settings.Settings.LightnessSlider);
-        }
-
         private static SolidColorBrush CreateFrozenBrush(uint argb, byte a = 255)
         {
             var brush = new SolidColorBrush(Color.FromArgb(
@@ -278,103 +374,9 @@ namespace DynamicThemeColor
             return brush;
         }
 
-        public void ClearCache(bool silent = false)
+        private static bool IsTheme(string theme, string currentTheme)
         {
-            _paletteCache.Clear();
-
-            if (silent) return;
-            PlayniteApi.Dialogs.ShowMessage(
-                ResourceProvider.GetString("LOCDynamicThemeColorCacheCleared"), 
-                "Dynamic Theme Color"
-            );
-        }
-        
-        public void RefreshTheme()
-        {
-            var game = PlayniteApi.MainView.SelectedGames?.FirstOrDefault();
-            UpdateTheme(game);
-        }
-
-        private void UpdateTheme(Game game)
-        {
-            var activeView = PlayniteApi.MainView.ActiveDesktopView;
-            var settings = Settings.Settings;
-            
-            if (activeView == DesktopView.List && !settings.ApplyInListView ||
-                activeView == DesktopView.Details && !settings.ApplyInDetailsView ||
-                activeView == DesktopView.Grid && !settings.ApplyInGridView ||
-                game == null)
-            {
-                ApplyFallbackPalette();
-                return;
-            }
-
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _cts = new CancellationTokenSource();
-            var token = _cts.Token;
-
-            if (_paletteCache.TryGetValue(game.Id, out var cachedPalette))
-            {
-                ApplyPalette(cachedPalette.Palette, cachedPalette.SeedColor);
-                return;
-            }
-            
-            var preferCover = Settings.Settings.PreferCoverArt;
-            var imageRelPath = preferCover 
-                ? !string.IsNullOrEmpty(game.CoverImage) ? game.CoverImage : game.BackgroundImage
-                : !string.IsNullOrEmpty(game.BackgroundImage) ? game.BackgroundImage : game.CoverImage;
-            
-            if (string.IsNullOrEmpty(imageRelPath) ||
-                imageRelPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                imageRelPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) 
-            {
-                ApplyFallbackPalette();
-                return;
-            }
-
-            var filePath = PlayniteApi.Database.GetFullFilePath(imageRelPath);
-            if (!File.Exists(filePath))
-            {
-                ApplyFallbackPalette();
-                return;
-            }
-
-            Task.Run(() =>
-            {
-                try
-                {
-                    if (token.IsCancellationRequested) return;
-
-                    var maxColors = Settings.Settings.ColorSelectionRange;
-                    var seedArgb = GetColorFromImage(filePath, game.Id, maxColors);
-
-                    if (seedArgb == 0)
-                    {
-                        if (!token.IsCancellationRequested) ApplyFallbackPalette();
-                        return;
-                    }
-
-                    if (token.IsCancellationRequested) return;
-
-                    var palette = GetPalette(seedArgb);
-                    
-                    #if !DEBUG
-                        _paletteCache[game.Id] = (palette, seedArgb);
-                    #endif
-
-                    PlayniteApi.MainView.UIDispatcher.Invoke(() =>
-                    {
-                        if (token.IsCancellationRequested) return;
-                        ApplyPalette(palette, seedArgb);
-                    });
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, $"Failed to extract color for {game.Name}");
-                }
-
-            }, token);
+            return !(currentTheme.IndexOf(theme, StringComparison.OrdinalIgnoreCase) < 0);
         }
     }
 }
