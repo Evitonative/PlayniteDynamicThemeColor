@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using MaterialColorUtilities.ColorAppearance;
 using MaterialColorUtilities.Palettes;
 using MaterialColorUtilities.Quantize;
 using MaterialColorUtilities.Score;
@@ -84,6 +83,7 @@ namespace DynamicThemeColor
 
         private void ApplyPalette(CorePalette palette, uint seedArgb)
         {
+            // Accent Color
             var accentColor = palette.Primary[80];
             var onAccentColor = palette.Primary[10];
             
@@ -98,55 +98,90 @@ namespace DynamicThemeColor
             var satMult = Settings.Settings.SaturationSlider;
             var lightMult = Settings.Settings.LightnessSlider;
             accentColor = ApplyColorAdjustments(accentColor, satMult, lightMult);
-            //onAccentColor = ApplyColorAdjustments(onAccentColor, satMult, lightMult);
+            //onAccentColor = ApplyColorAdjustments(onAccentColor, satMult, lightMult); -- this didn't look good, but I'll leave it here
             
+            // Surfaces & Window Backdrops
+            var windowBackground = palette.Neutral[8];
+            var tooltipBackground  = palette.NeutralVariant[8];
+            var windowOutline =  palette.NeutralVariant[35];
+            var cardBackground = palette.NeutralVariant[15];
+            
+            // Typography
+            var primaryText = palette.Neutral[90];
+            var secondaryText = palette.NeutralVariant[70];
+            
+            // Buttons & Inputs
+            var buttonBackground = palette.Neutral[25];
+            var buttonOutline = palette.Primary[70];
+            var altPropertiesButton = palette.NeutralVariant[30];
+            
+            // Other Colors
+            var scrollbarInactiveThumb = palette.Neutral[20];
+            var progressbarBackground = palette.NeutralVariant[15];
+            
+            // Notes are for the default theme
             ApplyBrushes(
-                ("ControlBackgroundBrush", CreateFrozenBrush(palette.Neutral[20], 64)),
-                ("TextBrush", CreateFrozenBrush(palette.Neutral[90])),
-                ("TextBrushDarker", CreateFrozenBrush(palette.NeutralVariant[70])),
-                ("TextBrushDark", CreateFrozenBrush(onAccentColor)),
-                ("NormalBrush", CreateFrozenBrush(palette.Neutral[20])),
-                ("NormalBrushDark", CreateFrozenBrush(palette.Neutral[12])),
-                ("NormalBorderBrush", Brushes.Transparent),
-                ("HoverBrush", CreateFrozenBrush(palette.Primary[40], 80)),
-                ("GlyphBrush", CreateFrozenBrush(accentColor)),
-                ("HighlightGlyphBrush", CreateFrozenBrush(accentColor)),
-                ("PopupBorderBrush", CreateFrozenBrush(palette.NeutralVariant[35])),
-                ("TooltipBackgroundBrush", CreateFrozenBrush(palette.Neutral[15])),
-                ("ButtonBackgroundBrush", CreateFrozenBrush(palette.Neutral[25])),
-                ("GridItemBackgroundBrush", Brushes.Transparent),
-                ("PanelSeparatorBrush", CreateFrozenBrush(palette.Neutral[90], 13)),
-                ("WindowPanelSeparatorBrush", Brushes.Transparent),
-                ("PopupBackgroundBrush", CreateFrozenBrush(palette.Neutral[10])),
-                ("CheckBoxCheckMarkBrush", CreateFrozenBrush(accentColor)),
-                ("ExpanderBackgroundBrush", Brushes.Transparent),
-                // ReSharper disable once StringLiteralTypo
-                ("WindowBackgourndBrush", CreateFrozenBrush(palette.Neutral[8])),
-                ("WindowBackgroundBrush", CreateFrozenBrush(palette.Neutral[8]))
+                // --- Surfaces & Window Backdrops ---
+                // ReSharper disable once StringLiteralTypo - Playnite dev made a typo
+                ("WindowBackgourndBrush", CreateFrozenBrush(windowBackground)),             // Primary window backgrounds
+                ("WindowBackgroundBrush", CreateFrozenBrush(windowBackground)),             // Primary window backgrounds
+                ("PopupBackgroundBrush", CreateFrozenBrush(tooltipBackground)),             // Popup Background
+                ("TooltipBackgroundBrush", CreateFrozenBrush(tooltipBackground)),           // Tooltip Background
+                ("PopupBorderBrush", CreateFrozenBrush(windowOutline)),                     // Window Outline
+                ("GridItemBackgroundBrush", CreateFrozenBrush(tooltipBackground)),          // Background under letterboxed/odd-aspect covers in Grid View
+                
+                // --- Typography ---
+                ("TextBrush", CreateFrozenBrush(primaryText)),                              // Primary text across labels, titles, and grid tiles
+                ("TextBrushDarker", CreateFrozenBrush(secondaryText)),                      // The search icon, Harmony uses it in more places
+                ("TextBrushDark", CreateFrozenBrush(onAccentColor)),                        // The Button on the play button
+                
+                // --- Interactive Accents, Glyphs & State Indicators ---
+                ("GlyphBrush", CreateFrozenBrush(accentColor)),                             // Used by a lot, play button, active elements, some Glyphs
+                ("HighlightGlyphBrush", CreateFrozenBrush(accentColor)),                    // Background of the progress in sliders
+                ("CheckBoxCheckMarkBrush", CreateFrozenBrush(accentColor)),                 // Checkbox check glyph
+                ("HoverBrush", CreateFrozenBrush(accentColor, 80)),                       // Hovering on sidebar
+                
+                // --- Controls, Inputs & Buttons ---
+                ("ButtonBackgroundBrush", CreateFrozenBrush(buttonBackground)),             // Button Background
+                ("NormalBorderBrush", CreateFrozenBrush(buttonOutline, 32)),              // Outline of buttons
+                ("ControlBackgroundBrush", CreateFrozenBrush(buttonBackground, 64)),      // Sidebar, Searchbar, Search Menu, All kinds of inputs
+                ("NormalBrush", CreateFrozenBrush(scrollbarInactiveThumb)),                 // Inactive Scrollbar & Filters Button
+                ("NormalBrushDark", CreateFrozenBrush(progressbarBackground)),              // Progress bar gutter / recessed tracks
+                
+                // --- Layout Framing & Dividers ---
+                ("PanelSeparatorBrush", Brushes.Transparent),                       // Framing in main window
+                ("WindowPanelSeparatorBrush", Brushes.Transparent),                 // Framing in the settings windows
+                ("ExpanderBackgroundBrush", Brushes.Transparent)                    // Expandable section backgrounds
             );
 
-            // Harmony Theme Specific
-            var currentTheme = PlayniteApi.ApplicationSettings.DesktopTheme ?? string.Empty;
-            if (currentTheme.IndexOf("Harmony", StringComparison.OrdinalIgnoreCase) < 0) return;
-            ApplyBrushes(
-                ("WindowBackgroundBrush", CreateFrozenBrush(palette.Neutral[8])),
-                ("MainWindowBackgroundBrush", CreateFrozenBrush(palette.Neutral[8])),
-                ("PlayButtonTextBrush", CreateFrozenBrush(onAccentColor)),
-                ("ButtonMouseOverBackgroundBrush", CreateFrozenBrush(palette.Neutral[35])),
-                ("MainPanelBackgroundBrush", CreateFrozenBrush(palette.Neutral[8])),
-                ("SidebarBackgroundBrush", CreateFrozenBrush(palette.Neutral[90], 13)),
-                ("SidebarItemBackgroundBrush", CreateFrozenBrush(palette.Neutral[90], 13)),
-                ("TopPanelSearchBoxBackgroundBrush", CreateFrozenBrush(palette.Neutral[15])),
-                ("DetailsViewBarBackgroundBrush", CreateFrozenBrush(palette.Neutral[90], 15)),
-                ("OpaqueHighlightBrush", CreateFrozenBrush(accentColor, 64)),
-                ("OpaqueGrayHighlightBrush", CreateFrozenBrush(accentColor, 64)),
-                ("OpaqueHighlightBrushBright", CreateFrozenBrush(palette.Primary[90], 64)),
-                ("SecondaryBrush", CreateFrozenBrush(palette.NeutralVariant[30])),
-                ("BottomButtonHighlightBrush", CreateFrozenBrush(palette.Primary[70]))
-            );
+            // Theme Specific
+            switch (PlayniteApi.ApplicationSettings.DesktopTheme ?? string.Empty)
+            { 
+                case var theme when IsTheme("Harmony", theme):
+                    ApplyBrushes(
+                        // --- Surfaces & Window Backdrops ---
+                        ("MainWindowBackgroundBrush", CreateFrozenBrush(windowBackground)),                 // Main Window Background
+                        
+                        // --- Controls, Inputs & Buttons ---
+                        ("PlayButtonTextBrush", CreateFrozenBrush(onAccentColor)),                          // Text play button
+                        ("ButtonMouseOverBackgroundBrush", CreateFrozenBrush(buttonBackground, 128)),     // Hover over game quick actions
+                        ("SecondaryBrush", CreateFrozenBrush(altPropertiesButton)),                         // Unused but I use it as alternative disabled Properties Button
+                        ("MainPanelBackgroundBrush", CreateFrozenBrush(accentColor))                        // Used by borders from checkboxes, but I can't see it
+                        
+                        // This is most likely not used, I just keep it to remember it
+                        // ("SidebarItemBackgroundBrush", CreateFrozenBrush(palette.Neutral[90], 13))
+                    );
 
-            if (Settings.Settings.EnableHarmonyDetailsPanelBrush)
-                ApplyBrushes(("DetailsViewPanelBackgroundBrush", CreateFrozenBrush(palette.NeutralVariant[15])));
+                    if (Settings.Settings.EnableHarmonyDetailsPanelBrush)
+                        ApplyBrushes(("DetailsViewPanelBackgroundBrush", CreateFrozenBrush(cardBackground)));
+                    
+                    break;
+            }
+        }
+
+        private static bool IsTheme(string theme, string currentTheme)
+        {
+            return !(currentTheme.IndexOf(theme, StringComparison.OrdinalIgnoreCase) < 0);
         }
 
         private static uint ApplyColorAdjustments(uint argb, double satSlider, double lightSlider)
@@ -186,7 +221,7 @@ namespace DynamicThemeColor
 
             return (uint)((a << 24) | (finalR << 16) | (finalG << 8) | finalB);
         }
-        
+
         private static void ApplyBrushes(params (string resource, Brush brush)[] brushes)
         {
             foreach (var (resource, brush) in brushes)
@@ -323,7 +358,10 @@ namespace DynamicThemeColor
                     if (token.IsCancellationRequested) return;
 
                     var palette = GetPalette(seedArgb);
-                    _paletteCache[game.Id] = (palette, seedArgb);
+                    
+                    #if !DEBUG
+                        _paletteCache[game.Id] = (palette, seedArgb);
+                    #endif
 
                     PlayniteApi.MainView.UIDispatcher.Invoke(() =>
                     {
