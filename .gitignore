@@ -61,3 +61,4 @@ nunit-*.xml
 
 # Playnite specific
 *.pext
+/build
