@@ -140,14 +140,14 @@ namespace DynamicThemeColor {
                 .WithThemeRegistry(themeRegistry, desktopTheme);
 
             if (settings.UseSeedColorForGlyph) {
-                engine.AddFilter(new SeedAccentFilter());
+                engine.AddVariableFilter(new SeedAccentFilter());
             }
 
-            engine.AddFilter(new SaturationFilter(settings));
-            engine.AddFilter(new LightnessFilter(settings));
+            engine.AddVariableFilter(new SaturationFilter(settings));
+            engine.AddVariableFilter(new LightnessFilter(settings));
 
             if (settings.UseSeedColorForGlyph || settings.AlwaysEnabledContrastImprovements) {
-                engine.AddFilter(new AccentContrastFilter());
+                engine.AddVariableFilter(new AccentContrastFilter());
             }
 
             engine.Build().Draw();

@@ -9,7 +9,8 @@ namespace DynamicThemeColor.Theming {
     public class PaletteEngine {
         private static readonly ILogger logger = LogManager.GetLogger();
 
-        private readonly List<IColorFilter> filters =  new List<IColorFilter>();
+        private readonly List<IColorFilter> variableFilters = new List<IColorFilter>();
+        private readonly List<IColorFilter> brushFilters = new List<IColorFilter>();
         private readonly ColorPalette colorPalette;
 
         private ThemeRegistry themeRegistry;
@@ -31,15 +32,35 @@ namespace DynamicThemeColor.Theming {
             return this;
         }
 
-        public PaletteEngine AddFilter(IColorFilter filter) {
-            logger.Debug($"Adding filter {filter.Name}");
+        public PaletteEngine AddVariableFilter(IColorFilter filter) {
+            return AddFilter(filter, ColorProcessingStage.Variable);
+        }
 
-            if (!(filter.ProcessingStage.Contains(ColorProcessingStage.Variable) || filter.ProcessingStage.Contains(ColorProcessingStage.Brush))) {
-                logger.Debug($"Filter not compatible with palette stage {filter.Name}");
+        public PaletteEngine AddBrushFilter(IColorFilter filter) {
+            return AddFilter(filter, ColorProcessingStage.Brush);
+        }
+
+        public PaletteEngine AddFilter(IColorFilter filter, ColorProcessingStage targetStage) {
+            logger.Debug($"Adding filter '{filter.Name}' to stage '{targetStage}'");
+
+            if (!filter.ProcessingStage.Contains(targetStage)) {
+                logger.Warn($"Filter '{filter.Name}' does not support the {targetStage} stage.");
                 return this;
             }
 
-            filters.Add(filter);
+            // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+            switch (targetStage) {
+                case ColorProcessingStage.Variable:
+                    variableFilters.Add(filter);
+                    break;
+                case ColorProcessingStage.Brush:
+                    brushFilters.Add(filter);
+                    break;
+                default:
+                    logger.Warn($"Stage '{targetStage}' is not handled by PaletteEngine.");
+                    break;
+            }
+
             return this;
         }
 
@@ -51,14 +72,14 @@ namespace DynamicThemeColor.Theming {
 
             Dictionary<string, (uint color, byte alpha)> resolvedVariables = themeRegistry.ResolveDictionary(rawVariables, colorPalette, null, rawVariables);
 
-            foreach (IColorFilter filter in filters.Where(filter => filter.ProcessingStage.Contains(ColorProcessingStage.Variable))) {
+            foreach (IColorFilter filter in this.variableFilters) {
                 logger.Debug($"Applying variable filter {filter.Name}");
                 filter.ApplyFilter(colorPalette, resolvedVariables, ColorProcessingStage.Variable);
             }
 
             brushColors = themeRegistry.ResolveDictionary(rawBrushes, colorPalette, resolvedVariables);
 
-            foreach (IColorFilter filter in filters.Where(filter => filter.ProcessingStage.Contains(ColorProcessingStage.Brush))) {
+            foreach (IColorFilter filter in this.brushFilters) {
                 logger.Debug($"Applying brush filter {filter.Name}");
                 filter.ApplyFilter(colorPalette, brushColors, ColorProcessingStage.Brush);
             }

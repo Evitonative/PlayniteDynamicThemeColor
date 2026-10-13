@@ -9,6 +9,7 @@ namespace DynamicThemeColor.Filters {
         public ColorProcessingStage[] ProcessingStage => new[] {
             ColorProcessingStage.Seed,
             ColorProcessingStage.Variable,
+            ColorProcessingStage.Brush,
         };
 
         private readonly AddonSettings settings;
