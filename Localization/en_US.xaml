@@ -1,53 +1,5 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <!-- Headers -->
-    <sys:String x:Key="LOCDynamicThemeColorViewsHeader">Active Views</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorGenerationHeader">Theme Generation</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorThemeSpecificHeader">Theme Specific</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorAdvancedHeader">Advanced</sys:String>
-
-    <!-- View Options -->
-    <sys:String x:Key="LOCDynamicThemeColorApplyDetails">Apply in Details View</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorApplyGrid">Apply in Grid View</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorApplyList">Apply in List View</sys:String>
-
-    <!-- Generation Options -->
-    <sys:String x:Key="LOCDynamicThemeColorPaletteStyle">Theme Style</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorPaletteStyleTooltip" xml:space="preserve">default: TonalSpot&#x0a;&#x0a;TonalSpot creates a standard muted theme.&#x0a;Content preserves the image's vibrant colors.&#x0a;Expressive shifts colors for a more creative look.</sys:String>
-
-    <sys:String x:Key="LOCDynamicThemeColorPreferCover">Prefer Cover Art</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorPreferCoverTooltip" xml:space="preserve">default: checked&#x0a;&#x0a;If checked, colors will be extracted from the cover image first.&#x0a;If unchecked, the background image is used instead.</sys:String>
-
-    <sys:String x:Key="LOCDynamicThemeColorSelectionRange">Color Selection Range</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorSelectionRangeTooltip" xml:space="preserve">default: 1&#x0a;&#x0a;How many dominant colors to consider when finding the best match.</sys:String>
-
-    <sys:String x:Key="LOCDynamicThemeColorFallbackHex">Fallback Color (Hex)</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorFallbackHexTooltip">The default color used when a game has no artwork or the view is disabled. (e.g. #1cd8fc)</sys:String>
-    
-    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyph">Use Original Color for Accents</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorUseSeedGlyphTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;If checked, colorful elements like play buttons and checkmarks will use the exact color&#x0a;pulled from the image instead of blending into the background theme.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
-    
-    <sys:String x:Key="LOCDynamicThemeColorSaturation">Saturation</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorSaturationTooltip" xml:space="preserve">default: 0.00&#x0a;&#x0a;Boost (or reduce) the saturation of the accent color.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
-    
-    <sys:String x:Key="LOCDynamicThemeColorLightness">Lightness</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorLightnessTooltip" xml:space="preserve">default: 0.00&#x0a;&#x0a;Boost (or reduce) the lightness of the accent color.&#x0a;&#x0a;This potentially results in poor contrast. Use with care.</sys:String>
-
-    <!-- Theme Specific Settings -->
-    <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanel">Override Details Panel Background</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorHarmonyDetailsPanelTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;Replaces Harmony's default texture with a solid dynamic color.&#x0a;&#x0a;Disabling this requires a Playnite restart to take effect.</sys:String>
-    
-    <sys:String x:Key="LOCDynamicThemeColorRestartRequiredTitle">Restart Required</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorRestartRequiredMsg" xml:space="preserve">A theme setting was changed that requires Playnite to restart to take effect.&#x0a;&#x0a;Please restart Playnite when you are ready.</sys:String>
-    
-    <!-- Advanced -->
-    <sys:String x:Key="LOCDynamicThemeColorContrastImprovementsAlways">Always Use Contrast Improvements</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorContrastImprovementsAlwaysTooltip" xml:space="preserve">default: not checked&#x0a;&#x0a;Always applies the contrast improvements for the "Use Original Color for Accents" option .&#x0a;This may have unintended side effects.&#x0a;Try this if you have contrast issues.&#x0a;Does nothing when "Use Original Color for Accents" is enabled.</sys:String>
-    
-    <sys:String x:Key="LOCDynamicThemeColorClearCacheBtn">Clear Color Cache</sys:String>
-    <sys:String x:Key="LOCDynamicThemeColorClearCacheTooltip">Forces the plugin to re-extract colors from all images the next time a game is selected.</sys:String>
-    
-    <sys:String x:Key="LOCDynamicThemeColorCacheCleared">Color cache cleared successfully.</sys:String>
 </ResourceDictionary>
