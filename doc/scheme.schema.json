@@ -1,0 +1,202 @@
+﻿{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://evitonative.de/schemas/playnite-dynamic-theme/scheme.json",
+    "title": "Scheme Definition",
+    "description": "Color scheme definition for a playnite theme.",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "theme": {
+            "description": "The name of the playnite theme.",
+            "type": "string"
+        },
+        "fullscreen": {
+            "description": "The theme is a fullscreen theme.",
+            "type": "boolean",
+            "default": false
+        },
+        "author": {
+            "description": "Author(s) of this theme.",
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/scheme-author"
+            }
+        },
+        "version": {
+            "description": "Version of this theme.",
+            "type": "integer"
+        },
+        "inherits": {
+            "$ref": "#/$defs/scheme-dependency"
+        },
+        "variables": {
+            "description": "Variables used by scheme.",
+            "type": "object",
+            "patternProperties": {
+                "^[a-zA-Z0-9-_]+$": {
+                    "$ref": "#/$defs/color-reference"
+                }
+            },
+            "additionalProperties": false
+        },
+        "brushes": {
+            "description": "Playnite brushes for recoloring the UI.",
+            "type": "object",
+            "patternProperties": {
+                "^.+$": {
+                    "allOf": [
+                        { "$ref": "#/$defs/color-reference"},
+                        {
+                            "type": "object",
+                            "properties": {
+                                "optional": {
+                                    "description": "This value should have a settings option to disable it.",
+                                    "type": [ "object", "null" ],
+                                    "default": null,
+                                    "properties": {
+                                        "label": {
+                                            "description": "Label of the settings option",
+                                            "type": "string",
+                                            "minLength": 1
+                                        },
+                                        "default": {
+                                            "description": "Default value of the option.",
+                                            "type": "boolean",
+                                            "default": false
+                                        }
+                                    },
+                                    "required": [ "label" ],
+                                    "additionalProperties": false
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    ]
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": [ "theme", "author", "version" ],
+    "additionalProperties": false,
+    "$defs": {
+        "scheme-author": {
+            "description": "Name of the author",
+            "type": "string",
+            "minLength": 1
+        },
+        "scheme-dependency": {
+            "description": "A scheme for a theme depended on by another scheme.",
+            "type": "object",
+            "properties": {
+                "theme": {
+                    "description": "The theme the scheme supports",
+                    "type": "string"
+                },
+                "min-version": {
+                    "description": "The minimum required version of the scheme.",
+                    "type": "integer"
+                },
+                "author": {
+                    "description": "Array of authors of the dependent theme.",
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/scheme-author" }
+                }
+            },
+            "required": [ "theme" ],
+            "additionalProperties": false
+        },
+        "color-reference": {
+            "oneOf": [
+                { "$ref": "#/$defs/hex-color" },
+                { "$ref": "#/$defs/transparent" },
+                { "$ref": "#/$defs/material-color" },
+                { "$ref": "#/$defs/variable-reference" }
+            ],
+            "additionalProperties": false
+        },
+        "hex-color": {
+            "description": "HEX color",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "hex"
+                },
+                "value": {
+                    "type": "string",
+                    "pattern": "^#[a-fA-F0-9]{6}$"
+                },
+                "alpha": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "default": 100
+                }
+            },
+            "required": [ "type", "value" ]
+        },
+        "transparent": {
+            "description": "Transparent Brush",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "transparent"
+                }
+            },
+            "required": [ "type" ]
+        },
+        "material-color": {
+            "description": "Material color",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "material"
+                },
+                "palette": {
+                    "type": "string",
+                    "enum": [ "Neutral", "NeutralVariant", "Primary", "Secondary", "Tertiary" ]
+                },
+                "value": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "alpha": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "default": 100
+                }
+            },
+            "required": [ "type", "palette","value" ],
+            "additionalProperties": false
+        },
+        "variable-reference": {
+            "description": "Reference to another variable",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "const": "variable"
+                },
+                "variable": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9-_]+$"
+                },
+                "alpha": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "default": 100
+                }
+            },
+            "required": [ "type", "variable" ],
+            "additionalProperties": false
+        }
+    }
+}

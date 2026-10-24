@@ -1,0 +1,53 @@
+﻿{
+    "$schema": "../../doc/scheme.schema.json",
+    "theme": "Harmony",
+    "fullscreen": false,
+    "author": [ "Evito" ],
+    "version": 1,
+    "inherits": {
+        "theme": "default",
+        "min-version": 1,
+        "author": [ "Evito" ]
+    },
+    "variables": {
+        "cardBackground": {
+            "type": "material",
+            "palette": "NeutralVariant",
+            "value": 15
+        },
+        "altPropertiesButton": {
+            "type": "material",
+            "palette": "NeutralVariant",
+            "value": 30
+        }
+    },
+    "brushes": {
+        "MainWindowBackgroundBrush": {
+            "type": "variable",
+            "variable": "windowBackground"
+        },
+        "PlayButtonTextBrush": {
+            "type": "variable",
+            "variable": "onAccentColor"
+        },
+        "ButtonMouseOverBackgroundBrush": {
+            "type": "variable",
+            "variable": "buttonBackground"
+        },
+        "SecondaryBrush": {
+            "type": "variable",
+            "variable": "altPropertiesButton"
+        },
+        "MainPanelBackgroundBrush": {
+            "type": "variable",
+            "variable": "accentColor"
+        },
+        "DetailsViewPanelBackgroundBrush": {
+            "type": "variable",
+            "variable": "cardBackground",
+            "optional": {
+                "label": "Enable Harmony Details Panel Brush"
+            }
+        }
+    }
+}

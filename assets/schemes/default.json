@@ -1,0 +1,151 @@
+﻿{
+    "$schema": "../../doc/scheme.schema.json",
+    "theme": "default",
+    "fullscreen": false,
+    "author": ["Evito"],
+    "version": 1,
+    "inherits": null,
+    "variables": {
+        "AccentColor": {
+            "type": "material",
+            "palette": "Primary",
+            "value": 80
+        },
+        "OnAccentColor": {
+            "type": "material",
+            "palette": "Primary",
+            "value": 10
+        },
+        "WindowBackground": {
+            "type": "material",
+            "palette": "Neutral",
+            "value": 8
+        },
+        "TooltipBackground": {
+            "type": "material",
+            "palette": "NeutralVariant",
+            "value": 8
+        },
+        "WindowOutline": {
+            "type": "material",
+            "palette": "NeutralVariant",
+            "value": 35
+        },
+        "PrimaryText": {
+            "type": "material",
+            "palette": "Neutral",
+            "value": 90
+        },
+        "SecondaryText": {
+            "type": "material",
+            "palette": "NeutralVariant",
+            "value": 70
+        },
+        "ButtonBackground": {
+            "type": "material",
+            "palette": "Neutral",
+            "value": 25
+        },
+        "ButtonOutline": {
+            "type": "material",
+            "palette": "Primary",
+            "value": 70
+        },
+        "ScrollbarInactiveThumb": {
+            "type": "material",
+            "palette": "Neutral",
+            "value": 20
+        },
+        "ProgressbarBackground": {
+            "type": "material",
+            "palette": "NeutralVariant",
+            "value": 15
+        }
+    },
+    "brushes": {
+        "WindowBackgourndBrush": {
+            "type": "variable",
+            "variable": "WindowBackground"
+        },
+        "WindowBackgroundBrush": {
+            "type": "variable",
+            "variable": "WindowBackground"
+        },
+        "PopupBackgroundBrush": {
+            "type": "variable",
+            "variable": "TooltipBackground"
+        },
+        "TooltipBackgroundBrush": {
+            "type": "variable",
+            "variable": "TooltipBackground"
+        },
+        "PopupBorderBrush": {
+            "type": "variable",
+            "variable": "WindowOutline"
+        },
+        "GridItemBackgroundBrush": {
+            "type": "variable",
+            "variable": "TooltipBackground"
+        },
+        "TextBrush": {
+            "type": "variable",
+            "variable": "PrimaryText"
+        },
+        "TextBrushDarker": {
+            "type": "variable",
+            "variable": "SecondaryText"
+        },
+        "TextBrushDark": {
+            "type": "variable",
+            "variable": "OnAccentColor"
+        },
+        "GlyphBrush": {
+            "type": "variable",
+            "variable": "AccentColor"
+        },
+        "HighlightGlyphBrush": {
+            "type": "variable",
+            "variable": "AccentColor"
+        },
+        "CheckBoxCheckMarkBrush": {
+            "type": "variable",
+            "variable": "AccentColor"
+        },
+        "HoverBrush": {
+            "type": "variable",
+            "variable": "AccentColor",
+            "alpha": 80
+        },
+        "ButtonBackgroundBrush": {
+            "type": "variable",
+            "variable": "ButtonBackground"
+        },
+        "NormalBorderBrush": {
+            "type": "variable",
+            "variable": "ButtonOutline",
+            "alpha": 32
+        },
+        "ControlBackgroundBrush": {
+            "type": "variable",
+            "variable": "ButtonBackground",
+            "alpha": 64
+        },
+        "NormalBrush": {
+            "type": "variable",
+            "variable": "ScrollbarInactiveThumb"
+        },
+        "NormalBrushDark": {
+            "type": "variable",
+            "variable": "ProgressbarBackground"
+        },
+        "PanelSeparatorBrush": {
+            "type": "transparent"
+        },
+        "WindowPanelSeparatorBrush": {
+            "type": "transparent"
+        },
+        "ExpanderBackgroundBrush": {
+            "type": "transparent"
+        }
+    }
+}

@@ -12,12 +12,16 @@ namespace DynamicThemeColor {
         public override Guid Id { get; } = Guid.Parse("a7a76873-8465-4273-a8a6-d460550ce627");
 
         private SettingsViewModel Settings { get; [UsedImplicitly] set; }
+        private readonly ILogger logger = LogManager.GetLogger();
+        private readonly SchemeEngine schemeEngine;
 
         public DynamicThemeColor(IPlayniteAPI api) : base(api) {
             Settings = new SettingsViewModel(this);
             Properties = new GenericPluginProperties {
                 HasSettings = true,
             };
+
+            schemeEngine = new SchemeEngine(this);
         }
 
         public override ISettings GetSettings(bool firstRunSettings) {

@@ -10,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" PrivateAssets="All" ExcludeAssets="runtime" />
         <PackageReference Include="MaterialColorUtilities" Version="0.3.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="PlayniteSDK" Version="6.17.0"/>
     </ItemGroup>
 
@@ -22,16 +23,20 @@
             <SubType>Designer</SubType>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="assets\icon.png">
+        <None Update="assets\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="THIRD-PARTY-LICENSE.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="assets\schemes\harmony.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
         <Reference Include="System.Windows.Forms"/>
+        <Reference Include="System.ComponentModel.DataAnnotations" />
     </ItemGroup>
 
     <ItemGroup>
