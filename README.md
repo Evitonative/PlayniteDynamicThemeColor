@@ -1,4 +1,9 @@
 # 🎨 Playnite Dynamic Theme Color
+> [!CAUTION]
+> **This is the development branch for Version 2 of this add-on.**
+>
+> It is currently work-in-progress, incomplete, and actively changing. Breaking changes and refactorings can happen at any time. Do not use this branch for production environments.
+
 A [Playnite](https://playnite.link/) Add-on that dynamically changes your interface theme colors based on the cover or background artwork of the currently selected game.
 
 ## 🖼️ Showcase
@@ -9,7 +14,7 @@ See the add-on in action in [this video by u/shawak456 on Reddit](https://www.re
 > Other themes may not react to changes made by this add-on.
 >
 > Fullscreen Mode has no supported themes and you may want to disable the add-on when switching into fullscreen.
-> 
+>
 > ↳ *See [Theme Compatibility](#-theme-compatibility) below for details.*
 
 > [!NOTE]
@@ -49,20 +54,20 @@ Harmony hardcodes the background color of the `Install` and `More` buttons, so t
 
 <details>
  <summary>Manual Modification of Harmony to Recolour Context Buttons</summary>
- 
+
  If you want those to change you have a couple options.
-  
+
  You need to edit the `DerivedStyles\PlayButton.xaml` file, located by default at `%AppData%\Playnite\Themes\Desktop\Harmony_d49ef7bc-49de-4fd0-9a67-bd1f26b56047\DerivedStyles\PlayButton.xaml`.
- 
+
  In there search for `#363742` or go to line 68, where you should find this:
- 
+
  ```xaml
  <Style x:Key="ContextButtonViews" TargetType="{x:Type Button}">
      <Setter Property="Background" Value="#363742" />
      <Setter Property="Foreground" Value="{DynamicResource GlyphBrush}" />
      <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}" />
  ```
- 
+
  You can replace `#363742` with one of the following.
  - `{DynamicResource ControlBackgroundBrush}`: This is background used by the Edit and Favorite buttons.
  - `{DynamicResource SecondaryBrush}`: Is not used by the theme (or I couldn't find it). It for the most part also uses a fitting color.
