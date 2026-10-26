@@ -1,0 +1,113 @@
+<UserControl x:Class="DynamicThemeColor.UI.Views.Settings.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:components="clr-namespace:DynamicThemeColor.UI.Components"
+             xmlns:settings="clr-namespace:DynamicThemeColor.UI.Views.Settings"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance Type=settings:SettingsViewModel, IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <Thickness x:Key="SectionSpacing">0,0,0,15</Thickness>
+        <Thickness x:Key="ItemSpacing">0,0,0,8</Thickness>
+        <Thickness x:Key="GroupBoxContentPadding">10,8,5,5</Thickness>
+        <Thickness x:Key="RootTabPadding">15</Thickness>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+
+    <TabControl>
+        <TabItem Header="General">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel Margin="{StaticResource RootTabPadding}">
+                    <GroupBox Margin="{StaticResource SectionSpacing}">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="View Targets"
+                                           VerticalAlignment="Center"/>
+                                <components:HelpIcon VerticalAlignment="Center"
+                                                     HelpToolTip="In which views should theming be applied?"/>
+                            </StackPanel>
+                        </GroupBox.Header>
+
+                        <StackPanel Margin="{StaticResource GroupBoxContentPadding}">
+                            <CheckBox IsChecked="{Binding Settings.ApplyInDetailsView}"
+                                      Margin="{StaticResource ItemSpacing}"
+                                      Content="Details View" />
+
+                            <CheckBox IsChecked="{Binding Settings.ApplyInGridView}"
+                                      Margin="{StaticResource ItemSpacing}"
+                                      Content="Grid View" />
+
+                            <CheckBox IsChecked="{Binding Settings.ApplyInListView}"
+                                      Margin="{StaticResource ItemSpacing}"
+                                      Content="List View" />
+
+                            <CheckBox IsChecked="{Binding Settings.ApplyInFullscreen}"
+                                      Margin="{StaticResource ItemSpacing}"
+                                      Content="Fullscreen" />
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Asset Priority Order"
+                                           VerticalAlignment="Center"/>
+                                <components:HelpIcon VerticalAlignment="Center"
+                                                     HelpToolTip="In which order should the assets for a game be attempted to be loaded. Lower in the list will be loaded in case an asset is not available."/>
+                            </StackPanel>
+                        </GroupBox.Header>
+
+                        <StackPanel>
+                            <components:RankableList ItemsSource="{Binding Settings.AssetPriority}" />
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="Schemes">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel Margin="{StaticResource RootTabPadding}">
+                    <TextBlock Text="Active Schemes" Margin="{StaticResource ItemSpacing}"/>
+                    <ItemsControl ItemsSource="{Binding ActiveSchemes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <components:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
+                                                                   SchemeOptions="{Binding OptionsDictionary}"
+                                                                   Margin="{StaticResource ItemSpacing}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Expander Header="Other Discovered Schemes"
+                              Margin="0,15,0,0"
+                              Visibility="{Binding HasOtherSchemes, Converter={StaticResource BoolToVis}}">
+                        <ItemsControl ItemsSource="{Binding OtherSchemes}" Margin="0,10,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <components:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
+                                                                       SchemeOptions="{Binding OptionsDictionary}"
+                                                                       Margin="{StaticResource ItemSpacing}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="Filters">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem Header="Advanced">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+            </ScrollViewer>
+        </TabItem>
+    </TabControl>
+</UserControl>

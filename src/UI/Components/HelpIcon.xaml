@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="DynamicThemeColor.UI.Components.HelpIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="RootHelpIcon">
+    <TextBlock Text="ⓘ"
+               ToolTip="{Binding HelpToolTip, ElementName=RootHelpIcon}"
+               Foreground="{DynamicResource TextBrushDarker}"
+               Cursor="Help"
+               VerticalAlignment="Center"
+               Margin="10,0,0,0" />
+</UserControl>

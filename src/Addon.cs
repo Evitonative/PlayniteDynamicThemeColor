@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Controls;
-using DynamicThemeColor.Settings;
+using DynamicThemeColor.Model;
+using DynamicThemeColor.UI.Views.Settings;
 using JetBrains.Annotations;
 using Playnite.SDK;
 using Playnite.SDK.Events;
@@ -8,20 +9,23 @@ using Playnite.SDK.Plugins;
 
 namespace DynamicThemeColor {
     [UsedImplicitly]
-    public class DynamicThemeColor : GenericPlugin {
-        public override Guid Id { get; } = Guid.Parse("a7a76873-8465-4273-a8a6-d460550ce627");
+    public class Addon : GenericPlugin {
+        public sealed override Guid Id { get; } = Guid.Parse("a7a76873-8465-4273-a8a6-d460550ce627");
+        public readonly SchemeEngine SchemeEngine;
 
         private SettingsViewModel Settings { get; [UsedImplicitly] set; }
-        private readonly ILogger logger = LogManager.GetLogger();
-        private readonly SchemeEngine schemeEngine;
 
-        public DynamicThemeColor(IPlayniteAPI api) : base(api) {
-            Settings = new SettingsViewModel(this);
+        public Addon(IPlayniteAPI api) : base(api) {
             Properties = new GenericPluginProperties {
                 HasSettings = true,
             };
 
-            schemeEngine = new SchemeEngine(this);
+            AddonSettings savedSettings = LoadPluginSettings<AddonSettings>();
+            AddonSettings addonSettings = savedSettings ?? new AddonSettings();
+            addonSettings.EnsureAllEnumsPresent();
+
+            SchemeEngine = new SchemeEngine(PlayniteApi, Id, addonSettings);
+            Settings = new SettingsViewModel(this, addonSettings);
         }
 
         public override ISettings GetSettings(bool firstRunSettings) {

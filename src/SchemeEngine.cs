@@ -15,17 +15,21 @@ namespace DynamicThemeColor {
         private const string schemesFolderName = "schemes";
 
         private readonly ILogger logger = LogManager.GetLogger();
-        private readonly DynamicThemeColor addon;
         private readonly IPlayniteAPI playniteApi;
+        private readonly Guid addonId;
+        private readonly AddonSettings addonSettings;
 
+        public readonly Dictionary<string, ColorScheme> Schemes = new Dictionary<string, ColorScheme>(StringComparer.OrdinalIgnoreCase);
         private readonly List<(string, int)> schemeFiles = new List<(string, int)>();
-        private readonly Dictionary<string, ColorScheme> schemes = new Dictionary<string, ColorScheme>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, ColorScheme.IColorReference> activeVariables = new Dictionary<string, ColorScheme.IColorReference>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, ColorScheme.IBrushDefinition> activeBrushes = new Dictionary<string, ColorScheme.IBrushDefinition>(StringComparer.OrdinalIgnoreCase);
 
-        public SchemeEngine(DynamicThemeColor addon) {
-            this.addon = addon;
-            playniteApi = addon.PlayniteApi;
+        public List<string> ActiveSchemeChain { get; private set; }
+
+        public SchemeEngine(IPlayniteAPI playniteApi, Guid addonId, AddonSettings addonSettings) {
+            this.playniteApi = playniteApi;
+            this.addonId = addonId;
+            this.addonSettings = addonSettings;
 
             DiscoverSchemes();
             LoadSchemes(schemeFiles, out List<(string, string)> loadingErrors);
@@ -35,6 +39,10 @@ namespace DynamicThemeColor {
                 logger.Warn($"Error loading scheme file: {file}: {message}");
             }
 
+            Refresh();
+        }
+
+        public void Refresh() {
             string currentDesktopTheme = playniteApi.ApplicationSettings.DesktopTheme;
             string currentFullscreenTheme = playniteApi.ApplicationSettings.FullscreenTheme;
             bool fullscreenEnabled = playniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen;
@@ -42,7 +50,9 @@ namespace DynamicThemeColor {
 
             string bestMatchingScheme = TryDiscoverBestScheme(currentTheme, fullscreenEnabled);
 
-            MakeVariableAndBrushDict(bestMatchingScheme, activeVariables, activeBrushes);
+            List<string> chain = new List<string>();
+            MakeVariableAndBrushDict(bestMatchingScheme, activeVariables, activeBrushes, seenThemes: chain);
+            ActiveSchemeChain = chain;
         }
 
         private void DiscoverSchemes() {
@@ -78,7 +88,7 @@ namespace DynamicThemeColor {
             }
 
             // In Extension Setting
-            string extensionSettingsPath = Path.Combine(playniteExtensionsDataPath, addon.Id.ToString());
+            string extensionSettingsPath = Path.Combine(playniteExtensionsDataPath, addonId.ToString());
             string settingsSchemesPath = Path.Combine(extensionSettingsPath, schemesFolderName);
 
             if (!Directory.Exists(settingsSchemesPath)) {
@@ -93,7 +103,7 @@ namespace DynamicThemeColor {
         private void LoadSchemes(List<(string, int)> files, out List<(string, string)> errors) {
             errors = new List<(string, string)>();
 
-            schemes.Clear();
+            Schemes.Clear();
 
             foreach ((string filePath, int priority) in files) {
                 try {
@@ -143,7 +153,7 @@ namespace DynamicThemeColor {
             }
             seenThemes.Add(schemeName);
 
-            if (!schemes.TryGetValue(schemeName, out ColorScheme scheme)) {
+            if (!Schemes.TryGetValue(schemeName, out ColorScheme scheme)) {
                 logger.Error($"Invalid scheme in while flattening: {schemeName}");
                 return;
             }
@@ -163,11 +173,25 @@ namespace DynamicThemeColor {
             }
 
             scheme.Variables.ForEach(kvp => variables[kvp.Key] = kvp.Value);
-            scheme.Brushes.ForEach(kvp => brushes[kvp.Key] = kvp.Value);
+            foreach (KeyValuePair<string, ColorScheme.IBrushDefinition> kvp in scheme.Brushes) {
+                string brushKey = kvp.Key;
+                ColorScheme.IBrushDefinition brushDefinition = kvp.Value;
+
+                if (brushDefinition.Optional != null) {
+                    bool isEnabled = brushDefinition.Optional.Default;
+                    if (addonSettings?.SchemeOptionOverrides != null &&
+                        addonSettings.SchemeOptionOverrides.TryGetValue(scheme.Theme, out Dictionary<string, bool> brushDict) &&
+                        brushDict.TryGetValue(brushKey, out bool savedValue)) isEnabled = savedValue;
+
+                    if (!isEnabled) continue;
+                }
+
+                brushes[kvp.Key] = kvp.Value;
+            }
         }
 
         private string TryDiscoverBestScheme(string currentTheme, bool fullscreenEnabled) {
-            List<ColorScheme> candidates = schemes.Values
+            List<ColorScheme> candidates = Schemes.Values
                 .Where(s => s.Fullscreen == fullscreenEnabled)
                 .Where(s => currentTheme.IndexOf(s.Theme, StringComparison.OrdinalIgnoreCase) >= 0)
                 .OrderByDescending(s => s.DiscoveryPriority)
@@ -181,7 +205,7 @@ namespace DynamicThemeColor {
 
         [CanBeNull]
         private string TryDiscoverBestScheme(string dependencyName, bool fullscreenEnabled, int? minVersion, [CanBeNull] List<string> authors) {
-            List<ColorScheme> candidates = schemes.Values
+            List<ColorScheme> candidates = Schemes.Values
                 .Where(s => s.Fullscreen == fullscreenEnabled)
                 .Where(s => string.Equals(s.Theme, dependencyName, StringComparison.OrdinalIgnoreCase))
                 .Where(s=> minVersion == null || s.Version >= minVersion)
@@ -202,11 +226,11 @@ namespace DynamicThemeColor {
         }
 
         private void RegisterOrUpdateScheme(ColorScheme scheme, int priority) {
-            if (schemes.TryGetValue(scheme.Theme, out ColorScheme existing))
+            if (Schemes.TryGetValue(scheme.Theme, out ColorScheme existing))
                 if (priority < existing.DiscoveryPriority) return;
 
             scheme.DiscoveryPriority = priority;
-            schemes[scheme.Theme] = scheme;
+            Schemes[scheme.Theme] = scheme;
         }
     }
 }

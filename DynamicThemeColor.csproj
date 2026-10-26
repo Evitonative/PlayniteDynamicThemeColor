@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" PrivateAssets="All" ExcludeAssets="runtime" />
+        <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" PrivateAssets="All" ExcludeAssets="runtime"/>
         <PackageReference Include="MaterialColorUtilities" Version="0.3.0"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4"/>
         <PackageReference Include="PlayniteSDK" Version="6.17.0"/>
     </ItemGroup>
 
@@ -29,21 +29,29 @@
         <None Include="THIRD-PARTY-LICENSE.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="assets\schemes\harmony.json">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
     </ItemGroup>
 
     <ItemGroup>
         <Reference Include="System.Windows.Forms"/>
-        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.ComponentModel.DataAnnotations"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Page Update="src\Settings\SettingsView.xaml">
+        <Page Update="src\Components\*.xaml">
             <Generator>MSBuild:Compile</Generator>
             <XamlRuntime>Wpf</XamlRuntime>
             <SubType>Designer</SubType>
+        </Page>
+        <Page Update="src\UI\Components\HelpIcon.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Update="src\UI\Components\RankableList.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Update="src\UI\Views\Settings\SettingsView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
         </Page>
     </ItemGroup>
 
