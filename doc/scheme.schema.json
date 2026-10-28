@@ -1,11 +1,15 @@
 ﻿{
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://evitonative.de/schemas/playnite-dynamic-theme/scheme.json",
+    "$id": "https://raw.githubusercontent.com/Evitonative/PlayniteDynamicThemeColor/master/doc/scheme.schema.json",
     "title": "Scheme Definition",
     "description": "Color scheme definition for a playnite theme.",
     "type": "object",
     "properties": {
         "$schema": {
+            "type": "string"
+        },
+        "displayName": {
+            "description": "The name show to the user",
             "type": "string"
         },
         "theme": {
