@@ -8,6 +8,8 @@ using Playnite.SDK.Data;
 namespace DynamicThemeColor.UI.Views.Settings {
     public class SettingsViewModel : ObservableObject, ISettings {
         private readonly Addon plugin;
+        private readonly ILogger logger = LogManager.GetLogger();
+
         private AddonSettings EditingClone { get; set; }
         private AddonSettings settings;
 
@@ -31,7 +33,29 @@ namespace DynamicThemeColor.UI.Views.Settings {
             LoadSchemeCollections();
         }
 
+        public void BeginEdit() {
+            logger.Debug("Settings editing session started (BeginEdit). Creating editing clone.");
+            EditingClone = Serialization.GetClone(Settings);
+        }
+
+        public void CancelEdit() {
+            logger.Debug("Settings editing session cancelled (CancelEdit). Reverting changes.");
+            Settings = EditingClone;
+        }
+
+        public void EndEdit() {
+            logger.Debug("Settings editing session committed (EndEdit). Saving settings and refreshing SchemeEngine.");
+            plugin.SavePluginSettings(Settings);
+            plugin.SchemeEngine.RefreshBrushes();
+        }
+
+        public bool VerifySettings(out List<string> errors) {
+            errors = new List<string>();
+            return true;
+        }
+
         private void LoadSchemeCollections() {
+            logger.Trace("Reloading active and other scheme collections for UI view.");
             ActiveSchemes.Clear();
             OtherSchemes.Clear();
 
@@ -46,24 +70,6 @@ namespace DynamicThemeColor.UI.Views.Settings {
                 if (engine.ActiveSchemeChain != null && engine.ActiveSchemeChain.Contains(schemeName)) ActiveSchemes.Add(itemVm);
                 else OtherSchemes.Add(itemVm);
             }
-        }
-
-        public void BeginEdit() {
-            EditingClone = Serialization.GetClone(Settings);
-        }
-
-        public void CancelEdit() {
-            Settings = EditingClone;
-        }
-
-        public void EndEdit() {
-            plugin.SavePluginSettings(Settings);
-            plugin.SchemeEngine.RefreshBrushes();
-        }
-
-        public bool VerifySettings(out List<string> errors) {
-            errors = new List<string>();
-            return true;
         }
     }
 }

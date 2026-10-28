@@ -51,11 +51,15 @@ namespace DynamicThemeColor {
             bool fullscreenEnabled = playniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen;
             string currentTheme = fullscreenEnabled ? currentFullscreenTheme : currentDesktopTheme;
 
+            logger.Trace($"Refreshing brushes. Mode: {(fullscreenEnabled ? "Fullscreen" : "Desktop")}, Active Theme: '{currentTheme}'");
+
             string bestMatchingScheme = TryDiscoverBestScheme(currentTheme, fullscreenEnabled);
+            logger.Debug($"Best matching scheme resolved to: '{bestMatchingScheme}'");
 
             List<string> chain = new List<string>();
             MakeVariableAndBrushDict(bestMatchingScheme, activeVariables, activeBrushes, seenThemes: chain);
             ActiveSchemeChain = chain;
+            logger.Trace($"Active scheme inheritance chain built: [{string.Join(" -> ", chain)}]");
         }
 
         private void DiscoverSchemes() {
@@ -186,6 +190,7 @@ namespace DynamicThemeColor {
                         addonSettings.SchemeOptionOverrides.TryGetValue(scheme.Theme, out Dictionary<string, bool> brushDict) &&
                         brushDict.TryGetValue(brushKey, out bool savedValue)) isEnabled = savedValue;
 
+                    logger.Trace($"Optional brush '{brushKey}' in scheme '{scheme.Theme}' evaluated to enabled: {isEnabled}");
                     if (!isEnabled) continue;
                 }
 
@@ -194,6 +199,8 @@ namespace DynamicThemeColor {
         }
 
         private string TryDiscoverBestScheme(string currentTheme, bool fullscreenEnabled) {
+            logger.Trace($"Searching for best scheme matching theme '{currentTheme}' (Fullscreen: {fullscreenEnabled}) among {Schemes.Count} registered schemes.");
+
             List<ColorScheme> candidates = Schemes.Values
                 .Where(s => s.Fullscreen == fullscreenEnabled)
                 .Where(s => currentTheme.IndexOf(s.Theme, StringComparison.OrdinalIgnoreCase) >= 0)
@@ -201,13 +208,19 @@ namespace DynamicThemeColor {
                 .ThenByDescending(s => s.Theme.Length)
                 .ToList();
 
-            if (candidates.Count > 0) return candidates[0].Theme;
+            if (candidates.Count > 0) {
+                logger.Trace($"Found matching scheme candidate: '{candidates[0].Theme}' (Priority: {candidates[0].DiscoveryPriority})");
+                return candidates[0].Theme;
+            }
+
             logger.Debug($"No scheme matched active theme '{currentTheme}'. Falling back to default.");
             return "default";
         }
 
         [CanBeNull]
         private string TryDiscoverBestScheme(string dependencyName, bool fullscreenEnabled, int? minVersion, [CanBeNull] List<string> authors) {
+            logger.Trace($"Searching for scheme dependency '{dependencyName}' (Fullscreen: {fullscreenEnabled}) among {Schemes.Count} registered schemes.");
+
             List<ColorScheme> candidates = Schemes.Values
                 .Where(s => s.Fullscreen == fullscreenEnabled)
                 .Where(s => string.Equals(s.Theme, dependencyName, StringComparison.OrdinalIgnoreCase))
@@ -218,7 +231,11 @@ namespace DynamicThemeColor {
                 .ToList();
 
 
-            if (candidates.Count > 0) return candidates[0].Theme;
+            if (candidates.Count > 0) {
+                logger.Trace($"Found matching scheme candidate: '{candidates[0].Theme}' (Priority: {candidates[0].DiscoveryPriority})");
+                return candidates[0].Theme;
+            }
+
             if (!string.Equals(dependencyName, "default", StringComparison.OrdinalIgnoreCase)) {
                 logger.Warn($"Scheme dependency '{dependencyName}' could not be found. Falling back to 'default'.");
                 return "default";

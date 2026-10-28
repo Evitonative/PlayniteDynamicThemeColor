@@ -13,6 +13,8 @@ namespace DynamicThemeColor {
         public sealed override Guid Id { get; } = Guid.Parse("a7a76873-8465-4273-a8a6-d460550ce627");
         public readonly SchemeEngine SchemeEngine;
 
+        private readonly ILogger logger = LogManager.GetLogger();
+
         private SettingsViewModel Settings { get; [UsedImplicitly] set; }
 
         public Addon(IPlayniteAPI api) : base(api) {
@@ -21,6 +23,11 @@ namespace DynamicThemeColor {
             };
 
             AddonSettings savedSettings = LoadPluginSettings<AddonSettings>();
+
+            logger.Debug(savedSettings != null
+                ? "Loaded existing plugin settings from disk."
+                : "No saved settings found, initializing default AddonSettings.");
+
             AddonSettings addonSettings = savedSettings ?? new AddonSettings();
             addonSettings.EnsureAllEnumsPresent();
 
