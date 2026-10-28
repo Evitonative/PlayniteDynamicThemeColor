@@ -58,7 +58,7 @@ namespace DynamicThemeColor.UI.Views.Settings {
 
         public void EndEdit() {
             plugin.SavePluginSettings(Settings);
-            plugin.SchemeEngine.Refresh();
+            plugin.SchemeEngine.RefreshBrushes();
         }
 
         public bool VerifySettings(out List<string> errors) {

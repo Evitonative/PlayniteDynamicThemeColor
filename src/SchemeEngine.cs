@@ -31,6 +31,11 @@ namespace DynamicThemeColor {
             this.addonId = addonId;
             this.addonSettings = addonSettings;
 
+            PrepareSchemes();
+            RefreshBrushes();
+        }
+
+        private void PrepareSchemes() {
             DiscoverSchemes();
             LoadSchemes(schemeFiles, out List<(string, string)> loadingErrors);
 
@@ -38,11 +43,9 @@ namespace DynamicThemeColor {
             {
                 logger.Warn($"Error loading scheme file: {file}: {message}");
             }
-
-            Refresh();
         }
 
-        public void Refresh() {
+        public void RefreshBrushes() {
             string currentDesktopTheme = playniteApi.ApplicationSettings.DesktopTheme;
             string currentFullscreenTheme = playniteApi.ApplicationSettings.FullscreenTheme;
             bool fullscreenEnabled = playniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen;
