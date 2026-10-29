@@ -8,44 +8,43 @@ using DynamicThemeColor.Utils;
 using MaterialColorUtilities.Palettes;
 using Playnite.SDK;
 using Playnite.SDK.Models;
-using Style = MaterialColorUtilities.Palettes.Style;
 
 namespace DynamicThemeColor {
-    // TODO: All 0xffffffff should refer to the settings for the fallback color
     // TODO: per game overrides for at least seed from settings/other gui
     public class ThemingEngine {
         private readonly IPlayniteAPI playniteApi;
-        private readonly AddonSettings addonSettings;
+        private readonly Func<AddonSettings> addonSettings;
         private readonly SchemeEngine schemeEngine;
         private readonly ILogger logger = LogManager.GetLogger();
         private readonly Dictionary<string, object> originalResources =  new Dictionary<string, object>();
-        private readonly ThemePaletteCache paletteCache = new ThemePaletteCache();
+        public readonly ThemePaletteCache PaletteCache = new ThemePaletteCache();
 
-        public ThemingEngine(IPlayniteAPI playniteApi, AddonSettings addonSettings, SchemeEngine schemeEngine) {
+        public ThemingEngine(IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings, SchemeEngine schemeEngine) {
             this.playniteApi = playniteApi;
             this.addonSettings = addonSettings;
             this.schemeEngine = schemeEngine;
         }
 
         public void ApplyPalette(Game game) {
+            AddonSettings settings = addonSettings();
             DesktopView activeView = playniteApi.MainView.ActiveDesktopView;
             bool isFullscreen = playniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen;
 
-            if (isFullscreen && !addonSettings.ApplyInFullscreen || game == null) {
+            if (isFullscreen && !addonSettings().ApplyInFullscreen || game == null) {
                 ApplyFallbackPalette();
                 return;
             }
 
             if (!isFullscreen) {
-                if ((activeView == DesktopView.List && !addonSettings.ApplyInListView) ||
-                    (activeView == DesktopView.Details && !addonSettings.ApplyInDetailsView) ||
-                    (activeView == DesktopView.Grid && !addonSettings.ApplyInGridView)) {
+                if ((activeView == DesktopView.List && !settings.ApplyInListView) ||
+                    (activeView == DesktopView.Details && !settings.ApplyInDetailsView) ||
+                    (activeView == DesktopView.Grid && !settings.ApplyInGridView)) {
                     ApplyFallbackPalette();
                     return;
                 }
             }
 
-            if (paletteCache.TryGet(game.Id, out ThemePalette cached)) {
+            if (PaletteCache.TryGet(game.Id, out ThemePalette cached)) {
                 logger.Trace($"Cache hit for game '{game.Name}' ({game.Id}). Applying cached palette.");
                 ApplyResolvedTheme(cached);
                 return;
@@ -57,8 +56,7 @@ namespace DynamicThemeColor {
                 return;
             }
 
-            // TODO: Hook up max colors to settings
-            uint rawSeed = MaterialColorHelper.ExtractSeedColor(imgPath, 5, game.Id.GetHashCode());
+            uint rawSeed = MaterialColorHelper.ExtractSeedColor(imgPath, settings.ColorSelectionRange, game.Id.GetHashCode());
             if (rawSeed == 0) {
                 ApplyFallbackPalette();
                 return;
@@ -66,23 +64,20 @@ namespace DynamicThemeColor {
 
             uint filteredSeed = ApplySeedFilters(rawSeed, game);
 
-            // TODO: From addon settings
-            CorePalette palette = MaterialColorHelper.GetPalette(filteredSeed, Style.Content);
+            CorePalette palette = MaterialColorHelper.GetPalette(filteredSeed, settings.PaletteStyle);
             ThemePalette themePalette = new ThemePalette(palette, filteredSeed);
             ApplyPaletteFilters(themePalette, game);
 
-            paletteCache.Set(game.Id, themePalette);
+            PaletteCache.Set(game.Id, themePalette);
             ApplyResolvedTheme(themePalette);
         }
 
-        // TODO: Settings toggle between reverting
         private void ApplyFallbackPalette() {
-            if (true) {
-                // TODO: From Settings
-                const uint fallbackSeed = 0xFF1CD8FC;
+            AddonSettings settings = addonSettings();
+            if (settings.UseFallbackOnMissing) {
+                uint fallbackSeed = ConvertHexToArgb(settings.FallbackSeedColor);
 
-                // TODO: From addon settings
-                CorePalette palette = MaterialColorHelper.GetPalette(fallbackSeed, Style.Content);
+                CorePalette palette = MaterialColorHelper.GetPalette(fallbackSeed, settings.PaletteStyle);
                 ApplyResolvedTheme(new ThemePalette(palette, fallbackSeed));
                 return;
             }
@@ -135,14 +130,15 @@ namespace DynamicThemeColor {
                 return cachedValue;
             }
 
+            AddonSettings settings = addonSettings();
             if (recursionStack.Contains(varName)) {
                 logger.Warn($"Circular variable reference detected involving variable '{varName}'");
-                return 0xFFFFFFFF;
+                return ConvertHexToArgb(settings.FallbackSeedColor);
             }
 
             if (!schemeEngine.ActiveVariables.TryGetValue(varName, out ColorScheme.IColorReference colorRef)) {
                 logger.Warn($"Variable '{varName}' was referenced but could not be found in active variables.");
-                return 0xFFFFFFFF;
+                return ConvertHexToArgb(settings.FallbackSeedColor);
             }
 
             recursionStack.Add(varName);
@@ -154,6 +150,7 @@ namespace DynamicThemeColor {
         }
 
         private uint EvaluateColorReference(ColorScheme.IColorReference colorRef, ThemePalette palette, Dictionary<string, uint> resolved, HashSet<string> recursionStack) {
+            AddonSettings settings = addonSettings();
             switch (colorRef) {
                 case ColorScheme.HexColor hex:
                     return ConvertHexToArgb(hex.Value);
@@ -165,7 +162,7 @@ namespace DynamicThemeColor {
                     return ResolveSingleVariable(varRef.Variable, palette, resolved, recursionStack);
                 default: {
                     logger.Error($"Unknown material color reference {colorRef}");
-                    return 0xFFFFFFFF;
+                    return ConvertHexToArgb(settings.FallbackSeedColor);
                 }
             }
         }
@@ -185,7 +182,8 @@ namespace DynamicThemeColor {
         }
 
         private string ResolveAssetPath(Game game) {
-            foreach (GameAssetType assetType in addonSettings.AssetPriority) {
+            AddonSettings settings = addonSettings();
+            foreach (GameAssetType assetType in settings.AssetPriority) {
                 string relPath;
                 switch(assetType) {
                     case GameAssetType.Background: relPath = game.BackgroundImage; break;
@@ -206,16 +204,16 @@ namespace DynamicThemeColor {
             return null;
         }
 
-        protected virtual uint ApplySeedFilters(uint seedArgb, Game game) {
+        private static uint ApplySeedFilters(uint seedArgb, Game game) {
             // TODO: seed filters
             return seedArgb;
         }
 
-        protected virtual void ApplyPaletteFilters(ThemePalette palette, Game game) {
+        private static void ApplyPaletteFilters(ThemePalette palette, Game game) {
             // TODO: palette filters
         }
 
-        protected virtual uint ApplyBrushFilters(string brushKey, uint argb) {
+        private static uint ApplyBrushFilters(string brushKey, uint argb) {
             // TODO: brush filters
             return argb;
         }

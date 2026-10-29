@@ -18,18 +18,19 @@
                     </Grid.ColumnDefinitions>
 
                     <ContentPresenter Content="{Binding}"
-                                      VerticalAlignment="Center"
-                                      Margin="5,0" />
+                                      VerticalAlignment="Center" />
 
                     <Button Grid.Column="1" Content="▲" Margin="2,0"
                             FontSize="{DynamicResource FontSizeSmall}"
                             Command="{Binding MoveUpCommand, ElementName=Root}"
-                            CommandParameter="{Binding}" />
+                            CommandParameter="{Binding}"
+                            ToolTip="{DynamicResource LOCDTCAssetPriorityMoveUpHint}"/>
 
                     <Button Grid.Column="2" Content="▼" Margin="2,0"
                             FontSize="{DynamicResource FontSizeSmall}"
                             Command="{Binding MoveDownCommand, ElementName=Root}"
-                            CommandParameter="{Binding}" />
+                            CommandParameter="{Binding}"
+                            ToolTip="{DynamicResource LOCDTCAssetPriorityMoveDownHint}" />
                 </Grid>
             </DataTemplate>
         </ListBox.ItemTemplate>

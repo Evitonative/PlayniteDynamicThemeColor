@@ -1,5 +1,42 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- Tabs -->
+    <sys:String x:Key="LOCDTCTabGeneral">General</sys:String>
+    <sys:String x:Key="LOCDTCTabSchemes">Schemes</sys:String>
+    <sys:String x:Key="LOCDTCTabFilters">Filters</sys:String>
+    <sys:String x:Key="LOCDTCTabAdvanced">Advanced</sys:String>
 
+    <!-- General Tab -->
+    <!-- View Targets -->
+    <sys:String x:Key="LOCDTCViewTargetsTitle">View Targets</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetHint">Which views dynamic theming should be applied.</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetDetails">Details View</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetGrid">Grid View</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetList">List View</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetFullscreen">Fullscreen</sys:String>
+
+    <!-- Asset Priority Order -->
+    <sys:String x:Key="LOCDTCAssetPriorityOrderTitle">Asset Priority</sys:String>
+    <sys:String x:Key="LOCDTCAssetPriorityOrderHint">The order in which game assets should be attempted to be loaded.&#x0a;&#x0a;Lower values will have lower priority.</sys:String>
+    <sys:String x:Key="LOCDTCAssetPriorityMoveUpHint">Move Up</sys:String>
+    <sys:String x:Key="LOCDTCAssetPriorityMoveDownHint">Move Down</sys:String>
+
+    <!-- Extraction & Fallback Defaults -->
+    <sys:String x:Key="LOCDTCExtractionFallbackTitle">Extraction &amp; Fallback Defaults</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyle">Palette Style</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyleHint">Which style should be used when generating the color palette.</sys:String>
+    <sys:String x:Key="LOCDTCExtractionColorSelectionRange">Color Selection Range</sys:String>
+    <sys:String x:Key="LOCDTCExtractionColorSelectionRangeHint">How many top-score colors from the image are considered for generating the reference color.</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackSeedColor">Fallback Color</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackSeedColorHint">This color will be used when no color can be extracted for an image.</sys:String>
+
+    <!-- LOCDTCUseFallbackOnMissing -->
+    <sys:String x:Key="LOCDTCUseFallbackOnMissing">Use fallback when asset is missing</sys:String>
+    <sys:String x:Key="LOCDTCUseFallbackOnMissingHint">If enabled the fallback color will be used if a game as no assets availabel.&#x0a;If disabled themes default colors will be restored.</sys:String>
+
+    <!-- Schemes Tab -->
+    <sys:String x:Key="LOCDTCActiveSchemes">Active Schemes</sys:String>
+    <sys:String x:Key="LOCDTCOtherSchemes">Other Discovered Schemes</sys:String>
+    <sys:String x:Key="LOCDTCSchemeNoOptions">This scheme does not have any options.</sys:String>
 </ResourceDictionary>

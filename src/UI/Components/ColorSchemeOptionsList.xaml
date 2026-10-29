@@ -15,7 +15,7 @@
             </ItemsControl>
 
             <TextBlock x:Name="FallbackText"
-                       Text="This scheme does not have any options."
+                       Text="{DynamicResource LOCDTCSchemeNoOptions}"
                        Foreground="{DynamicResource TextBrushDarker}"
                        Margin="0,0,0,15"
                        Visibility="Collapsed">

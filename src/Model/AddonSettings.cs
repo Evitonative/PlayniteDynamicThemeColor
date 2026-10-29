@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MaterialColorUtilities.Palettes;
 
 // ReSharper disable RedundantDefaultMemberInitializer
 namespace DynamicThemeColor.Model {
@@ -49,6 +50,31 @@ namespace DynamicThemeColor.Model {
 
                 if (notFound) assetPriority.Add(v);
             }
+        }
+
+        // Extraction & Fallback Defaults
+        private Style paletteStyle = Style.TonalSpot;
+        public Style PaletteStyle {
+            get => paletteStyle;
+            set => SetValue(ref paletteStyle, value);
+        }
+
+        private int colorSelectionRange = 1;
+        public int ColorSelectionRange {
+            get => colorSelectionRange;
+            set => SetValue(ref colorSelectionRange, value);
+        }
+
+        private string fallbackSeedColor = "#1cd8fc";
+        public string FallbackSeedColor {
+            get => fallbackSeedColor;
+            set => SetValue(ref fallbackSeedColor, value);
+        }
+
+        private bool useFallbackOnMissing = true;
+        public bool UseFallbackOnMissing {
+            get => useFallbackOnMissing;
+            set => SetValue(ref useFallbackOnMissing, value);
         }
 
         // Scheme Settings

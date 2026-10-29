@@ -7,7 +7,8 @@ namespace DynamicThemeColor.UI.Views.Settings {
         public ColorScheme Scheme { get; }
         public Dictionary<string, bool> OptionsDictionary { get; }
 
-        public SchemeItemViewModel(ColorScheme scheme, AddonSettings settings) {
+        public SchemeItemViewModel(ColorScheme scheme, Func<AddonSettings> addonSettings) {
+            AddonSettings settings = addonSettings();
             Scheme = scheme;
 
             settings.SchemeOptionOverrides = settings.SchemeOptionOverrides ?? new Dictionary<string, Dictionary<string, bool>>(StringComparer.OrdinalIgnoreCase);

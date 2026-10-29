@@ -17,7 +17,7 @@ namespace DynamicThemeColor {
         private readonly ILogger logger = LogManager.GetLogger();
         private readonly IPlayniteAPI playniteApi;
         private readonly Guid addonId;
-        private readonly AddonSettings addonSettings;
+        private readonly Func<AddonSettings> addonSettings;
 
         public readonly Dictionary<string, ColorScheme> Schemes = new Dictionary<string, ColorScheme>(StringComparer.OrdinalIgnoreCase);
         private readonly List<(string, int)> schemeFiles = new List<(string, int)>();
@@ -26,7 +26,7 @@ namespace DynamicThemeColor {
 
         public List<string> ActiveSchemeChain { get; private set; }
 
-        public SchemeEngine(IPlayniteAPI playniteApi, Guid addonId, AddonSettings addonSettings) {
+        public SchemeEngine(IPlayniteAPI playniteApi, Guid addonId, Func<AddonSettings> addonSettings) {
             this.playniteApi = playniteApi;
             this.addonId = addonId;
             this.addonSettings = addonSettings;
@@ -180,14 +180,15 @@ namespace DynamicThemeColor {
             }
 
             scheme.Variables.ForEach(kvp => variables[kvp.Key] = kvp.Value);
+            AddonSettings settings = addonSettings();
             foreach (KeyValuePair<string, ColorScheme.IBrushDefinition> kvp in scheme.Brushes) {
                 string brushKey = kvp.Key;
                 ColorScheme.IBrushDefinition brushDefinition = kvp.Value;
 
                 if (brushDefinition.Optional != null) {
                     bool isEnabled = brushDefinition.Optional.Default;
-                    if (addonSettings?.SchemeOptionOverrides != null &&
-                        addonSettings.SchemeOptionOverrides.TryGetValue(scheme.Theme, out Dictionary<string, bool> brushDict) &&
+                    if (settings?.SchemeOptionOverrides != null &&
+                        settings.SchemeOptionOverrides.TryGetValue(scheme.Theme, out Dictionary<string, bool> brushDict) &&
                         brushDict.TryGetValue(brushKey, out bool savedValue)) isEnabled = savedValue;
 
                     logger.Trace($"Optional brush '{brushKey}' in scheme '{scheme.Theme}' evaluated to enabled: {isEnabled}");

@@ -13,12 +13,24 @@ namespace DynamicThemeColor {
     [UsedImplicitly]
     public class Addon : GenericPlugin {
         public sealed override Guid Id { get; } = Guid.Parse("a7a76873-8465-4273-a8a6-d460550ce627");
+
         public readonly SchemeEngine SchemeEngine;
         public readonly ThemingEngine ThemingEngine;
 
         private readonly ILogger logger = LogManager.GetLogger();
 
-        private SettingsViewModel Settings { get; [UsedImplicitly] set; }
+        private SettingsViewModel SettingsView { get; [UsedImplicitly] set; }
+
+        private AddonSettings addonSettings;
+        public AddonSettings AddonSettings {
+            get => addonSettings;
+            [UsedImplicitly]
+            set {
+                addonSettings = value;
+                SettingsView.OnPropertyChanged();
+                SettingsView.LoadSchemeCollections();
+            }
+        }
 
         public Addon(IPlayniteAPI api) : base(api) {
             Properties = new GenericPluginProperties {
@@ -31,16 +43,16 @@ namespace DynamicThemeColor {
                 ? "Loaded existing plugin settings from disk."
                 : "No saved settings found, initializing default AddonSettings.");
 
-            AddonSettings addonSettings = savedSettings ?? new AddonSettings();
+            addonSettings = savedSettings ?? new AddonSettings();
             addonSettings.EnsureAllEnumsPresent();
 
-            SchemeEngine = new SchemeEngine(PlayniteApi, Id, addonSettings);
-            ThemingEngine = new ThemingEngine(PlayniteApi, addonSettings, SchemeEngine);
-            Settings = new SettingsViewModel(this, addonSettings);
+            SchemeEngine = new SchemeEngine(PlayniteApi, Id, () => AddonSettings);
+            ThemingEngine = new ThemingEngine(PlayniteApi, () => AddonSettings, SchemeEngine);
+            SettingsView = new SettingsViewModel(this);
         }
 
         public override ISettings GetSettings(bool firstRunSettings) {
-            return Settings;
+            return SettingsView;
         }
 
         public override UserControl GetSettingsView(bool firstRunView) {
