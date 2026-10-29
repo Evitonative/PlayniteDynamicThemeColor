@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using DynamicThemeColor.Model;
 using JetBrains.Annotations;
 using Playnite.SDK;
 using Playnite.SDK.Data;
+using Playnite.SDK.Models;
 
 namespace DynamicThemeColor.UI.Views.Settings {
     public class SettingsViewModel : ObservableObject, ISettings {
@@ -47,6 +49,9 @@ namespace DynamicThemeColor.UI.Views.Settings {
             logger.Debug("Settings editing session committed (EndEdit). Saving settings and refreshing SchemeEngine.");
             plugin.SavePluginSettings(Settings);
             plugin.SchemeEngine.RefreshBrushes();
+
+            Game currentGame = plugin.PlayniteApi.MainView.SelectedGames?.FirstOrDefault();
+            plugin.ThemingEngine.ApplyPalette(currentGame);
         }
 
         public bool VerifySettings(out List<string> errors) {

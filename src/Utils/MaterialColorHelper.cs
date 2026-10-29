@@ -9,7 +9,7 @@ using MaterialColorUtilities.Quantize;
 using MaterialColorUtilities.Score;
 
 namespace DynamicThemeColor.Utils {
-    public class MaterialColorHelp {
+    public static class MaterialColorHelper {
         public static uint ExtractSeedColor(string filePath, int maxColors, int hasCode) {
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -38,12 +38,12 @@ namespace DynamicThemeColor.Utils {
             if (maxColors <= 1) return rankedColors.FirstOrDefault();
 
             List<uint> topColors = rankedColors.Take(maxColors).ToList();
-            int index = (int)(hasCode % (uint)topColors.Count);
+            int index = (int)(Math.Abs((long)hasCode) % topColors.Count);
             return topColors[index];
         }
 
-        public static CorePalette GetPalette(uint seedArgb) {
-            return CorePalette.Of(seedArgb);
+        public static CorePalette GetPalette(uint seedArgb, Style style) {
+            return CorePalette.Of(seedArgb, style);
         }
 
         public static SolidColorBrush CreateFrozenBrush(uint argb, byte alpha = 255) {

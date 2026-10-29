@@ -21,8 +21,8 @@ namespace DynamicThemeColor {
 
         public readonly Dictionary<string, ColorScheme> Schemes = new Dictionary<string, ColorScheme>(StringComparer.OrdinalIgnoreCase);
         private readonly List<(string, int)> schemeFiles = new List<(string, int)>();
-        private readonly Dictionary<string, ColorScheme.IColorReference> activeVariables = new Dictionary<string, ColorScheme.IColorReference>(StringComparer.OrdinalIgnoreCase);
-        private readonly Dictionary<string, ColorScheme.IBrushDefinition> activeBrushes = new Dictionary<string, ColorScheme.IBrushDefinition>(StringComparer.OrdinalIgnoreCase);
+        public readonly Dictionary<string, ColorScheme.IColorReference> ActiveVariables = new Dictionary<string, ColorScheme.IColorReference>(StringComparer.OrdinalIgnoreCase);
+        public readonly Dictionary<string, ColorScheme.IBrushDefinition> ActiveBrushes = new Dictionary<string, ColorScheme.IBrushDefinition>(StringComparer.OrdinalIgnoreCase);
 
         public List<string> ActiveSchemeChain { get; private set; }
 
@@ -57,7 +57,7 @@ namespace DynamicThemeColor {
             logger.Debug($"Best matching scheme resolved to: '{bestMatchingScheme}'");
 
             List<string> chain = new List<string>();
-            MakeVariableAndBrushDict(bestMatchingScheme, activeVariables, activeBrushes, seenThemes: chain);
+            MakeVariableAndBrushDict(bestMatchingScheme, ActiveVariables, ActiveBrushes, seenThemes: chain);
             ActiveSchemeChain = chain;
             logger.Trace($"Active scheme inheritance chain built: [{string.Join(" -> ", chain)}]");
         }
