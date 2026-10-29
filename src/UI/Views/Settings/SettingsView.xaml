@@ -22,7 +22,8 @@
                 <StackPanel Margin="{StaticResource RootTabPadding}">
                     <GroupBox Margin="{StaticResource SectionSpacing}">
                         <GroupBox.Header>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="{StaticResource GroupBoxContentPadding}" >
                                 <TextBlock Text="View Targets"
                                            VerticalAlignment="Center"/>
                                 <components:HelpIcon VerticalAlignment="Center"
@@ -51,9 +52,10 @@
 
                     <GroupBox>
                         <GroupBox.Header>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="{StaticResource GroupBoxContentPadding}" >
                                 <TextBlock Text="Asset Priority Order"
-                                           VerticalAlignment="Center"/>
+                                           VerticalAlignment="Center" />
                                 <components:HelpIcon VerticalAlignment="Center"
                                                      HelpToolTip="In which order should the assets for a game be attempted to be loaded. Lower in the list will be loaded in case an asset is not available."/>
                             </StackPanel>

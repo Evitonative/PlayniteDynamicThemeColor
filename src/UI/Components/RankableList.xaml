@@ -4,7 +4,10 @@
              x:Name="Root">
     <ListBox ItemsSource="{Binding ItemsSource, ElementName=Root}"
              SelectedItem="{Binding SelectedItem, ElementName=Root, Mode=TwoWay}"
-             HorizontalAlignment="Stretch">
+             HorizontalAlignment="Stretch"
+             Background="Transparent"
+             BorderBrush="Transparent"
+             BorderThickness="0">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Grid Margin="2">
