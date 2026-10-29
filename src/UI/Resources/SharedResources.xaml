@@ -1,0 +1,50 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    mc:Ignorable="d">
+
+    <ResourceDictionary.MergedDictionaries>
+        <d:ResourceDictionary Source="pack://application:,,,/DynamicThemeColor;component/Localization/en_US.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+    <!-- Centralized Spacing & Padding -->
+    <Thickness x:Key="Layout.Spacing.Root">15</Thickness>
+    <Thickness x:Key="Layout.Spacing.Section">0,0,0,15</Thickness>
+    <Thickness x:Key="Layout.Spacing.Item">0,0,0,8</Thickness>
+    <Thickness x:Key="Layout.Spacing.Expander">0,10,0,0</Thickness>
+
+    <!-- Padding -->
+    <Thickness x:Key="Layout.Padding.GroupBox">10,8,5,5</Thickness>
+    <Thickness x:Key="Layout.Padding.Header">10,8,15,5</Thickness>
+    <Thickness x:Key="Layout.Padding.Badge">6,2</Thickness>
+
+    <!-- Margins -->
+    <Thickness x:Key="Layout.Margin.HeaderTitle">10,0,0,0</Thickness>
+    <Thickness x:Key="Layout.Margin.HelpIcon">10,0,0,0</Thickness>
+    <Thickness x:Key="Layout.Margin.RankableItem">2</Thickness>
+    <Thickness x:Key="Layout.Margin.RankableButton">2,0</Thickness>
+
+    <!-- Raw Colors -->
+    <Color x:Key="Palette.Badge.Default">#FF444444</Color>
+    <Color x:Key="Palette.Badge.BuiltIn">#FF2196F3</Color>
+    <Color x:Key="Palette.Badge.Theme">#FF9C27B0</Color>
+    <Color x:Key="Palette.Badge.Custom">#FF4CAF50</Color>
+    <Color x:Key="Palette.Badge.Default.Text">#FFFFFFFF</Color>
+    <Color x:Key="Palette.Badge.BuiltIn.Text">#FFFFFFFF</Color>
+    <Color x:Key="Palette.Badge.Theme.Text">#FFFFFFFF</Color>
+    <Color x:Key="Palette.Badge.Custom.Text">#FFFFFFFF</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="Brush.Badge.Default.Background" Color="{StaticResource Palette.Badge.Default}" />
+    <SolidColorBrush x:Key="Brush.Badge.BuiltIn.Background" Color="{StaticResource Palette.Badge.BuiltIn}" />
+    <SolidColorBrush x:Key="Brush.Badge.Theme.Background" Color="{StaticResource Palette.Badge.Theme}" />
+    <SolidColorBrush x:Key="Brush.Badge.Custom.Background" Color="{StaticResource Palette.Badge.Custom}" />
+    <SolidColorBrush x:Key="Brush.Badge.Default.Foreground" Color="{StaticResource Palette.Badge.Default.Text}" />
+    <SolidColorBrush x:Key="Brush.Badge.BuiltIn.Foreground" Color="{StaticResource Palette.Badge.BuiltIn.Text}" />
+    <SolidColorBrush x:Key="Brush.Badge.Theme.Foreground" Color="{StaticResource Palette.Badge.Theme.Text}" />
+    <SolidColorBrush x:Key="Brush.Badge.Custom.Foreground" Color="{StaticResource Palette.Badge.Custom.Text}" />
+</ResourceDictionary>
+

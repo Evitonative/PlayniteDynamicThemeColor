@@ -11,25 +11,19 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <d:ResourceDictionary Source="pack://application:,,,/DynamicThemeColor;component/Localization/en_US.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DynamicThemeColor;component/src/UI/Resources/SharedResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <Thickness x:Key="SectionSpacing">0,0,0,15</Thickness>
-            <Thickness x:Key="ItemSpacing">0,0,0,8</Thickness>
-            <Thickness x:Key="GroupBoxContentPadding">10,8,5,5</Thickness>
-            <Thickness x:Key="RootTabPadding">15</Thickness>
-            <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </ResourceDictionary>
     </UserControl.Resources>
 
     <TabControl>
         <TabItem Header="{DynamicResource LOCDTCTabGeneral}">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <StackPanel Margin="{StaticResource RootTabPadding}">
-                    <GroupBox Margin="{StaticResource SectionSpacing}">
+                <StackPanel Margin="{StaticResource Layout.Spacing.Root}">
+                    <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal"
-                                        Margin="{StaticResource GroupBoxContentPadding}" >
+                                        Margin="{StaticResource Layout.Padding.GroupBox}" >
                                 <TextBlock Text="{DynamicResource LOCDTCViewTargetsTitle}"
                                            VerticalAlignment="Center"/>
                                 <components:HelpIcon VerticalAlignment="Center"
@@ -37,29 +31,29 @@
                             </StackPanel>
                         </GroupBox.Header>
 
-                        <StackPanel Margin="{StaticResource GroupBoxContentPadding}">
+                        <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
                             <CheckBox IsChecked="{Binding Settings.ApplyInDetailsView}"
-                                      Margin="{StaticResource ItemSpacing}"
+                                      Margin="{StaticResource Layout.Spacing.Item}"
                                       Content="{DynamicResource LOCDTCViewTargetDetails}" />
 
                             <CheckBox IsChecked="{Binding Settings.ApplyInGridView}"
-                                      Margin="{StaticResource ItemSpacing}"
+                                      Margin="{StaticResource Layout.Spacing.Item}"
                                       Content="{DynamicResource LOCDTCViewTargetGrid}" />
 
                             <CheckBox IsChecked="{Binding Settings.ApplyInListView}"
-                                      Margin="{StaticResource ItemSpacing}"
+                                      Margin="{StaticResource Layout.Spacing.Item}"
                                       Content="{DynamicResource LOCDTCViewTargetList}" />
 
                             <CheckBox IsChecked="{Binding Settings.ApplyInFullscreen}"
-                                      Margin="{StaticResource ItemSpacing}"
+                                      Margin="{StaticResource Layout.Spacing.Item}"
                                       Content="{DynamicResource LOCDTCViewTargetFullscreen}" />
                         </StackPanel>
                     </GroupBox>
 
-                    <GroupBox Margin="{StaticResource SectionSpacing}">
+                    <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal"
-                                        Margin="{StaticResource GroupBoxContentPadding}" >
+                                        Margin="{StaticResource Layout.Padding.GroupBox}" >
                                 <TextBlock Text="{DynamicResource LOCDTCAssetPriorityOrderTitle}"
                                            VerticalAlignment="Center" />
                                 <components:HelpIcon VerticalAlignment="Center"
@@ -67,21 +61,21 @@
                             </StackPanel>
                         </GroupBox.Header>
 
-                        <StackPanel Margin="{StaticResource GroupBoxContentPadding}">
+                        <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
                             <components:RankableList ItemsSource="{Binding Settings.AssetPriority}" />
                         </StackPanel>
                     </GroupBox>
 
-                    <GroupBox Margin="{StaticResource SectionSpacing}">
+                    <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal"
-                                        Margin="{StaticResource GroupBoxContentPadding}" >
+                                        Margin="{StaticResource Layout.Padding.GroupBox}" >
                                 <TextBlock Text="{DynamicResource LOCDTCExtractionFallbackTitle}"
                                            VerticalAlignment="Center" />
                                </StackPanel>
                         </GroupBox.Header>
 
-                        <Grid Margin="{StaticResource GroupBoxContentPadding}">
+                        <Grid Margin="{StaticResource Layout.Padding.GroupBox}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="220" />
                                 <ColumnDefinition Width="*" />
@@ -99,11 +93,11 @@
                             <TextBlock Grid.Row="0" Grid.Column="0"
                                        Text="{DynamicResource LOCDTCExtractionFallbackPaletteStyle}"
                                        VerticalAlignment="Center"
-                                       Margin="{StaticResource ItemSpacing}" />
+                                       Margin="{StaticResource Layout.Spacing.Item}" />
                             <ComboBox Grid.Row="0" Grid.Column="1"
                                       ItemsSource="{Binding AvailableStyles}"
                                       SelectedItem="{Binding Settings.PaletteStyle}"
-                                      VerticalAlignment="Center" Margin="{StaticResource ItemSpacing}"
+                                      VerticalAlignment="Center" Margin="{StaticResource Layout.Spacing.Item}"
                                       HorizontalAlignment="Stretch" />
                             <components:HelpIcon Grid.Row="0" Grid.Column="2"
                                                  Margin="0,0,0,8"
@@ -113,10 +107,10 @@
                             <TextBlock Grid.Row="1" Grid.Column="0"
                                        Text="{DynamicResource LOCDTCExtractionColorSelectionRange}"
                                        VerticalAlignment="Center"
-                                       Margin="{StaticResource ItemSpacing}" />
+                                       Margin="{StaticResource Layout.Spacing.Item}" />
                             <Grid Grid.Row="1" Grid.Column="1"
                                   VerticalAlignment="Center"
-                                  Margin="{StaticResource ItemSpacing}">
+                                  Margin="{StaticResource Layout.Spacing.Item}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" MinWidth="45" />
@@ -141,10 +135,10 @@
                             <TextBlock Grid.Row="2" Grid.Column="0"
                                        Text="{DynamicResource LOCDTCExtractionFallbackSeedColor}"
                                        VerticalAlignment="Center"
-                                       Margin="{StaticResource ItemSpacing}" />
+                                       Margin="{StaticResource Layout.Spacing.Item}" />
                             <Grid Grid.Row="2" Grid.Column="1"
                                   VerticalAlignment="Center"
-                                  Margin="{StaticResource ItemSpacing}">
+                                  Margin="{StaticResource Layout.Spacing.Item}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="45" />
@@ -180,12 +174,12 @@
                             <TextBlock Grid.Row="3" Grid.Column="0"
                                        Text="{DynamicResource LOCDTCUseFallbackOnMissing}"
                                        VerticalAlignment="Center"
-                                       Margin="{StaticResource ItemSpacing}" />
+                                       Margin="{StaticResource Layout.Spacing.Item}" />
                             <CheckBox Grid.Row="3" Grid.Column="1"
                                       IsChecked="{Binding Settings.UseFallbackOnMissing}"
                                       VerticalAlignment="Center"
                                       HorizontalAlignment="Left"
-                                      Margin="{StaticResource ItemSpacing}" />
+                                      Margin="{StaticResource Layout.Spacing.Item}" />
                             <components:HelpIcon Grid.Row="3" Grid.Column="2"
                                                  Margin="0,0,0,8"
                                                  HelpToolTip="{DynamicResource LOCDTCUseFallbackOnMissingHint}" />
@@ -197,14 +191,14 @@
 
         <TabItem Header="{DynamicResource LOCDTCTabSchemes}">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <StackPanel Margin="{StaticResource RootTabPadding}">
-                    <TextBlock Text="{DynamicResource LOCDTCActiveSchemes}" Margin="{StaticResource ItemSpacing}"/>
+                <StackPanel Margin="{StaticResource Layout.Spacing.Root}">
+                    <TextBlock Text="{DynamicResource LOCDTCActiveSchemes}" Margin="{StaticResource Layout.Spacing.Item}"/>
                     <ItemsControl ItemsSource="{Binding ActiveSchemes}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <components:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
                                                                    SchemeOptions="{Binding OptionsDictionary}"
-                                                                   Margin="{StaticResource ItemSpacing}"/>
+                                                                   Margin="{StaticResource Layout.Spacing.Item}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -212,12 +206,12 @@
                     <Expander Header="{DynamicResource LOCDTCOtherSchemes}"
                               Margin="0,15,0,0"
                               Visibility="{Binding HasOtherSchemes, Converter={StaticResource BoolToVis}}">
-                        <ItemsControl ItemsSource="{Binding OtherSchemes}" Margin="0,10,0,0">
+                        <ItemsControl ItemsSource="{Binding OtherSchemes}" Margin="{StaticResource Layout.Spacing.Expander}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <components:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
                                                                        SchemeOptions="{Binding OptionsDictionary}"
-                                                                       Margin="{StaticResource ItemSpacing}"/>
+                                                                       Margin="{StaticResource Layout.Spacing.Item}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

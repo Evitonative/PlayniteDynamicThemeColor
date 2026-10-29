@@ -2,6 +2,14 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Name="Root">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/DynamicThemeColor;component/src/UI/Resources/SharedResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <ListBox ItemsSource="{Binding ItemsSource, ElementName=Root}"
              SelectedItem="{Binding SelectedItem, ElementName=Root, Mode=TwoWay}"
              HorizontalAlignment="Stretch"
@@ -10,7 +18,7 @@
              BorderThickness="0">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Grid Margin="2">
+                <Grid Margin="{StaticResource Layout.Margin.RankableItem}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
@@ -20,13 +28,13 @@
                     <ContentPresenter Content="{Binding}"
                                       VerticalAlignment="Center" />
 
-                    <Button Grid.Column="1" Content="▲" Margin="2,0"
+                    <Button Grid.Column="1" Content="▲" Margin="{StaticResource Layout.Margin.RankableButton}"
                             FontSize="{DynamicResource FontSizeSmall}"
                             Command="{Binding MoveUpCommand, ElementName=Root}"
                             CommandParameter="{Binding}"
                             ToolTip="{DynamicResource LOCDTCAssetPriorityMoveUpHint}"/>
 
-                    <Button Grid.Column="2" Content="▼" Margin="2,0"
+                    <Button Grid.Column="2" Content="▼" Margin="{StaticResource Layout.Margin.RankableButton}"
                             FontSize="{DynamicResource FontSizeSmall}"
                             Command="{Binding MoveDownCommand, ElementName=Root}"
                             CommandParameter="{Binding}"

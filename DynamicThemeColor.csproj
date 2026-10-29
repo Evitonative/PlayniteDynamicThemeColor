@@ -37,18 +37,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Page Update="src\Components\*.xaml">
+        <Page Update="src\UI\Resources\SharedResources.xaml">
             <Generator>MSBuild:Compile</Generator>
             <XamlRuntime>Wpf</XamlRuntime>
             <SubType>Designer</SubType>
         </Page>
-        <Page Update="src\UI\Components\HelpIcon.xaml">
-          <Generator>MSBuild:Compile</Generator>
+        <Page Update="src\UI\Components\*.xaml">
+            <Generator>MSBuild:Compile</Generator>
+            <XamlRuntime>Wpf</XamlRuntime>
+            <SubType>Designer</SubType>
         </Page>
-        <Page Update="src\UI\Components\RankableList.xaml">
-          <Generator>MSBuild:Compile</Generator>
-        </Page>
-        <Page Update="src\UI\Views\Settings\SettingsView.xaml">
+        <Page Update="src\UI\Views\**\*.xaml">
           <Generator>MSBuild:Compile</Generator>
           <XamlRuntime>Wpf</XamlRuntime>
           <SubType>Designer</SubType>
