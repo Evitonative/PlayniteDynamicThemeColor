@@ -72,7 +72,7 @@ namespace DynamicThemeColor {
             ApplyResolvedTheme(themePalette);
         }
 
-        private void ApplyFallbackPalette() {
+        public void ApplyFallbackPalette() {
             AddonSettings settings = addonSettings();
             if (settings.UseFallbackOnMissing) {
                 uint fallbackSeed = ConvertHexToArgb(settings.FallbackSeedColor);

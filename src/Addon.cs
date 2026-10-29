@@ -49,6 +49,8 @@ namespace DynamicThemeColor {
             SchemeEngine = new SchemeEngine(PlayniteApi, Id, () => AddonSettings);
             ThemingEngine = new ThemingEngine(PlayniteApi, () => AddonSettings, SchemeEngine);
             SettingsView = new SettingsViewModel(this);
+
+            ThemingEngine.ApplyFallbackPalette();
         }
 
         public override ISettings GetSettings(bool firstRunSettings) {
