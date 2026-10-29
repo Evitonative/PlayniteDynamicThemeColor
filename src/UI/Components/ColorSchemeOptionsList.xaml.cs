@@ -1,14 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using DynamicThemeColor.Model;
 
 namespace DynamicThemeColor.UI.Components {
-    public partial class ColorSchemeOptionsList : UserControl {
+    public partial class ColorSchemeOptionsList : INotifyPropertyChanged {
         public ColorSchemeOptionsList() {
             InitializeComponent();
+        }
+
+        public string DisplayName {
+            get {
+                if (ColorScheme == null) return string.Empty;
+                return ColorScheme.DisplayName ?? ColorScheme.Theme;
+            }
         }
 
         public static readonly DependencyProperty ColorSchemeProperty = DependencyProperty.Register(
@@ -36,7 +43,10 @@ namespace DynamicThemeColor.UI.Components {
         public ObservableCollection<OptionItem> Options { get; } = new ObservableCollection<OptionItem>();
 
         private static void OnParametersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            if (d is ColorSchemeOptionsList control) control.RebuildOptions();
+            if (!(d is ColorSchemeOptionsList control)) return;
+
+            control.RebuildOptions();
+            control.OnPropertyChanged(nameof(DisplayName));
         }
 
         private void RebuildOptions() {
@@ -53,6 +63,11 @@ namespace DynamicThemeColor.UI.Components {
             FallbackText.Visibility = Options.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public class OptionItem : ObservableObject {
             private readonly string brushKey;

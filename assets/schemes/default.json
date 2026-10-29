@@ -1,5 +1,6 @@
 ﻿{
     "$schema": "../../doc/scheme.schema.json",
+    "displayName": "Default",
     "theme": "default",
     "fullscreen": false,
     "author": ["Evito"],

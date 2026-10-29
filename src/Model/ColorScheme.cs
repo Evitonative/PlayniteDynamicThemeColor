@@ -16,9 +16,24 @@ namespace DynamicThemeColor.Model {
         private const int defaultAlpha = 100;
 
         /// <summary>
-        /// DiscoveryPriority of the color scheme
+        /// DiscoveryPriority of the color scheme.
+        ///
+        /// Not part of the JSON Schema and should not be used in schemes directly.
         /// </summary>
         public int DiscoveryPriority { get; set; } = 0;
+
+        /// <summary>
+        /// Source from where a scheme is loaded
+        ///
+        /// Not part of the JSON Schema and should not be used in schemes directly.
+        /// </summary>
+        public SchemeSource SchemeSource { get; set; } = SchemeSource.Custom;
+
+        /// <summary>
+        /// The name of the playnite theme.
+        /// </summary>
+        [JsonProperty("displayName")]
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// The name of the playnite theme.

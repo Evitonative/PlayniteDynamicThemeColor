@@ -39,4 +39,7 @@
     <sys:String x:Key="LOCDTCActiveSchemes">Active Schemes</sys:String>
     <sys:String x:Key="LOCDTCOtherSchemes">Other Discovered Schemes</sys:String>
     <sys:String x:Key="LOCDTCSchemeNoOptions">This scheme does not have any options.</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSourceBuiltIn">Built-in</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSourceTheme">Theme</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSourceCustom">Custom</sys:String>
 </ResourceDictionary>

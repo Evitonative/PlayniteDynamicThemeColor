@@ -20,7 +20,7 @@ namespace DynamicThemeColor {
         private readonly Func<AddonSettings> addonSettings;
 
         public readonly Dictionary<string, ColorScheme> Schemes = new Dictionary<string, ColorScheme>(StringComparer.OrdinalIgnoreCase);
-        private readonly List<(string, int)> schemeFiles = new List<(string, int)>();
+        private readonly List<(string, SchemeSource)> schemeFiles = new List<(string, SchemeSource)>();
         public readonly Dictionary<string, ColorScheme.IColorReference> ActiveVariables = new Dictionary<string, ColorScheme.IColorReference>(StringComparer.OrdinalIgnoreCase);
         public readonly Dictionary<string, ColorScheme.IBrushDefinition> ActiveBrushes = new Dictionary<string, ColorScheme.IBrushDefinition>(StringComparer.OrdinalIgnoreCase);
 
@@ -74,7 +74,7 @@ namespace DynamicThemeColor {
                 string addonDirectorySchemesPath = Path.Combine(playniteAddonDirectoryPath, bundledSchemesFolderName);
                 if (!Directory.Exists(addonDirectorySchemesPath)) logger.Warn($"Add-on is missing built-in schemes");
                 else foreach (string file in Directory.GetFiles(addonDirectorySchemesPath, "*.json", SearchOption.TopDirectoryOnly))
-                    schemeFiles.Add((file, 10));
+                    schemeFiles.Add((file, SchemeSource.BuiltIn));
             } else logger.Error("Add-on assembly directory was not found.");
 
             // In Themes
@@ -85,13 +85,13 @@ namespace DynamicThemeColor {
             if (!Directory.Exists(desktopThemesPath)) logger.Warn($"Desktop themes directory not found: {desktopThemesPath}");
             else foreach (string dir in Directory.GetDirectories(desktopThemesPath, "*", SearchOption.TopDirectoryOnly)) {
                 string schemeFile = Path.Combine(dir, themeSchemeFileName);
-                if (File.Exists(schemeFile)) schemeFiles.Add((schemeFile, 20));
+                if (File.Exists(schemeFile)) schemeFiles.Add((schemeFile, SchemeSource.Theme));
             }
 
             if (!Directory.Exists(fullscreenThemePaths)) logger.Warn($"Fullscreen themes directory not found: {fullscreenThemePaths}");
             else foreach (string dir in Directory.GetDirectories(fullscreenThemePaths, "*", SearchOption.TopDirectoryOnly)) {
                 string schemeFile = Path.Combine(dir, themeSchemeFileName);
-                if (File.Exists(schemeFile)) schemeFiles.Add((schemeFile, 20));
+                if (File.Exists(schemeFile)) schemeFiles.Add((schemeFile, SchemeSource.Theme));
             }
 
             // In Extension Setting
@@ -104,15 +104,15 @@ namespace DynamicThemeColor {
             }
 
             foreach (string file in Directory.GetFiles(settingsSchemesPath, "*.json", SearchOption.TopDirectoryOnly))
-                schemeFiles.Add((file, 30));
+                schemeFiles.Add((file, SchemeSource.Custom));
         }
 
-        private void LoadSchemes(List<(string, int)> files, out List<(string, string)> errors) {
+        private void LoadSchemes(List<(string, SchemeSource)> files, out List<(string, string)> errors) {
             errors = new List<(string, string)>();
 
             Schemes.Clear();
 
-            foreach ((string filePath, int priority) in files) {
+            foreach ((string filePath, SchemeSource schemeSource) in files) {
                 try {
                     string json = File.ReadAllText(filePath);
 
@@ -128,7 +128,7 @@ namespace DynamicThemeColor {
                         continue;
                     }
 
-                    RegisterOrUpdateScheme(scheme, priority);
+                    RegisterOrUpdateScheme(scheme, schemeSource);
                 }
                 catch (JsonException jsonEx) {
                     errors.Add((filePath, $"JSON parsing error: {jsonEx.Message}"));
@@ -246,7 +246,10 @@ namespace DynamicThemeColor {
             return null;
         }
 
-        private void RegisterOrUpdateScheme(ColorScheme scheme, int priority) {
+        private void RegisterOrUpdateScheme(ColorScheme scheme, SchemeSource schemeSource) {
+            scheme.SchemeSource = schemeSource;
+
+            int priority = (int)schemeSource;
             if (Schemes.TryGetValue(scheme.Theme, out ColorScheme existing))
                 if (priority < existing.DiscoveryPriority) return;
 

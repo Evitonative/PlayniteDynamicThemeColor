@@ -1,8 +1,7 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 
 namespace DynamicThemeColor.UI.Components {
-    public partial class HelpIcon : UserControl {
+    public partial class HelpIcon {
         public HelpIcon() {
             InitializeComponent();
         }

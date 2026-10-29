@@ -5,7 +5,7 @@ using System.Windows.Input;
 using Playnite.SDK;
 
 namespace DynamicThemeColor.UI.Components {
-    public partial class RankableList : UserControl {
+    public partial class RankableList {
         public RankableList() {
             InitializeComponent();
             MoveUpCommand = new RelayCommand<object>(MoveUp, CanMoveUp);

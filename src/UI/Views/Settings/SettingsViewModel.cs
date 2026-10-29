@@ -62,14 +62,18 @@ namespace DynamicThemeColor.UI.Views.Settings {
             SchemeEngine engine = addon.SchemeEngine;
             if (engine?.Schemes == null ) return;
 
-            foreach (KeyValuePair<string, ColorScheme> kvp in engine.Schemes) {
-                string schemeName = kvp.Key;
-                ColorScheme scheme = kvp.Value;
+            if (engine.ActiveSchemeChain != null)
+                foreach (string schemeName in engine.ActiveSchemeChain)
+                    if (engine.Schemes.TryGetValue(schemeName, out ColorScheme scheme))
+                        ActiveSchemes.Add(new SchemeItemViewModel(scheme, () => addon.AddonSettings));
 
-                SchemeItemViewModel itemVm = new SchemeItemViewModel(scheme, () => addon.AddonSettings);
-                if (engine.ActiveSchemeChain != null && engine.ActiveSchemeChain.Contains(schemeName)) ActiveSchemes.Add(itemVm);
-                else OtherSchemes.Add(itemVm);
-            }
+            foreach (SchemeItemViewModel itemVm
+                     in from kvp in engine.Schemes
+                     let schemeName = kvp.Key
+                     let scheme = kvp.Value
+                     let itemVm = new SchemeItemViewModel(scheme, () => addon.AddonSettings)
+                     where engine.ActiveSchemeChain == null || !engine.ActiveSchemeChain.Contains(schemeName) select itemVm)
+                OtherSchemes.Add(itemVm);
         }
 
         public RelayCommand PickColorCommand => new RelayCommand(() => {
