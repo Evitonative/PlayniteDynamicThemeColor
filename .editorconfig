@@ -8,6 +8,9 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+[THIRD-PARTY-LICENSE.txt]
+indent_style = tab
+
 [*.cs]
 csharp_style_var_for_built_in_types = false:warning
 csharp_style_var_when_type_is_apparent = false:warning
