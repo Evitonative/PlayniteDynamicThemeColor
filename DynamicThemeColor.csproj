@@ -37,7 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Page Update="src\UI\Resources\SharedResources.xaml">
+        <Page Update="src\UI\Resources\*.xaml">
             <Generator>MSBuild:Compile</Generator>
             <XamlRuntime>Wpf</XamlRuntime>
             <SubType>Designer</SubType>
