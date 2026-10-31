@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using DynamicThemeColor.Model;
+using DynamicThemeColor.Model.Filters;
 using DynamicThemeColor.Utils;
+using JetBrains.Annotations;
 using MaterialColorUtilities.Palettes;
 using Playnite.SDK;
 using Playnite.SDK.Models;
@@ -46,7 +49,7 @@ namespace DynamicThemeColor {
 
             if (PaletteCache.TryGet(game.Id, out ThemePalette cached)) {
                 logger.Trace($"Cache hit for game '{game.Name}' ({game.Id}). Applying cached palette.");
-                ApplyResolvedTheme(cached);
+                ApplyResolvedTheme(cached, game);
                 return;
             }
 
@@ -69,7 +72,7 @@ namespace DynamicThemeColor {
             ApplyPaletteFilters(themePalette, game);
 
             PaletteCache.Set(game.Id, themePalette);
-            ApplyResolvedTheme(themePalette);
+            ApplyResolvedTheme(themePalette, game);
         }
 
         public void ApplyFallbackPalette() {
@@ -91,7 +94,7 @@ namespace DynamicThemeColor {
             }
         }
 
-        private void ApplyResolvedTheme(ThemePalette palette) {
+        private void ApplyResolvedTheme(ThemePalette palette, [CanBeNull] Game game = null) {
             Dictionary<string, uint> resolvedVariables = ResolveVariables(palette);
 
             playniteApi.MainView.UIDispatcher.Invoke(() => {
@@ -101,7 +104,7 @@ namespace DynamicThemeColor {
 
                     HashSet<string> recursionStack = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     uint finalArgb = EvaluateColorReference(brushDef, palette, resolvedVariables, recursionStack);
-                    finalArgb = ApplyBrushFilters(brushKey, finalArgb);
+                    finalArgb = ApplyBrushFilters(brushKey, finalArgb, game);
 
                     byte alpha = (byte)((brushDef.Alpha * 255) / 100);
                     SolidColorBrush brush = MaterialColorHelper.CreateFrozenBrush(finalArgb, alpha);
@@ -204,18 +207,32 @@ namespace DynamicThemeColor {
             return null;
         }
 
-        private static uint ApplySeedFilters(uint seedArgb, Game game) {
-            // TODO: seed filters
-            return seedArgb;
+        private uint ApplySeedFilters(uint seedArgb, Game game) {
+            AddonSettings settings = addonSettings();
+            return settings.SeedFilters
+                .Where(f => f.IsEnabled)
+                .Select(FilterRegistry.CreateInstance)
+                .Where(filter => filter != null)
+                .Aggregate(seedArgb, (current, filter) =>
+                    filter.ApplySeedFilters(current, game));
         }
 
-        private static void ApplyPaletteFilters(ThemePalette palette, Game game) {
-            // TODO: palette filters
+        private void ApplyPaletteFilters(ThemePalette palette, Game game) {
+            AddonSettings settings = addonSettings();
+            foreach (FilterConfiguration config in settings.PaletteFilters.Where(f => f.IsEnabled)) {
+                SchemeFilter filter = FilterRegistry.CreateInstance(config);
+                filter?.ApplyPaletteFilters(palette, game);
+            }
         }
 
-        private static uint ApplyBrushFilters(string brushKey, uint argb) {
-            // TODO: brush filters
-            return argb;
+        private uint ApplyBrushFilters(string brushKey, uint brushArgb, Game game) {
+            AddonSettings settings = addonSettings();
+            return settings.BrushFilters
+                .Where(f => f.IsEnabled)
+                .Select(FilterRegistry.CreateInstance)
+                .Where(filter => filter != null)
+                .Aggregate(brushArgb, (current, filter) =>
+                    filter.ApplyBrushFilters(brushKey, current, game));
         }
     }
 }

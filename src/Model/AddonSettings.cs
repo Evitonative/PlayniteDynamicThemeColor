@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using DynamicThemeColor.Model.Filters;
 using MaterialColorUtilities.Palettes;
 
 // ReSharper disable RedundantDefaultMemberInitializer
@@ -82,6 +83,25 @@ namespace DynamicThemeColor.Model {
         public Dictionary<string, Dictionary<string, bool>> SchemeOptionOverrides {
             get => schemeOptionOverrides;
             set => SetValue(ref schemeOptionOverrides, value);
+        }
+
+        // Filters
+        private ObservableCollection<FilterConfiguration> seedFilters = new ObservableCollection<FilterConfiguration>();
+        public ObservableCollection<FilterConfiguration> SeedFilters {
+            get => seedFilters;
+            set => SetValue(ref seedFilters, value);
+        }
+
+        private ObservableCollection<FilterConfiguration> paletteFilters = new ObservableCollection<FilterConfiguration>();
+        public ObservableCollection<FilterConfiguration> PaletteFilters {
+            get => paletteFilters;
+            set => SetValue(ref paletteFilters, value);
+        }
+
+        private ObservableCollection<FilterConfiguration> brushFilters = new ObservableCollection<FilterConfiguration>();
+        public ObservableCollection<FilterConfiguration> BrushFilters {
+            get => brushFilters;
+            set => SetValue(ref brushFilters, value);
         }
     }
 }
