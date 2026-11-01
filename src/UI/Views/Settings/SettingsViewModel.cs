@@ -14,24 +14,39 @@ namespace DynamicThemeColor.UI.Views.Settings {
     public class SettingsViewModel : ObservableObject, ISettings {
         private readonly Addon addon;
         private readonly ILogger logger = LogManager.GetLogger();
-
         private AddonSettings EditingClone { get; set; }
 
+        // General Tab
         public AddonSettings Settings => addon.AddonSettings;
-
         public Array AvailableStyles { get; } = Enum.GetValues(typeof(Style));
+        public RelayCommand PickColorCommand { get; }
+
+        // Schemes Tab
         public ObservableCollection<SchemeItemViewModel> ActiveSchemes { get; } = new ObservableCollection<SchemeItemViewModel>();
         public ObservableCollection<SchemeItemViewModel> OtherSchemes { get; } = new ObservableCollection<SchemeItemViewModel>();
         public bool HasOtherSchemes => OtherSchemes.Count > 0;
 
+        // Advanced Tab
+        public ObservableCollection<CachedGameItemViewModel> CachedGames { get; } = new ObservableCollection<CachedGameItemViewModel>();
+        public int CachedGamesCount => addon.ThemingEngine.PaletteCache.Count;
+        public RelayCommand ClearCacheCommand { get; }
+        public RelayCommand<CachedGameItemViewModel> RemoveCachedGameCommand { get; }
+
         public SettingsViewModel(Addon addon) {
             this.addon = addon;
+
+            PickColorCommand = new RelayCommand(ExecutePickColor);
+            ClearCacheCommand = new RelayCommand(ExecuteClearCache);
+            RemoveCachedGameCommand = new RelayCommand<CachedGameItemViewModel>(ExecuteRemoveCachedItem);
+
             LoadSchemeCollections();
+            RefreshCachedGames();
         }
 
         public void BeginEdit() {
             logger.Debug("Settings editing session started (BeginEdit). Creating editing clone.");
             EditingClone = Serialization.GetClone(addon.AddonSettings);
+            RefreshCachedGames();
         }
 
         public void CancelEdit() {
@@ -76,7 +91,19 @@ namespace DynamicThemeColor.UI.Views.Settings {
                 OtherSchemes.Add(itemVm);
         }
 
-        public RelayCommand PickColorCommand => new RelayCommand(() => {
+        private void RefreshCachedGames() {
+            CachedGames.Clear();
+            foreach (Guid gameId in addon.ThemingEngine.PaletteCache.GetCachedGameIds()) {
+                Game game = addon.PlayniteApi.Database.Games.Get(gameId);
+                if (game != null)
+                    CachedGames.Add(new CachedGameItemViewModel(gameId, game.Name));
+            }
+
+            OnPropertyChanged(nameof(CachedGamesCount));
+            OnPropertyChanged(nameof(CachedGames));
+        }
+
+        private void ExecutePickColor() {
             using (ColorDialog dialog = new ColorDialog()) {
                 try {
                     if (ColorConverter.ConvertFromString(addon.AddonSettings.FallbackSeedColor) is Color c) {
@@ -90,6 +117,27 @@ namespace DynamicThemeColor.UI.Views.Settings {
                     addon.AddonSettings.FallbackSeedColor = $"#{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";
                 }
             }
-        });
+        }
+
+        private void ExecuteClearCache() {
+            addon.ThemingEngine.PaletteCache.Clear();
+            RefreshCachedGames();
+        }
+
+        private void ExecuteRemoveCachedItem(CachedGameItemViewModel item) {
+            if (item == null) return;
+            addon.ThemingEngine.PaletteCache.Remove(item.GameId);
+            RefreshCachedGames();
+        }
+    }
+
+    public class CachedGameItemViewModel {
+        public Guid GameId { get; }
+        public string GameName { get; }
+
+        public CachedGameItemViewModel(Guid gameId, string gameName) {
+            GameId = gameId;
+            GameName = gameName;
+        }
     }
 }

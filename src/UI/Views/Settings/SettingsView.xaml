@@ -193,7 +193,8 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <StackPanel Margin="{StaticResource Layout.Spacing.Root}">
                     <TextBlock Text="{DynamicResource LOCDTCActiveSchemes}" Margin="{StaticResource Layout.Spacing.Item}"/>
-                    <ItemsControl ItemsSource="{Binding ActiveSchemes}">
+                    <ItemsControl ItemsSource="{Binding ActiveSchemes}"
+                                  Margin="{DynamicResource Layout.Spacing.Section}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <components:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
@@ -204,7 +205,6 @@
                     </ItemsControl>
 
                     <Expander Header="{DynamicResource LOCDTCOtherSchemes}"
-                              Margin="0,15,0,0"
                               Visibility="{Binding HasOtherSchemes, Converter={StaticResource BoolToVis}}">
                         <ItemsControl ItemsSource="{Binding OtherSchemes}" Margin="{StaticResource Layout.Spacing.Expander}">
                             <ItemsControl.ItemTemplate>
@@ -228,7 +228,79 @@
 
         <TabItem Header="{DynamicResource LOCDTCTabAdvanced}">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel Margin="{StaticResource Layout.Spacing.Root}">
+                    <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="{StaticResource Layout.Padding.GroupBox}" >
+                                <TextBlock Text="{DynamicResource LOCDTCAdvancedCacheTitle}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </GroupBox.Header>
 
+                        <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+
+
+                            <Grid Margin="{StaticResource Layout.Padding.GroupBox}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="220" />
+                                    <ColumnDefinition Width="64" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0"
+                                           Text="{DynamicResource LOCDTCAdvancedCacheCount}"
+                                           VerticalAlignment="Center"
+                                           Margin="{StaticResource Layout.Spacing.Item}" />
+                                <TextBlock Grid.Row="0" Grid.Column="1"
+                                           Text="{Binding CachedGamesCount}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right"
+                                           Margin="{StaticResource Layout.Spacing.Item}" />
+                                <Button Grid.Row="0" Grid.Column="2"
+                                        Content="{DynamicResource LOCDTCAdvancedCacheClear}"
+                                        Command="{Binding ClearCacheCommand}"
+                                        Margin="{StaticResource Layout.Spacing.ItemBetween}"
+                                        VerticalAlignment="Center" />
+                            </Grid>
+
+                            <Expander Header="{DynamicResource LOCDTCAdvancedCacheGames}" >
+                                <ListBox ItemsSource="{Binding CachedGames}"
+                                         HorizontalAlignment="Stretch"
+                                         Background="Transparent"
+                                         BorderBrush="Transparent"
+                                         BorderThickness="0"
+                                         Margin="{StaticResource Layout.Spacing.Expander}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0"
+                                                           Text="{Binding GameName}"
+                                                           VerticalAlignment="Center" />
+
+                                                <Button Grid.Column="1"
+                                                        Content="🗑"
+                                                        Command="{Binding DataContext.RemoveCachedGameCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                        CommandParameter="{Binding}"
+                                                        VerticalAlignment="Center"
+                                                        ToolTip="{DynamicResource LOCDTCAdvancedCacheRemoveSingleGame}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Expander>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
             </ScrollViewer>
         </TabItem>
     </TabControl>

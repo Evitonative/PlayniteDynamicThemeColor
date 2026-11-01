@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace DynamicThemeColor.Utils {
     public class ThemePaletteCache {
@@ -28,6 +29,10 @@ namespace DynamicThemeColor.Utils {
 
         public void Clear() {
             cache.Clear();
+        }
+
+        public ICollection<Guid> GetCachedGameIds() {
+            return cache.Keys;
         }
 
         public int Count => cache.Count;

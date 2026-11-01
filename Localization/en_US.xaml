@@ -42,4 +42,11 @@
     <sys:String x:Key="LOCDTCSchemeSourceBuiltIn">Built-in</sys:String>
     <sys:String x:Key="LOCDTCSchemeSourceTheme">Theme</sys:String>
     <sys:String x:Key="LOCDTCSchemeSourceCustom">Custom</sys:String>
+
+    <!-- Advanced Tab -->
+    <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheCount">Cached Games: </sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheClear">Clear Cache</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheGames">Cached Games</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGame">Remove Game From Cache</sys:String>
 </ResourceDictionary>

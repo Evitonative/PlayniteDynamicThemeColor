@@ -14,6 +14,7 @@
     <Thickness x:Key="Layout.Spacing.Root">15</Thickness>
     <Thickness x:Key="Layout.Spacing.Section">0,0,0,15</Thickness>
     <Thickness x:Key="Layout.Spacing.Item">0,0,0,8</Thickness>
+    <Thickness x:Key="Layout.Spacing.ItemBetween">10,0,0,8</Thickness>
     <Thickness x:Key="Layout.Spacing.Expander">0,10,0,0</Thickness>
 
     <!-- Padding -->
