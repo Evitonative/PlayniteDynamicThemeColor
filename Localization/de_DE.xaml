@@ -1,0 +1,52 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- Tabs -->
+    <sys:String x:Key="LOCDTCTabGeneral">Allgemein</sys:String>
+    <sys:String x:Key="LOCDTCTabSchemes">Schema</sys:String>
+    <sys:String x:Key="LOCDTCTabFilters">Filter</sys:String>
+    <sys:String x:Key="LOCDTCTabAdvanced">Erweitert</sys:String>
+
+    <!-- General Tab -->
+    <!-- View Targets -->
+    <sys:String x:Key="LOCDTCViewTargetsTitle">Aktive Ansichten</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetHint">In welchen Ansichten das dynamische Theming angewendet werden soll.</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetDetails">Detailansicht</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetGrid">Rasteransicht</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetList">Listenansicht</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetFullscreen">Vollbild</sys:String>
+
+    <!-- Asset Priority Order -->
+    <sys:String x:Key="LOCDTCAssetPriorityOrderTitle">Asset-Priorität</sys:String>
+    <sys:String x:Key="LOCDTCAssetPriorityOrderHint">Reihenfolge, in der versucht werden soll Assets zu laden.&#x0a;&#x0a;Niedrigere Werte haben eine geringere Priorität.</sys:String>
+    <sys:String x:Key="LOCDTCAssetPriorityMoveUpHint">Hoch</sys:String>
+    <sys:String x:Key="LOCDTCAssetPriorityMoveDownHint">Runter</sys:String>
+
+    <!-- Extraction & Fallback Defaults -->
+    <sys:String x:Key="LOCDTCExtractionFallbackTitle">Extraktion &amp; Fallback-Standards</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyle">Paletten-Stil</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyleHint">Welcher Stil soll für zum Erstellen der Farbpalette verwendet werden?</sys:String>
+    <sys:String x:Key="LOCDTCExtractionColorSelectionRange">Farbauswahl-Bereich</sys:String>
+    <sys:String x:Key="LOCDTCExtractionColorSelectionRangeHint">Aus wie vielen Farben soll für Erstellen der Palette gewählt werden. Weniger Farben sind liefern ein passenderes Ergebnis, mehr Farben sorgen für mehr Variation.</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackSeedColor">Fallback-Farbe</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackSeedColorHint">Die Farbe wird verwendet, wenn für ein Spiel keine Farbe extrahiert werden kann.</sys:String>
+
+    <!-- LOCDTCUseFallbackOnMissing -->
+    <sys:String x:Key="LOCDTCUseFallbackOnMissing">Fallback wenn Asset fehlt</sys:String>
+    <sys:String x:Key="LOCDTCUseFallbackOnMissingHint">Wenn aktiviert, wird die Fallback-Farbe verwendet, wenn ein Spiel keine Assets hat.&#x0a;Wenn deaktiviert, werden die Standardfarben des Themes wiederhergestellt..</sys:String>
+
+    <!-- Schemes Tab -->
+    <sys:String x:Key="LOCDTCActiveSchemes">Aktive Schemata</sys:String>
+    <sys:String x:Key="LOCDTCOtherSchemes">Weitere gefundene Schemata</sys:String>
+    <sys:String x:Key="LOCDTCSchemeNoOptions">Dieses Schema hat keine Einstellungen.</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSourceBuiltIn">Built-in</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSourceTheme">Design</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSourceCustom">Benutzerdefiniert</sys:String>
+
+    <!-- Advanced Tab -->
+    <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheCount">Zwischengespeicherte Spiele:</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheClear">Cache Leeren</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheGames">Zwischengespeicherte Spiele</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGame">Spiel aus dem Cache entfernen.</sys:String>
+</ResourceDictionary>

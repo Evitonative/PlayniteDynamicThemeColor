@@ -9,7 +9,7 @@
 
     <!-- General Tab -->
     <!-- View Targets -->
-    <sys:String x:Key="LOCDTCViewTargetsTitle">View Targets</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetsTitle">Active Views</sys:String>
     <sys:String x:Key="LOCDTCViewTargetHint">Which views dynamic theming should be applied.</sys:String>
     <sys:String x:Key="LOCDTCViewTargetDetails">Details View</sys:String>
     <sys:String x:Key="LOCDTCViewTargetGrid">Grid View</sys:String>
@@ -27,13 +27,13 @@
     <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyle">Palette Style</sys:String>
     <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyleHint">Which style should be used when generating the color palette.</sys:String>
     <sys:String x:Key="LOCDTCExtractionColorSelectionRange">Color Selection Range</sys:String>
-    <sys:String x:Key="LOCDTCExtractionColorSelectionRangeHint">How many top-score colors from the image are considered for generating the reference color.</sys:String>
+    <sys:String x:Key="LOCDTCExtractionColorSelectionRangeHint">How many top-score colors from the image are considered for generating the reference color. Fewer colors deliver more accurate results, more colors results in more variety.</sys:String>
     <sys:String x:Key="LOCDTCExtractionFallbackSeedColor">Fallback Color</sys:String>
     <sys:String x:Key="LOCDTCExtractionFallbackSeedColorHint">This color will be used when no color can be extracted for an image.</sys:String>
 
     <!-- LOCDTCUseFallbackOnMissing -->
     <sys:String x:Key="LOCDTCUseFallbackOnMissing">Use fallback when asset is missing</sys:String>
-    <sys:String x:Key="LOCDTCUseFallbackOnMissingHint">If enabled the fallback color will be used if a game as no assets availabel.&#x0a;If disabled themes default colors will be restored.</sys:String>
+    <sys:String x:Key="LOCDTCUseFallbackOnMissingHint">If enabled the fallback color will be used if a game as no assets available.&#x0a;If disabled themes default colors will be restored.</sys:String>
 
     <!-- Schemes Tab -->
     <sys:String x:Key="LOCDTCActiveSchemes">Active Schemes</sys:String>
@@ -45,8 +45,8 @@
 
     <!-- Advanced Tab -->
     <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedCacheCount">Cached Games: </sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheCount">Cached Games:</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheClear">Clear Cache</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheGames">Cached Games</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGame">Remove Game From Cache</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGameHint">Remove Game From Cache.</sys:String>
 </ResourceDictionary>

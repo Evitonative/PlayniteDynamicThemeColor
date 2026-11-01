@@ -292,7 +292,7 @@
                                                         Command="{Binding DataContext.RemoveCachedGameCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                                         CommandParameter="{Binding}"
                                                         VerticalAlignment="Center"
-                                                        ToolTip="{DynamicResource LOCDTCAdvancedCacheRemoveSingleGame}"/>
+                                                        ToolTip="{DynamicResource LOCDTCAdvancedCacheRemoveSingleGameHint}"/>
                                             </Grid>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
