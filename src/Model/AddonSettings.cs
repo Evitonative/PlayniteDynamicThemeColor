@@ -79,8 +79,8 @@ namespace DynamicThemeColor.Model {
         }
 
         // Scheme Settings
-        private Dictionary<string, Dictionary<string, bool>> schemeOptionOverrides = new Dictionary<string, Dictionary<string, bool>>(StringComparer.OrdinalIgnoreCase);
-        public Dictionary<string, Dictionary<string, bool>> SchemeOptionOverrides {
+        private Dictionary<Guid, Dictionary<string, bool>> schemeOptionOverrides = new Dictionary<Guid, Dictionary<string, bool>>();
+        public Dictionary<Guid, Dictionary<string, bool>> SchemeOptionOverrides {
             get => schemeOptionOverrides;
             set => SetValue(ref schemeOptionOverrides, value);
         }
@@ -102,6 +102,13 @@ namespace DynamicThemeColor.Model {
         public ObservableCollection<FilterConfiguration> BrushFilters {
             get => brushFilters;
             set => SetValue(ref brushFilters, value);
+        }
+
+        // Advanced
+        private Dictionary<string, Guid> rememberedSchemeForThemes = new Dictionary<string, Guid>();
+        public Dictionary<string, Guid> RememberedSchemeForThemes {
+            get => rememberedSchemeForThemes;
+            set => SetValue(ref rememberedSchemeForThemes, value);
         }
     }
 }

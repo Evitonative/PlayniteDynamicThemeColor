@@ -44,9 +44,31 @@
     <sys:String x:Key="LOCDTCSchemeSourceCustom">Benutzerdefiniert</sys:String>
 
     <!-- Advanced Tab -->
+    <sys:String x:Key="LOCDTCAdvancedWarning">Achtung: Diese Einstellungen existieren weites gehend für debugging Zwecke. Es kann unvorhergesehenes Verhalten auftreten. Verwendung unter eigener Gefahr.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheCount">Zwischengespeicherte Spiele:</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheClear">Cache Leeren</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheGames">Zwischengespeicherte Spiele</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGame">Spiel aus dem Cache entfernen.</sys:String>
+
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineTitle">Scheme Engine</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButton">Alle Design-Schema Verbindungen Löschen</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint">Dies wird erst beim speichern umgesetzt. Du wirst möglicherweise sofort gefragt um neue Verbindungen zu erstellen fallst nötig.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButton">Alle Schema Neu Laden</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButtonHint">Du willst warscheinlich auch die Brushes erneuern.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButton">Alle Brushes Erneuern</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint">Das passiert auch wenn du speicherst.</sys:String>
+
+    <!-- Scheme Select Dialog -->
+    <sys:String x:Key="LOCDTCSchemeSelectWindowTitel">Schema Auswählen</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectDescription">Du hast mehrere Schemata installiert welche dein Design "{0}" unterstützen. Bitte wähle eins aus.</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectColumnSchemeName">Schema Name</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectColumnAuthor">Author</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectColumnVersion">Version</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Auswahl merken</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">Du kannst im Advanced-Tab der Einstellung dies jederzeit widerrufen.</sys:String>
+
+    <!-- Generic Buttons -->
+    <sys:String x:Key="LOCDTCGenericCancel">Abbrechen</sys:String>
+    <sys:String x:Key="LOCDTCGenericSelect">Wählen</sys:String>
 </ResourceDictionary>

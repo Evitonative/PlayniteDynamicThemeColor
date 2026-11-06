@@ -11,11 +11,11 @@ namespace DynamicThemeColor.UI.Views.Settings {
             AddonSettings settings = addonSettings();
             Scheme = scheme;
 
-            settings.SchemeOptionOverrides = settings.SchemeOptionOverrides ?? new Dictionary<string, Dictionary<string, bool>>(StringComparer.OrdinalIgnoreCase);
+            settings.SchemeOptionOverrides = settings.SchemeOptionOverrides ?? new Dictionary<Guid, Dictionary<string, bool>>();
 
-            if (!settings.SchemeOptionOverrides.TryGetValue(scheme.Theme, out Dictionary<string, bool> dict)) {
+            if (!settings.SchemeOptionOverrides.TryGetValue(scheme.Id, out Dictionary<string, bool> dict)) {
                 dict = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
-                settings.SchemeOptionOverrides[scheme.Theme] = dict;
+                settings.SchemeOptionOverrides[scheme.Id] = dict;
             }
             OptionsDictionary = dict;
         }

@@ -13,8 +13,7 @@ namespace DynamicThemeColor.UI.Components {
 
         public string DisplayName {
             get {
-                if (ColorScheme == null) return string.Empty;
-                return ColorScheme.DisplayName ?? ColorScheme.Theme;
+                return ColorScheme == null ? string.Empty : ColorScheme.DisplayName;
             }
         }
 

@@ -15,11 +15,13 @@
     <Thickness x:Key="Layout.Spacing.Section">0,0,0,15</Thickness>
     <Thickness x:Key="Layout.Spacing.Item">0,0,0,8</Thickness>
     <Thickness x:Key="Layout.Spacing.ItemBetween">10,0,0,8</Thickness>
+    <Thickness x:Key="Layout.Spacing.Between">10,0,0,0</Thickness>
     <Thickness x:Key="Layout.Spacing.Expander">0,10,0,0</Thickness>
 
     <!-- Padding -->
     <Thickness x:Key="Layout.Padding.GroupBox">10,8,5,5</Thickness>
     <Thickness x:Key="Layout.Padding.Header">10,8,15,5</Thickness>
+    <Thickness x:Key="Layout.Padding.Box">12</Thickness>
     <Thickness x:Key="Layout.Padding.Badge">6,2</Thickness>
 
     <!-- Margins -->
@@ -27,6 +29,10 @@
     <Thickness x:Key="Layout.Margin.HelpIcon">10,0,0,0</Thickness>
     <Thickness x:Key="Layout.Margin.RankableItem">2</Thickness>
     <Thickness x:Key="Layout.Margin.RankableButton">2,0</Thickness>
+
+    <!-- Border -->
+    <Thickness x:Key="Layout.Border.Thickness">2</Thickness>
+    <CornerRadius x:Key="Layout.Border.Radius">2</CornerRadius>
 
     <!-- Raw Colors -->
     <Color x:Key="Palette.Badge.Default">#FF444444</Color>

@@ -16,30 +16,22 @@ namespace DynamicThemeColor.Model {
         private const int defaultAlpha = 100;
 
         /// <summary>
-        /// DiscoveryPriority of the color scheme.
-        ///
-        /// Not part of the JSON Schema and should not be used in schemes directly.
+        /// A unique identifier of the scheme (UUID v4).
         /// </summary>
-        public int DiscoveryPriority { get; set; } = 0;
+        [JsonProperty("id")]
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Source from where a scheme is loaded
-        ///
-        /// Not part of the JSON Schema and should not be used in schemes directly.
-        /// </summary>
-        public SchemeSource SchemeSource { get; set; } = SchemeSource.Custom;
-
-        /// <summary>
-        /// The name of the playnite theme.
+        /// Name of the scheme shown to the user.
         /// </summary>
         [JsonProperty("displayName")]
         public string DisplayName { get; set; }
 
         /// <summary>
-        /// The name of the playnite theme.
+        /// Names of the supported Playnite themes.
         /// </summary>
-        [JsonProperty("theme", Required = Required.Always)]
-        public string Theme { get; set; }
+        [JsonProperty("themes", Required = Required.Always)]
+        public string[] Themes { get; set; }
 
         /// <summary>
         /// The theme is a fullscreen theme.
@@ -60,11 +52,10 @@ namespace DynamicThemeColor.Model {
         public int Version { get; set; }
 
         /// <summary>
-        /// A different scheme this scheme depends on.
+        /// ID of the scheme this scheme depends on.
         /// </summary>
         [JsonProperty("inherits")]
-        [CanBeNull]
-        public SchemeDependency Inherits { get; set; }
+        public Guid? Inherits { get; set; }
 
         /// <summary>
         /// Variables used by scheme.
@@ -77,6 +68,10 @@ namespace DynamicThemeColor.Model {
         /// </summary>
         [JsonProperty("brushes")]
         public Dictionary<string, IBrushDefinition> Brushes { get; set; } = new Dictionary<string, IBrushDefinition>();
+
+        public override string ToString() {
+            return $"#{GetType().Name} {DisplayName} ({Id})";
+        }
 
         /// <summary>
         /// Validate if the class meets all constraints.
@@ -95,18 +90,24 @@ namespace DynamicThemeColor.Model {
             }
 
 
-            foreach (KeyValuePair<string, IColorReference> kvp in Variables ?? Enumerable.Empty<KeyValuePair<string, IColorReference>>()) {
+            foreach (KeyValuePair<string, IColorReference> kvp in Variables ??
+                                                                  Enumerable
+                                                                      .Empty<KeyValuePair<string, IColorReference>>()) {
                 ValidateKvp(kvp, "Variable", ref isValid, errors);
             }
 
-            foreach (KeyValuePair<string, IBrushDefinition> kvp in Brushes ?? Enumerable.Empty<KeyValuePair<string, IBrushDefinition>>()) {
+            foreach (KeyValuePair<string, IBrushDefinition> kvp in Brushes ??
+                                                                   Enumerable
+                                                                       .Empty<
+                                                                           KeyValuePair<string, IBrushDefinition>>()) {
                 ValidateKvp(kvp, "Brush", ref isValid, errors);
             }
 
             return isValid;
         }
 
-        private static void ValidateKvp<TKey, TValue>(KeyValuePair<TKey, TValue> kvp, string itemType, ref bool isValid, List<string> errors) {
+        private static void ValidateKvp<TKey, TValue>(KeyValuePair<TKey, TValue> kvp, string itemType, ref bool isValid,
+            List<string> errors) {
             if (kvp.Value == null) return;
 
             List<ValidationResult> innerResults = new List<ValidationResult>();
@@ -116,30 +117,6 @@ namespace DynamicThemeColor.Model {
 
             errors.AddRange(innerResults.Select(r => $"{itemType} '{kvp.Key}': {r.ErrorMessage}"));
             isValid = false;
-        }
-
-        /// <summary>
-        /// Scheme for a theme depended on by another scheme.
-        /// </summary>
-        public class SchemeDependency {
-            /// <summary>
-            /// The theme the scheme supports
-            /// </summary>
-            [JsonProperty("theme", Required = Required.Always)]
-            public string Theme { get; set; }
-
-            /// <summary>
-            /// The minimum required version of the scheme.
-            /// </summary>
-            [JsonProperty("min-version")]
-            public int? MinVersion { get; set; }
-
-            /// <summary>
-            /// Array of authors of the dependent theme.
-            /// </summary>
-            [JsonProperty("author")]
-            [CanBeNull]
-            public List<string> Author { get; set; }
         }
 
         /// <summary>
@@ -185,7 +162,7 @@ namespace DynamicThemeColor.Model {
             /// <summary>
             /// The Material You palette.
             /// </summary>
-            [JsonProperty("palette",  Required = Required.Always)]
+            [JsonProperty("palette", Required = Required.Always)]
             public MaterialPalette Palette { get; set; }
 
             /// <summary>
@@ -216,14 +193,13 @@ namespace DynamicThemeColor.Model {
         /// </summary>
         [JsonConverter(typeof(ColorReferenceConverter<HexBrush, TransparentBrush, MaterialBrush, VariableBrush>))]
         public interface IBrushDefinition : IColorReference {
-            [JsonProperty("optional")]
-            [CanBeNull]
-            OptionalConfig Optional { get; set; }
+            [JsonProperty("optional")] [CanBeNull] OptionalConfig Optional { get; set; }
         }
 
         /// <summary>
         /// Hex colored brush
         /// </summary>
+        [UsedImplicitly]
         public class HexBrush : HexColor, IBrushDefinition {
             public OptionalConfig Optional { get; set; }
         }
@@ -231,6 +207,7 @@ namespace DynamicThemeColor.Model {
         /// <summary>
         /// Transparent brush
         /// </summary>
+        [UsedImplicitly]
         public class TransparentBrush : TransparentColor, IBrushDefinition {
             public OptionalConfig Optional { get; set; }
         }
@@ -238,6 +215,7 @@ namespace DynamicThemeColor.Model {
         /// <summary>
         /// Material color brush
         /// </summary>
+        [UsedImplicitly]
         public class MaterialBrush : MaterialColor, IBrushDefinition {
             public OptionalConfig Optional { get; set; }
         }
@@ -245,6 +223,7 @@ namespace DynamicThemeColor.Model {
         /// <summary>
         /// Brush referencing a variable
         /// </summary>
+        [UsedImplicitly]
         public class VariableBrush : VariableReference, IBrushDefinition {
             public OptionalConfig Optional { get; set; }
         }
@@ -268,35 +247,25 @@ namespace DynamicThemeColor.Model {
 
         [JsonConverter(typeof(StringEnumConverter))]
         public enum MaterialPalette {
-            [EnumMember(Value = "Neutral")]
-            Neutral,
-            [EnumMember(Value = "NeutralVariant")]
-            NeutralVariant,
-            [EnumMember(Value = "Primary")]
-            Primary,
-            [EnumMember(Value = "Secondary")]
-            Secondary,
-            [EnumMember(Value = "Tertiary")]
-            Tertiary,
+            [EnumMember(Value = "Neutral")] Neutral,
+            [EnumMember(Value = "NeutralVariant")] NeutralVariant,
+            [EnumMember(Value = "Primary")] Primary,
+            [EnumMember(Value = "Secondary")] Secondary,
+            [EnumMember(Value = "Tertiary")] Tertiary,
         }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public enum ColorReferenceType {
-            [EnumMember(Value = "hex")]
-            Hex,
-            [EnumMember(Value = "transparent")]
-            Transparent,
-            [EnumMember(Value = "material")]
-            Material,
-            [EnumMember(Value = "variable")]
-            Variable,
+            [EnumMember(Value = "hex")] Hex,
+            [EnumMember(Value = "transparent")] Transparent,
+            [EnumMember(Value = "material")] Material,
+            [EnumMember(Value = "variable")] Variable,
         }
 
-        private class ColorReferenceConverter <THex, TTransparent, TMaterial, TVariable> : JsonConverter
+        private class ColorReferenceConverter<THex, TTransparent, TMaterial, TVariable> : JsonConverter
             where THex : IColorReference
             where TMaterial : IColorReference
             where TVariable : IColorReference {
-
             public override bool CanWrite => false;
 
             public override bool CanConvert(Type objectType) {
@@ -304,7 +273,8 @@ namespace DynamicThemeColor.Model {
                        objectType == typeof(IBrushDefinition);
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+                JsonSerializer serializer) {
                 if (reader.TokenType == JsonToken.Null) return null;
 
                 JObject jObject = JObject.Load(reader);
@@ -342,6 +312,29 @@ namespace DynamicThemeColor.Model {
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
                 serializer.Serialize(writer, value);
             }
+        }
+    }
+
+    public class RegisteredColorScheme {
+        public ColorScheme Scheme { get; }
+        public SchemeSource SchemeSource { get; }
+        public string FilePath { get; }
+
+        public RegisteredColorScheme(
+            ColorScheme scheme,
+            string filePath,
+            SchemeSource schemeSource = SchemeSource.Custom) {
+            Scheme = scheme;
+            SchemeSource = schemeSource;
+            FilePath = filePath;
+        }
+
+        public string AuthorDisplay => Scheme?.Author != null
+            ? string.Join(", ", Scheme.Author)
+            : string.Empty;
+
+        public override string ToString() {
+            return Scheme.ToString();
         }
     }
 }

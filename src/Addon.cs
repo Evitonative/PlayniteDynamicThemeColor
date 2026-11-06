@@ -46,7 +46,7 @@ namespace DynamicThemeColor {
             addonSettings = savedSettings ?? new AddonSettings();
             addonSettings.EnsureAllEnumsPresent();
 
-            SchemeEngine = new SchemeEngine(PlayniteApi, Id, () => AddonSettings);
+            SchemeEngine = new SchemeEngine(PlayniteApi, Id, () => AddonSettings, SavePluginSettings);
             ThemingEngine = new ThemingEngine(PlayniteApi, () => AddonSettings, SchemeEngine);
             SettingsView = new SettingsViewModel(this);
 

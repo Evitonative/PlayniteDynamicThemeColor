@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Playnite.SDK;
 
@@ -31,8 +30,7 @@ namespace DynamicThemeColor.UI.Components {
                 typeof(RankableList),
                 new PropertyMetadata(null));
 
-        public object SelectedItem
-        {
+        public object SelectedItem {
             get => GetValue(SelectedItemProperty);
             set => SetValue(SelectedItemProperty, value);
         }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using DynamicThemeColor.Model;
-using JetBrains.Annotations;
+using DynamicThemeColor.UI.Views;
 using Newtonsoft.Json;
 using Playnite.SDK;
 
@@ -14,34 +15,123 @@ namespace DynamicThemeColor {
         private const string themeSchemeFileName = "dtc-scheme.json";
         private const string schemesFolderName = "schemes";
 
-        private readonly ILogger logger = LogManager.GetLogger();
+        private static readonly Guid defaultSchemeId = Guid.Parse("acf38ef2-09da-4e3e-a24a-8cd8719fb2bc");
+        private static readonly ILogger logger = LogManager.GetLogger();
         private readonly IPlayniteAPI playniteApi;
         private readonly Guid addonId;
         private readonly Func<AddonSettings> addonSettings;
+        private readonly Action<AddonSettings> savePluginSettings;
 
-        public readonly Dictionary<string, ColorScheme> Schemes = new Dictionary<string, ColorScheme>(StringComparer.OrdinalIgnoreCase);
-        private readonly List<(string, SchemeSource)> schemeFiles = new List<(string, SchemeSource)>();
+        public readonly Dictionary<Guid, RegisteredColorScheme> RegisteredSchemes = new Dictionary<Guid, RegisteredColorScheme>();
         public readonly Dictionary<string, ColorScheme.IColorReference> ActiveVariables = new Dictionary<string, ColorScheme.IColorReference>(StringComparer.OrdinalIgnoreCase);
         public readonly Dictionary<string, ColorScheme.IBrushDefinition> ActiveBrushes = new Dictionary<string, ColorScheme.IBrushDefinition>(StringComparer.OrdinalIgnoreCase);
+        public List<Guid> ActiveSchemeChain { get; private set; } = new List<Guid>();
 
-        public List<string> ActiveSchemeChain { get; private set; }
-
-        public SchemeEngine(IPlayniteAPI playniteApi, Guid addonId, Func<AddonSettings> addonSettings) {
+        public SchemeEngine(
+            IPlayniteAPI playniteApi,
+            Guid addonId,
+            Func<AddonSettings> addonSettings,
+            Action<AddonSettings> savePluginSettings) {
             this.playniteApi = playniteApi;
             this.addonId = addonId;
             this.addonSettings = addonSettings;
+            this.savePluginSettings = savePluginSettings;
 
             PrepareSchemes();
             RefreshBrushes();
         }
 
-        private void PrepareSchemes() {
-            DiscoverSchemes();
-            LoadSchemes(schemeFiles, out List<(string, string)> loadingErrors);
+        public void PrepareSchemes() {
+            DiscoverSchemeFiles(out List<SchemeFile> schemeFiles);
+            LoadSchemes(schemeFiles, out List<LoadingError> loadingErrors);
 
-            foreach ((string file, string message) in loadingErrors)
-            {
-                logger.Warn($"Error loading scheme file: {file}: {message}");
+            foreach (LoadingError err in loadingErrors) {
+                logger.Warn(err.ToString());
+            }
+        }
+
+        private void DiscoverSchemeFiles(out List<SchemeFile> schemeFiles) {
+            schemeFiles =  new List<SchemeFile>();
+
+            string playniteAddonDirectoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string playniteConfigPath = playniteApi.Paths.ConfigurationPath;
+            string playniteExtensionsDataPath = playniteApi.Paths.ExtensionsDataPath;
+
+            // Shipped with add-on
+            if (playniteAddonDirectoryPath != null) {
+                string addonDirectorySchemesPath = Path.Combine(playniteAddonDirectoryPath, bundledSchemesFolderName);
+                if (!Directory.Exists(addonDirectorySchemesPath)) logger.Warn($"Add-on is missing built-in schemes");
+                else schemeFiles.AddRange(Directory
+                    .GetFiles(addonDirectorySchemesPath, "*.json", SearchOption.TopDirectoryOnly)
+                    .Select(schemeFilePath => new SchemeFile(schemeFilePath, SchemeSource.BuiltIn)));
+            } else logger.Error("Add-on assembly directory was not found.");
+
+            // In Themes
+            string themesPath = Path.Combine(playniteConfigPath, "Themes");
+            string desktopThemesPath = Path.Combine(themesPath, "Desktop");
+            string fullscreenThemePaths = Path.Combine(themesPath, "Fullscreen");
+
+            if (!Directory.Exists(desktopThemesPath)) logger.Warn($"Desktop themes directory not found: {desktopThemesPath}");
+            else schemeFiles.AddRange(
+                from dir in Directory.GetDirectories(desktopThemesPath, "*", SearchOption.TopDirectoryOnly)
+                select Path.Combine(dir, themeSchemeFileName)
+                into schemeFilePath
+                where File.Exists(schemeFilePath)
+                select new SchemeFile(schemeFilePath, SchemeSource.BuiltIn));
+
+            if (!Directory.Exists(fullscreenThemePaths)) logger.Warn($"Fullscreen themes directory not found: {fullscreenThemePaths}");
+            else schemeFiles.AddRange(
+                from dir in Directory.GetDirectories(fullscreenThemePaths, "*", SearchOption.TopDirectoryOnly)
+                select Path.Combine(dir, themeSchemeFileName)
+                into schemeFilePath
+                where File.Exists(schemeFilePath)
+                select new SchemeFile(schemeFilePath, SchemeSource.BuiltIn));
+
+            // In Extension Setting
+            string extensionSettingsPath = Path.Combine(playniteExtensionsDataPath, addonId.ToString());
+            string settingsSchemesPath = Path.Combine(extensionSettingsPath, schemesFolderName);
+
+            if (!Directory.Exists(settingsSchemesPath)) {
+                logger.Debug($"Creating schemes folder at {settingsSchemesPath}");
+                Directory.CreateDirectory(settingsSchemesPath);
+            }
+
+            schemeFiles.AddRange(Directory
+                .GetFiles(settingsSchemesPath, "*.json", SearchOption.TopDirectoryOnly)
+                .Select(schemeFilePath => new SchemeFile(schemeFilePath, SchemeSource.Custom)));
+        }
+
+        private void LoadSchemes(
+            List<SchemeFile> files,
+            out List<LoadingError> errors) {
+            errors = new List<LoadingError>();
+            RegisteredSchemes.Clear();
+
+            foreach (SchemeFile file in files) {
+                try {
+                    string json = File.ReadAllText(file.Path);
+
+                    ColorScheme scheme = JsonConvert.DeserializeObject<ColorScheme>(json);
+
+                    if (scheme == null) {
+                        errors.Add(new LoadingError("File content evaluated to null", file));
+                        continue;
+                    }
+
+                    if (!scheme.Validate(out List<string> validationErrors)) {
+                        errors.AddRange(validationErrors.Select(e => new LoadingError(e, file)));
+                        continue;
+                    }
+
+                    RegisteredColorScheme registeredScheme = new RegisteredColorScheme(scheme, file.Path, file.Source);
+                    RegisteredSchemes[registeredScheme.Scheme.Id] = registeredScheme;
+                }
+                catch (JsonException jsonEx) {
+                    errors.Add(new LoadingError($"JSON parsing error: {jsonEx.Message}", file));
+                }
+                catch (Exception ex) {
+                    errors.Add(new LoadingError($"Unexpected error reading file: {ex.Message}", file));
+                }
             }
         }
 
@@ -53,133 +143,98 @@ namespace DynamicThemeColor {
 
             logger.Trace($"Refreshing brushes. Mode: {(fullscreenEnabled ? "Fullscreen" : "Desktop")}, Active Theme: '{currentTheme}'");
 
-            string bestMatchingScheme = TryDiscoverBestScheme(currentTheme, fullscreenEnabled);
+            Guid bestMatchingScheme = TryDiscoverBestScheme(currentTheme, fullscreenEnabled);
             logger.Debug($"Best matching scheme resolved to: '{bestMatchingScheme}'");
 
-            List<string> chain = new List<string>();
-            MakeVariableAndBrushDict(bestMatchingScheme, ActiveVariables, ActiveBrushes, seenThemes: chain);
+            List<Guid> chain = new List<Guid>();
+            UpdateVariableAndBrushDict(bestMatchingScheme, seenThemes: chain);
             ActiveSchemeChain = chain;
             logger.Trace($"Active scheme inheritance chain built: [{string.Join(" -> ", chain)}]");
         }
 
-        private void DiscoverSchemes() {
-            schemeFiles.Clear();
+        private Guid TryDiscoverBestScheme(string currentTheme, bool fullscreenEnabled) {
+            logger.Trace($"Searching for best scheme matching theme '{currentTheme}' (Fullscreen: {fullscreenEnabled}) among {RegisteredSchemes.Count} registered schemes.");
 
-            string playniteAddonDirectoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string playniteConfigPath = playniteApi.Paths.ConfigurationPath;
-            string playniteExtensionsDataPath = playniteApi.Paths.ExtensionsDataPath;
+            List<RegisteredColorScheme> candidates = RegisteredSchemes.Values
+                .Where(s => s.Scheme.Fullscreen == fullscreenEnabled)
+                .Where(s => s.Scheme.Themes.Any(supportedTheme => currentTheme.IndexOf(supportedTheme, StringComparison.OrdinalIgnoreCase) >= 0))
+                .ToList();
 
-            // Shipped with add-on
-            if (playniteAddonDirectoryPath != null) {
-                string addonDirectorySchemesPath = Path.Combine(playniteAddonDirectoryPath, bundledSchemesFolderName);
-                if (!Directory.Exists(addonDirectorySchemesPath)) logger.Warn($"Add-on is missing built-in schemes");
-                else foreach (string file in Directory.GetFiles(addonDirectorySchemesPath, "*.json", SearchOption.TopDirectoryOnly))
-                    schemeFiles.Add((file, SchemeSource.BuiltIn));
-            } else logger.Error("Add-on assembly directory was not found.");
-
-            // In Themes
-            string themesPath = Path.Combine(playniteConfigPath, "Themes");
-            string desktopThemesPath = Path.Combine(themesPath, "Desktop");
-            string fullscreenThemePaths = Path.Combine(themesPath, "Fullscreen");
-
-            if (!Directory.Exists(desktopThemesPath)) logger.Warn($"Desktop themes directory not found: {desktopThemesPath}");
-            else foreach (string dir in Directory.GetDirectories(desktopThemesPath, "*", SearchOption.TopDirectoryOnly)) {
-                string schemeFile = Path.Combine(dir, themeSchemeFileName);
-                if (File.Exists(schemeFile)) schemeFiles.Add((schemeFile, SchemeSource.Theme));
+            if (candidates.Count > 1) {
+                logger.Debug($"Found {candidates.Count} matching scheme candidates, prompting user.");
+                if (PromptUserToPickScheme(candidates, currentTheme, out RegisteredColorScheme userPickedScheme))
+                    return userPickedScheme.Scheme.Id;
             }
 
-            if (!Directory.Exists(fullscreenThemePaths)) logger.Warn($"Fullscreen themes directory not found: {fullscreenThemePaths}");
-            else foreach (string dir in Directory.GetDirectories(fullscreenThemePaths, "*", SearchOption.TopDirectoryOnly)) {
-                string schemeFile = Path.Combine(dir, themeSchemeFileName);
-                if (File.Exists(schemeFile)) schemeFiles.Add((schemeFile, SchemeSource.Theme));
+            if (candidates.Count == 1) {
+                RegisteredColorScheme candidate = candidates[0];
+                logger.Trace($"Found matching scheme candidate: {candidate}");
+                return candidate.Scheme.Id;
             }
 
-            // In Extension Setting
-            string extensionSettingsPath = Path.Combine(playniteExtensionsDataPath, addonId.ToString());
-            string settingsSchemesPath = Path.Combine(extensionSettingsPath, schemesFolderName);
-
-            if (!Directory.Exists(settingsSchemesPath)) {
-                logger.Debug($"Creating schemes folder at {settingsSchemesPath}");
-                Directory.CreateDirectory(settingsSchemesPath);
-            }
-
-            foreach (string file in Directory.GetFiles(settingsSchemesPath, "*.json", SearchOption.TopDirectoryOnly))
-                schemeFiles.Add((file, SchemeSource.Custom));
+            logger.Debug($"No scheme matched active theme '{currentTheme}'. Falling back to default.");
+            return defaultSchemeId;
         }
 
-        private void LoadSchemes(List<(string, SchemeSource)> files, out List<(string, string)> errors) {
-            errors = new List<(string, string)>();
+        private Guid? TryDiscoverSchemeDependency(Guid dependencyGuid) {
+            logger.Trace($"Searching for scheme dependency '{dependencyGuid}' among {RegisteredSchemes.Count} registered schemes.");
 
-            Schemes.Clear();
+            List<RegisteredColorScheme> candidates = RegisteredSchemes.Values
+                .Where(s => s.Scheme.Id == dependencyGuid)
+                .ToList();
 
-            foreach ((string filePath, SchemeSource schemeSource) in files) {
-                try {
-                    string json = File.ReadAllText(filePath);
-
-                    ColorScheme scheme = JsonConvert.DeserializeObject<ColorScheme>(json);
-
-                    if (scheme == null) {
-                        errors.Add((filePath, $"File content evaluated to null"));
-                        continue;
-                    }
-
-                    if (!scheme.Validate(out List<string> validationErrors)) {
-                        errors.AddRange(validationErrors.Select(e => (filePath, e)));
-                        continue;
-                    }
-
-                    RegisterOrUpdateScheme(scheme, schemeSource);
-                }
-                catch (JsonException jsonEx) {
-                    errors.Add((filePath, $"JSON parsing error: {jsonEx.Message}"));
-                }
-                catch (Exception ex) {
-                    errors.Add((filePath, $"Unexpected error reading file: {ex.Message}"));
-                }
+            if (candidates.Count > 1) {
+                logger.Debug($"Found {candidates.Count} matching scheme candidates, prompting user.");
             }
+
+            if (candidates.Count >= 1) {
+                RegisteredColorScheme candidate = candidates[0];
+                logger.Trace($"Found matching scheme candidate: {candidate}");
+                return candidate.Scheme.Id;
+            }
+
+            if (dependencyGuid != defaultSchemeId) {
+                logger.Warn($"Scheme dependency '{dependencyGuid}' could not be found. Falling back to 'default'.");
+                return defaultSchemeId;
+            }
+
+            logger.Error("Default scheme could not be found.");
+            return null;
         }
 
-        private void MakeVariableAndBrushDict(
-            string schemeName,
-            Dictionary<string, ColorScheme.IColorReference> variables,
-            Dictionary<string, ColorScheme.IBrushDefinition> brushes,
-            List<string> seenThemes = null,
-            bool first = true) {
-
-            if (seenThemes == null) seenThemes = new List<string>();
+        private void UpdateVariableAndBrushDict(Guid schemeId, List<Guid> seenThemes = null, bool first = true) {
+            if (seenThemes == null) seenThemes = new List<Guid>();
 
             if (first) {
-                variables.Clear();
-                brushes.Clear();
+                ActiveVariables.Clear();
+                ActiveBrushes.Clear();
             }
 
-            if (seenThemes.Contains(schemeName)) {
-                logger.Error($"Circular inheritance detected with scheme '{schemeName}'");
+            if (seenThemes.Contains(schemeId)) {
+                logger.Error($"Circular inheritance detected with scheme '{schemeId}'");
                 // TODO: Notify user
                 return;
             }
-            seenThemes.Add(schemeName);
 
-            if (!Schemes.TryGetValue(schemeName, out ColorScheme scheme)) {
-                logger.Error($"Invalid scheme in while flattening: {schemeName}");
+            seenThemes.Add(schemeId);
+
+            if (!RegisteredSchemes.TryGetValue(schemeId, out RegisteredColorScheme registeredScheme)) {
+                // TODO: This should be the case when a scheme depends on a scheme that was not loaded. We should ask the user if they want the default scheme.
+                logger.Error($"Invalid scheme in while flattening: {schemeId}");
                 return;
             }
 
+            ColorScheme scheme = registeredScheme.Scheme;
+
             if (scheme.Inherits != null) {
-                bool fullscreenEnabled = playniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen;
+                Guid? bestMatchingScheme = TryDiscoverSchemeDependency(scheme.Inherits.Value);
 
-                string bestMatchingScheme = TryDiscoverBestScheme(
-                    scheme.Inherits.Theme,
-                    fullscreenEnabled,
-                    minVersion: scheme.Inherits.MinVersion,
-                    authors: scheme.Inherits.Author);
-
-                if (string.IsNullOrEmpty(bestMatchingScheme))
-                    logger.Warn($"Scheme dependency {scheme.Inherits.Theme} for {scheme.Theme} could not be found.");
-                else MakeVariableAndBrushDict(bestMatchingScheme, variables, brushes, seenThemes, first: false);
+                if (bestMatchingScheme == null)
+                    logger.Warn($"Scheme dependency {scheme.Inherits} for {scheme.Themes} could not be found.");
+                else UpdateVariableAndBrushDict(bestMatchingScheme.Value, seenThemes, first: false);
             }
 
-            scheme.Variables.ForEach(kvp => variables[kvp.Key] = kvp.Value);
+            scheme.Variables.ForEach(kvp => ActiveVariables[kvp.Key] = kvp.Value);
             AddonSettings settings = addonSettings();
             foreach (KeyValuePair<string, ColorScheme.IBrushDefinition> kvp in scheme.Brushes) {
                 string brushKey = kvp.Key;
@@ -188,73 +243,85 @@ namespace DynamicThemeColor {
                 if (brushDefinition.Optional != null) {
                     bool isEnabled = brushDefinition.Optional.Default;
                     if (settings?.SchemeOptionOverrides != null &&
-                        settings.SchemeOptionOverrides.TryGetValue(scheme.Theme, out Dictionary<string, bool> brushDict) &&
+                        settings.SchemeOptionOverrides.TryGetValue(scheme.Id, out Dictionary<string, bool> brushDict) &&
                         brushDict.TryGetValue(brushKey, out bool savedValue)) isEnabled = savedValue;
 
-                    logger.Trace($"Optional brush '{brushKey}' in scheme '{scheme.Theme}' evaluated to enabled: {isEnabled}");
+                    logger.Trace($"Optional brush '{brushKey}' in scheme '{scheme.Themes}' evaluated to enabled: {isEnabled}");
                     if (!isEnabled) continue;
                 }
 
-                brushes[kvp.Key] = kvp.Value;
+                ActiveBrushes[kvp.Key] = kvp.Value;
             }
         }
 
-        private string TryDiscoverBestScheme(string currentTheme, bool fullscreenEnabled) {
-            logger.Trace($"Searching for best scheme matching theme '{currentTheme}' (Fullscreen: {fullscreenEnabled}) among {Schemes.Count} registered schemes.");
+        private bool PromptUserToPickScheme(IReadOnlyCollection<RegisteredColorScheme> candidates, string theme, out RegisteredColorScheme scheme) {
+            if (addonSettings().RememberedSchemeForThemes.TryGetValue(theme, out Guid schemeId)) {
+                RegisteredColorScheme foundCandidate = candidates.FirstOrDefault(s => s.Scheme.Id == schemeId);
+                if (foundCandidate != null) {
+                    scheme = foundCandidate;
+                    return true;
+                }
 
-            List<ColorScheme> candidates = Schemes.Values
-                .Where(s => s.Fullscreen == fullscreenEnabled)
-                .Where(s => currentTheme.IndexOf(s.Theme, StringComparison.OrdinalIgnoreCase) >= 0)
-                .OrderByDescending(s => s.DiscoveryPriority)
-                .ThenByDescending(s => s.Theme.Length)
-                .ToList();
-
-            if (candidates.Count > 0) {
-                logger.Trace($"Found matching scheme candidate: '{candidates[0].Theme}' (Priority: {candidates[0].DiscoveryPriority})");
-                return candidates[0].Theme;
+                addonSettings().RememberedSchemeForThemes.Remove(theme);
+                savePluginSettings(addonSettings());
             }
 
-            logger.Debug($"No scheme matched active theme '{currentTheme}'. Falling back to default.");
-            return "default";
+            Window window = playniteApi.Dialogs.CreateWindow(new WindowCreationOptions {
+                ShowMinimizeButton = false,
+                ShowMaximizeButton = false,
+                ShowCloseButton = true,
+            });
+
+            window.Title = ResourceProvider.GetString("LOCDTCSchemeSelectWindowTitel");
+            window.Width = 550;
+            window.SizeToContent = SizeToContent.Height;
+            window.MinHeight = 200;
+            window.MaxHeight = 450;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            SchemeSelectorView selectorView = new SchemeSelectorView(candidates, theme);
+            window.Content = selectorView;
+
+            bool? result = window.ShowDialog();
+            if (result != true || selectorView.SelectedItem == null) {
+                scheme = null;
+                return false;
+            }
+
+            scheme = selectorView.SelectedItem;
+            if (!selectorView.RememberChoice) return true;
+
+            addonSettings().RememberedSchemeForThemes[theme] = scheme.Scheme.Id;
+            savePluginSettings(addonSettings());
+            return true;
         }
 
-        [CanBeNull]
-        private string TryDiscoverBestScheme(string dependencyName, bool fullscreenEnabled, int? minVersion, [CanBeNull] List<string> authors) {
-            logger.Trace($"Searching for scheme dependency '{dependencyName}' (Fullscreen: {fullscreenEnabled}) among {Schemes.Count} registered schemes.");
+        private readonly struct SchemeFile {
+            public string Path { get; }
+            public SchemeSource Source { get; }
 
-            List<ColorScheme> candidates = Schemes.Values
-                .Where(s => s.Fullscreen == fullscreenEnabled)
-                .Where(s => string.Equals(s.Theme, dependencyName, StringComparison.OrdinalIgnoreCase))
-                .Where(s=> minVersion == null || s.Version >= minVersion)
-                .Where(s=> authors == null || new HashSet<string>(authors).SetEquals(s.Author))
-                .OrderByDescending(s => s.DiscoveryPriority)
-                .ThenByDescending(s => s.Theme.Length)
-                .ToList();
-
-
-            if (candidates.Count > 0) {
-                logger.Trace($"Found matching scheme candidate: '{candidates[0].Theme}' (Priority: {candidates[0].DiscoveryPriority})");
-                return candidates[0].Theme;
+            public SchemeFile(string path, SchemeSource source) {
+                Path = path;
+                Source = source;
             }
 
-            if (!string.Equals(dependencyName, "default", StringComparison.OrdinalIgnoreCase)) {
-                logger.Warn($"Scheme dependency '{dependencyName}' could not be found. Falling back to 'default'.");
-                return "default";
+            public override string ToString() {
+                return $"{Path} ({Source})";
             }
-
-            logger.Error("Default scheme could not be found.");
-            return null;
         }
 
-        private void RegisterOrUpdateScheme(ColorScheme scheme, SchemeSource schemeSource) {
-            scheme.SchemeSource = schemeSource;
+        private readonly struct LoadingError {
+            private string Message { get; }
+            private SchemeFile File { get; }
 
-            int priority = (int)schemeSource;
-            if (Schemes.TryGetValue(scheme.Theme, out ColorScheme existing))
-                if (priority < existing.DiscoveryPriority) return;
+            public LoadingError(string message, SchemeFile file) {
+                Message = message;
+                File = file;
+            }
 
-            scheme.DiscoveryPriority = priority;
-            Schemes[scheme.Theme] = scheme;
+            public override string ToString() {
+                return $"Error loading scheme file: {File}: {Message}";
+            }
         }
     }
 }

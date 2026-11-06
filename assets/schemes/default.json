@@ -1,7 +1,8 @@
 ﻿{
     "$schema": "../../doc/scheme.schema.json",
+    "id": "acf38ef2-09da-4e3e-a24a-8cd8719fb2bc",
     "displayName": "Default",
-    "theme": "default",
+    "themes": [ "default" ],
     "fullscreen": false,
     "author": ["Evito"],
     "version": 1,

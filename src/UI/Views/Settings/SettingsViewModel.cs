@@ -32,12 +32,20 @@ namespace DynamicThemeColor.UI.Views.Settings {
         public RelayCommand ClearCacheCommand { get; }
         public RelayCommand<CachedGameItemViewModel> RemoveCachedGameCommand { get; }
 
+        public RelayCommand ClearSchemeThemeCombinationsCommand { get; }
+        public RelayCommand ReprepareSchemesCommand { get; }
+        public RelayCommand RefreshBrushesCommand { get; }
+
         public SettingsViewModel(Addon addon) {
             this.addon = addon;
 
             PickColorCommand = new RelayCommand(ExecutePickColor);
             ClearCacheCommand = new RelayCommand(ExecuteClearCache);
             RemoveCachedGameCommand = new RelayCommand<CachedGameItemViewModel>(ExecuteRemoveCachedItem);
+
+            ClearSchemeThemeCombinationsCommand = new RelayCommand(ExecuteClearSchemeThemeCombinations);
+            ReprepareSchemesCommand = new RelayCommand(ExecuteReprepareSchemes);
+            RefreshBrushesCommand = new RelayCommand(ExecuteRefreshBrushes);
 
             LoadSchemeCollections();
             RefreshCachedGames();
@@ -75,18 +83,18 @@ namespace DynamicThemeColor.UI.Views.Settings {
             OtherSchemes.Clear();
 
             SchemeEngine engine = addon.SchemeEngine;
-            if (engine?.Schemes == null ) return;
+            if (engine?.RegisteredSchemes == null ) return;
 
             if (engine.ActiveSchemeChain != null)
-                foreach (string schemeName in engine.ActiveSchemeChain)
-                    if (engine.Schemes.TryGetValue(schemeName, out ColorScheme scheme))
-                        ActiveSchemes.Add(new SchemeItemViewModel(scheme, () => addon.AddonSettings));
+                foreach (Guid schemeId in engine.ActiveSchemeChain)
+                    if (engine.RegisteredSchemes.TryGetValue(schemeId, out RegisteredColorScheme scheme))
+                        ActiveSchemes.Add(new SchemeItemViewModel(scheme.Scheme, () => addon.AddonSettings));
 
             foreach (SchemeItemViewModel itemVm
-                     in from kvp in engine.Schemes
+                     in from kvp in engine.RegisteredSchemes
                      let schemeName = kvp.Key
                      let scheme = kvp.Value
-                     let itemVm = new SchemeItemViewModel(scheme, () => addon.AddonSettings)
+                     let itemVm = new SchemeItemViewModel(scheme.Scheme, () => addon.AddonSettings)
                      where engine.ActiveSchemeChain == null || !engine.ActiveSchemeChain.Contains(schemeName) select itemVm)
                 OtherSchemes.Add(itemVm);
         }
@@ -128,6 +136,18 @@ namespace DynamicThemeColor.UI.Views.Settings {
             if (item == null) return;
             addon.ThemingEngine.PaletteCache.Remove(item.GameId);
             RefreshCachedGames();
+        }
+
+        private void ExecuteClearSchemeThemeCombinations() {
+            addon.AddonSettings.RememberedSchemeForThemes.Clear();
+        }
+
+        private void ExecuteReprepareSchemes() {
+            addon.SchemeEngine.RefreshBrushes();
+        }
+
+        private void ExecuteRefreshBrushes() {
+            addon.SchemeEngine.RefreshBrushes();
         }
     }
 

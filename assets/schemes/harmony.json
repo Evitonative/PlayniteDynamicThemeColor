@@ -1,15 +1,12 @@
 ﻿{
     "$schema": "../../doc/scheme.schema.json",
+    "id": "a26d3c54-b4cb-4343-b8f0-4bd612d60afe",
     "displayName": "Harmony",
-    "theme": "Harmony",
+    "themes": [ "Harmony" ],
     "fullscreen": false,
     "author": [ "Evito" ],
     "version": 1,
-    "inherits": {
-        "theme": "default",
-        "min-version": 1,
-        "author": [ "Evito" ]
-    },
+    "inherits": "acf38ef2-09da-4e3e-a24a-8cd8719fb2bc",
     "variables": {
         "cardBackground": {
             "type": "material",
