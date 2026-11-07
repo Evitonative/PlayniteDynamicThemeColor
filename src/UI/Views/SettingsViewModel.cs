@@ -10,7 +10,7 @@ using Playnite.SDK;
 using Playnite.SDK.Data;
 using Playnite.SDK.Models;
 
-namespace DynamicThemeColor.UI.Views.Settings {
+namespace DynamicThemeColor.UI.Views {
     public class SettingsViewModel : ObservableObject, ISettings {
         private readonly Addon addon;
         private readonly ILogger logger = LogManager.GetLogger();
@@ -142,7 +142,7 @@ namespace DynamicThemeColor.UI.Views.Settings {
         }
 
         private void ExecuteReprepareSchemes() {
-            addon.SchemeEngine.RefreshBrushes();
+            addon.SchemeEngine.PrepareSchemes();
         }
 
         private void ExecuteRefreshBrushes() {
@@ -157,6 +157,24 @@ namespace DynamicThemeColor.UI.Views.Settings {
         public CachedGameItemViewModel(Guid gameId, string gameName) {
             GameId = gameId;
             GameName = gameName;
+        }
+    }
+
+    public class SchemeItemViewModel {
+        public RegisteredColorScheme Scheme { get; }
+        public Dictionary<string, bool> OptionsDictionary { get; }
+
+        public SchemeItemViewModel(RegisteredColorScheme scheme, Func<AddonSettings> addonSettings) {
+            AddonSettings settings = addonSettings();
+            Scheme = scheme;
+
+            settings.SchemeOptionOverrides = settings.SchemeOptionOverrides ?? new Dictionary<Guid, Dictionary<string, bool>>();
+
+            if (!settings.SchemeOptionOverrides.TryGetValue(scheme.Scheme.Id, out Dictionary<string, bool> dict)) {
+                dict = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+                settings.SchemeOptionOverrides[scheme.Scheme.Id] = dict;
+            }
+            OptionsDictionary = dict;
         }
     }
 }

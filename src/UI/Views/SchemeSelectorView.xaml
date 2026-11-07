@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
              xmlns:model="clr-namespace:DynamicThemeColor.Model"
-             xmlns:components="clr-namespace:DynamicThemeColor.UI.Components"
-             x:Name="Root"
+             xmlns:viewModels="clr-namespace:DynamicThemeColor.UI.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="250" d:DesignWidth="550">
+             d:DesignHeight="250" d:DesignWidth="550"
+             d:DataContext="{d:DesignInstance Type=viewModels:SchemeSelectorViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,11 +27,11 @@
                       VerticalScrollBarVisibility="Auto"
                       Margin="{StaticResource Layout.Spacing.Section}">
             <StackPanel>
-                <TextBlock Text="{Binding DescriptionMessage, ElementName=Root}"
+                <TextBlock Text="{Binding DescriptionMessage}"
                            Foreground="{DynamicResource TextBrush}"
                            TextWrapping="Wrap"/>
-                <ListView ItemsSource="{Binding Candidates, ElementName=Root}"
-                          SelectedItem="{Binding SelectedItem, ElementName=Root, Mode=TwoWay}"
+                <ListView ItemsSource="{Binding Candidates}"
+                          SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                           Background="Transparent"
                           BorderBrush="{DynamicResource PanelSeparatorBrush}"
                           BorderThickness="{DynamicResource ControlBorderThickness}"
@@ -80,16 +81,18 @@
                         Orientation="Horizontal"
                         VerticalAlignment="Center">
                 <CheckBox Content="{DynamicResource LOCDTCSchemeSelectRememberChoice}"
-                          IsChecked="{Binding RememberChoice, ElementName=Root, Mode=TwoWay}"
+                          IsChecked="{Binding RememberChoice, Mode=TwoWay}"
                           VerticalAlignment="Center" />
-                <components:HelpIcon HelpToolTip="{DynamicResource LOCDTCSchemeSelectRememberChoiceHint}" />
+                <c:HelpIcon HelpToolTip="{DynamicResource LOCDTCSchemeSelectRememberChoiceHint}" />
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="{DynamicResource LOCDTCGenericSelect}"
                         IsDefault="True"
                         Width="80"
-                        Click="SelectButton_Click" />
+                        Command="{Binding SelectCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+
                 <Button Content="{DynamicResource LOCDTCGenericCancel}"
                         IsCancel="True"
                         Margin="{StaticResource Layout.Spacing.Between}"

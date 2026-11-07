@@ -39,7 +39,7 @@ namespace DynamicThemeColor.UI.Components {
             set { SetValue(SchemeOptionsProperty, value); }
         }
 
-        public ObservableCollection<OptionItem> Options { get; } = new ObservableCollection<OptionItem>();
+        public ObservableCollection<OptionItemViewModel> Options { get; } = new ObservableCollection<OptionItemViewModel>();
 
         private static void OnParametersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (!(d is ColorSchemeOptionsList control)) return;
@@ -56,7 +56,7 @@ namespace DynamicThemeColor.UI.Components {
 
             foreach (KeyValuePair<string, ColorScheme.IBrushDefinition> kvp
                      in ColorScheme.Scheme.Brushes.Where(kvp => kvp.Value.Optional != null)) {
-                Options.Add(new OptionItem(kvp.Key, kvp.Value.Optional, SchemeOptions));
+                Options.Add(new OptionItemViewModel(kvp.Key, kvp.Value.Optional, SchemeOptions));
             }
 
             FallbackText.Visibility = Options.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
@@ -68,7 +68,7 @@ namespace DynamicThemeColor.UI.Components {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public class OptionItem : ObservableObject {
+        public class OptionItemViewModel : ObservableObject {
             private readonly string brushKey;
             private readonly Dictionary<string, bool> schemeOptions;
             private readonly bool defaultValue;
@@ -84,8 +84,7 @@ namespace DynamicThemeColor.UI.Components {
                 }
             }
 
-            public OptionItem(string brushKey, ColorScheme.OptionalConfig optional, Dictionary<string, bool> schemeOptions)
-            {
+            public OptionItemViewModel(string brushKey, ColorScheme.OptionalConfig optional, Dictionary<string, bool> schemeOptions) {
                 this.brushKey = brushKey;
                 this.schemeOptions = schemeOptions;
                 defaultValue = optional.Default;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using DynamicThemeColor.Model;
+using DynamicThemeColor.UI.ViewModels;
 using DynamicThemeColor.UI.Views;
 using Newtonsoft.Json;
 using Playnite.SDK;
@@ -279,17 +280,18 @@ namespace DynamicThemeColor {
             window.MaxHeight = 450;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-            SchemeSelectorView selectorView = new SchemeSelectorView(candidates, theme);
+            SchemeSelectorViewModel viewModel = new SchemeSelectorViewModel(candidates, theme);
+            SchemeSelectorView selectorView = new SchemeSelectorView { DataContext = viewModel };
             window.Content = selectorView;
 
             bool? result = window.ShowDialog();
-            if (result != true || selectorView.SelectedItem == null) {
+            if (result != true || viewModel.SelectedItem == null) {
                 scheme = null;
                 return false;
             }
 
-            scheme = selectorView.SelectedItem;
-            if (!selectorView.RememberChoice) return true;
+            scheme = viewModel.SelectedItem;
+            if (!viewModel.RememberChoice) return true;
 
             addonSettings().RememberedSchemeForThemes[theme] = scheme.Scheme.Id;
             savePluginSettings(addonSettings());
