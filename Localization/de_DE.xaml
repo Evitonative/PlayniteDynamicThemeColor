@@ -55,7 +55,7 @@
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButton">Alle Design-Schema Verbindungen Löschen</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint">Dies wird erst beim speichern umgesetzt. Du wirst möglicherweise sofort gefragt um neue Verbindungen zu erstellen fallst nötig.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButton">Alle Schema Neu Laden</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButtonHint">Du willst warscheinlich auch die Brushes erneuern.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButtonHint">Du willst wahrscheinlich auch die Brushes erneuern.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButton">Alle Brushes Erneuern</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint">Das passiert auch wenn du speicherst.</sys:String>
 

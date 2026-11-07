@@ -54,7 +54,7 @@
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineTitle">Scheme Engine</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButton">Clear All Connections Between Themes And Schemes</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint">This takes effect once you hit save. You may immediately be prompted to pick a new scheme.</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButton">Reload All Currently Loaded Schemes</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButton">Reload All Schemes</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButtonHint">You probably also want to reload the brushes if you use this.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButton">Refresh All Brushes</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint">Usually this is also done on save.</sys:String>
