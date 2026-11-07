@@ -88,13 +88,13 @@ namespace DynamicThemeColor.UI.Views.Settings {
             if (engine.ActiveSchemeChain != null)
                 foreach (Guid schemeId in engine.ActiveSchemeChain)
                     if (engine.RegisteredSchemes.TryGetValue(schemeId, out RegisteredColorScheme scheme))
-                        ActiveSchemes.Add(new SchemeItemViewModel(scheme.Scheme, () => addon.AddonSettings));
+                        ActiveSchemes.Add(new SchemeItemViewModel(scheme, () => addon.AddonSettings));
 
             foreach (SchemeItemViewModel itemVm
                      in from kvp in engine.RegisteredSchemes
                      let schemeName = kvp.Key
                      let scheme = kvp.Value
-                     let itemVm = new SchemeItemViewModel(scheme.Scheme, () => addon.AddonSettings)
+                     let itemVm = new SchemeItemViewModel(scheme, () => addon.AddonSettings)
                      where engine.ActiveSchemeChain == null || !engine.ActiveSchemeChain.Contains(schemeName) select itemVm)
                 OtherSchemes.Add(itemVm);
         }

@@ -38,7 +38,7 @@
                                FontWeight="SemiBold" >
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
-                                <Setter Property="Text" Value="{DynamicResource LOCDTCSchemeSourceBuiltIn}" />
+                                <Setter Property="Text" Value="[unknown]" />
                                 <Setter Property="Foreground" Value="{StaticResource Brush.Badge.Default.Foreground}" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ColorScheme.SchemeSource, ElementName=Root}" Value="BuiltIn">

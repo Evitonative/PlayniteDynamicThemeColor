@@ -13,18 +13,18 @@ namespace DynamicThemeColor.UI.Components {
 
         public string DisplayName {
             get {
-                return ColorScheme == null ? string.Empty : ColorScheme.DisplayName;
+                return ColorScheme == null ? string.Empty : ColorScheme.Scheme.DisplayName;
             }
         }
 
         public static readonly DependencyProperty ColorSchemeProperty = DependencyProperty.Register(
             nameof(ColorScheme),
-            typeof(ColorScheme),
+            typeof(RegisteredColorScheme),
             typeof(ColorSchemeOptionsList),
             new PropertyMetadata(null, OnParametersChanged));
 
-        public ColorScheme ColorScheme {
-            get { return (ColorScheme)GetValue(ColorSchemeProperty); }
+        public RegisteredColorScheme ColorScheme {
+            get { return (RegisteredColorScheme)GetValue(ColorSchemeProperty); }
             set { SetValue(ColorSchemeProperty, value); }
         }
 
@@ -52,10 +52,10 @@ namespace DynamicThemeColor.UI.Components {
             Options.Clear();
 
             if (ColorScheme == null || SchemeOptions == null) return;
-            if (ColorScheme.Brushes == null) return;
+            if (ColorScheme.Scheme.Brushes == null) return;
 
             foreach (KeyValuePair<string, ColorScheme.IBrushDefinition> kvp
-                     in ColorScheme.Brushes.Where(kvp => kvp.Value.Optional != null)) {
+                     in ColorScheme.Scheme.Brushes.Where(kvp => kvp.Value.Optional != null)) {
                 Options.Add(new OptionItem(kvp.Key, kvp.Value.Optional, SchemeOptions));
             }
 
