@@ -1,11 +1,15 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace DynamicThemeColor.UI.Components.RankableList {
-    public class RankableComponentBase : UserControl {
+    public class RankableComponentBase : UserControl, INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register(
-            nameof(AddCommand), typeof(ICommand), typeof(RankableComponentBase), new PropertyMetadata(null));
+            nameof(AddCommand), typeof(ICommand), typeof(RankableComponentBase),
+            new PropertyMetadata(null, OnDependencyChanged));
 
         public ICommand AddCommand {
             get => (ICommand)GetValue(AddCommandProperty);
@@ -13,7 +17,8 @@ namespace DynamicThemeColor.UI.Components.RankableList {
         }
 
         public static readonly DependencyProperty AddingEnabledOverrideProperty = DependencyProperty.Register(
-            nameof(AddingEnabledOverride), typeof(bool?), typeof(RankableComponentBase), new PropertyMetadata(null));
+            nameof(AddingEnabledOverride), typeof(bool?), typeof(RankableComponentBase),
+            new PropertyMetadata(null, OnDependencyChanged));
 
         public bool? AddingEnabledOverride {
             get => (bool?)GetValue(AddingEnabledOverrideProperty);
@@ -44,6 +49,11 @@ namespace DynamicThemeColor.UI.Components.RankableList {
         public bool ReorderingEnabled {
             get => (bool)GetValue(ReorderingEnabledProperty);
             set => SetValue(ReorderingEnabledProperty, value);
+        }
+
+        private static void OnDependencyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (!(d is RankableComponentBase control)) return;
+            control.PropertyChanged?.Invoke(control, new PropertyChangedEventArgs(nameof(AddingEnabled)));
         }
     }
 }
