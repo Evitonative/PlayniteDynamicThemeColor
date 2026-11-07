@@ -16,7 +16,9 @@
     <Thickness x:Key="Layout.Spacing.Item">0,0,0,8</Thickness>
     <Thickness x:Key="Layout.Spacing.ItemBetween">10,0,0,8</Thickness>
     <Thickness x:Key="Layout.Spacing.Between">10,0,0,0</Thickness>
+    <Thickness x:Key="Layout.Spacing.BetweenTrailing">0,0,10,0</Thickness>
     <Thickness x:Key="Layout.Spacing.Expander">0,10,0,0</Thickness>
+    <Thickness x:Key="Layout.Spacing.TableHeader">0,0,0,10</Thickness>
 
     <!-- Padding -->
     <Thickness x:Key="Layout.Padding.GroupBox">10,8,5,5</Thickness>

@@ -68,7 +68,10 @@
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Auswahl merken</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">Du kannst im Advanced-Tab der Einstellung dies jederzeit widerrufen.</sys:String>
 
-    <!-- Generic Buttons -->
+    <!-- Generic Buttons & Tooltips -->
     <sys:String x:Key="LOCDTCGenericCancel">Abbrechen</sys:String>
     <sys:String x:Key="LOCDTCGenericSelect">Wählen</sys:String>
+    <sys:String x:Key="LOCDTCGenericAddItem">Element Hinzufügen</sys:String>
+    <sys:String x:Key="LOCDTCGenericRemoveItem">Element Entfernen</sys:String>
+    <sys:String x:Key="LOCDTCGenericEditItem">Element Bearbeiten</sys:String>
 </ResourceDictionary>

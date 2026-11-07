@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:components="clr-namespace:DynamicThemeColor.UI.Components"
+             xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
              xmlns:settings="clr-namespace:DynamicThemeColor.UI.Views.Settings"
+             xmlns:rl="clr-namespace:DynamicThemeColor.UI.Components.RankableList"
              mc:Ignorable="d"
              d:DesignWidth="600"
              d:DataContext="{d:DesignInstance Type=settings:SettingsViewModel, IsDesignTimeCreatable=False}">
@@ -26,7 +27,7 @@
                                         Margin="{StaticResource Layout.Padding.GroupBox}" >
                                 <TextBlock Text="{DynamicResource LOCDTCViewTargetsTitle}"
                                            VerticalAlignment="Center"/>
-                                <components:HelpIcon VerticalAlignment="Center"
+                                <c:HelpIcon VerticalAlignment="Center"
                                                      HelpToolTip="{DynamicResource LOCDTCViewTargetHint}"/>
                             </StackPanel>
                         </GroupBox.Header>
@@ -50,19 +51,32 @@
                         </StackPanel>
                     </GroupBox>
 
-                    <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                    <GroupBox Margin="{StaticResource Layout.Spacing.Section}" HorizontalAlignment="Stretch">
                         <GroupBox.Header>
-                            <StackPanel Orientation="Horizontal"
-                                        Margin="{StaticResource Layout.Padding.GroupBox}" >
-                                <TextBlock Text="{DynamicResource LOCDTCAssetPriorityOrderTitle}"
-                                           VerticalAlignment="Center" />
-                                <components:HelpIcon VerticalAlignment="Center"
-                                                     HelpToolTip="{DynamicResource LOCDTCAssetPriorityOrderHint}"/>
-                            </StackPanel>
+                            <Grid Width="{Binding ActualWidth, ElementName=AssetPriorityListBody}"
+                                  Margin="{StaticResource Layout.Padding.GroupBox}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" VerticalAlignment="Center"
+                                           Text="{DynamicResource LOCDTCAssetPriorityOrderTitle}" />
+
+                                <c:HelpIcon
+                                    Grid.Column="1" VerticalAlignment="Center"
+                                    HelpToolTip="{DynamicResource LOCDTCAssetPriorityOrderHint}"/>
+
+                                <rl:RankableToolbarHeader
+                                    Grid.Column="2" VerticalAlignment="Center"
+                                    Margin="{StaticResource Layout.Spacing.Between}"
+                                    ListBody="{Binding ElementName=AssetPriorityListBody}" />
+                            </Grid>
                         </GroupBox.Header>
 
                         <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
-                            <components:RankableList ItemsSource="{Binding Settings.AssetPriority}" />
+                            <rl:RankableListBody ItemsSource="{Binding Settings.AssetPriority}" x:Name="AssetPriorityListBody" />
                         </StackPanel>
                     </GroupBox>
 
@@ -72,7 +86,7 @@
                                         Margin="{StaticResource Layout.Padding.GroupBox}" >
                                 <TextBlock Text="{DynamicResource LOCDTCExtractionFallbackTitle}"
                                            VerticalAlignment="Center" />
-                               </StackPanel>
+                            </StackPanel>
                         </GroupBox.Header>
 
                         <Grid Margin="{StaticResource Layout.Padding.GroupBox}">
@@ -99,7 +113,7 @@
                                       SelectedItem="{Binding Settings.PaletteStyle}"
                                       VerticalAlignment="Center" Margin="{StaticResource Layout.Spacing.Item}"
                                       HorizontalAlignment="Stretch" />
-                            <components:HelpIcon Grid.Row="0" Grid.Column="2"
+                            <c:HelpIcon Grid.Row="0" Grid.Column="2"
                                                  HelpToolTip="{DynamicResource LOCDTCExtractionFallbackPaletteStyleHint}" />
 
                             <!-- Color Selection Range -->
@@ -126,7 +140,7 @@
                                          VerticalAlignment="Center"
                                          TextAlignment="Center" />
                             </Grid>
-                            <components:HelpIcon Grid.Row="1" Grid.Column="2"
+                            <c:HelpIcon Grid.Row="1" Grid.Column="2"
                                                  Margin="0,0,0,8"
                                                  HelpToolTip="{DynamicResource LOCDTCExtractionColorSelectionRangeHint}" />
 
@@ -165,7 +179,7 @@
                                             BorderThickness="{DynamicResource ControlBorderThickness}" />
                                 </Button>
                             </Grid>
-                            <components:HelpIcon Grid.Row="2" Grid.Column="2"
+                            <c:HelpIcon Grid.Row="2" Grid.Column="2"
                                                  VerticalAlignment="Center"
                                                  HelpToolTip="{DynamicResource LOCDTCExtractionFallbackSeedColorHint}" />
 
@@ -179,7 +193,7 @@
                                       VerticalAlignment="Center"
                                       HorizontalAlignment="Left"
                                       Margin="{StaticResource Layout.Spacing.Item}" />
-                            <components:HelpIcon Grid.Row="3" Grid.Column="2"
+                            <c:HelpIcon Grid.Row="3" Grid.Column="2"
                                                  Margin="0,0,0,8"
                                                  HelpToolTip="{DynamicResource LOCDTCUseFallbackOnMissingHint}" />
                         </Grid>
@@ -196,7 +210,7 @@
                                   Margin="{DynamicResource Layout.Spacing.Section}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <components:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
+                                <c:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
                                                                    SchemeOptions="{Binding OptionsDictionary}"
                                                                    Margin="{StaticResource Layout.Spacing.Item}"/>
                             </DataTemplate>
@@ -208,7 +222,7 @@
                         <ItemsControl ItemsSource="{Binding OtherSchemes}" Margin="{StaticResource Layout.Spacing.Expander}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <components:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
+                                    <c:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
                                                                        SchemeOptions="{Binding OptionsDictionary}"
                                                                        Margin="{StaticResource Layout.Spacing.Item}"/>
                                 </DataTemplate>

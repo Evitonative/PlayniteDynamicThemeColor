@@ -68,7 +68,10 @@
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Remember my choice</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">You can delete your choices at any time in the advanced settings.</sys:String>
 
-    <!-- Generic Buttons -->
+    <!-- Generic Buttons & Tooltips -->
     <sys:String x:Key="LOCDTCGenericCancel">Cancel</sys:String>
     <sys:String x:Key="LOCDTCGenericSelect">Select</sys:String>
+    <sys:String x:Key="LOCDTCGenericAddItem">Add Item</sys:String>
+    <sys:String x:Key="LOCDTCGenericRemoveItem">Remove Item</sys:String>
+    <sys:String x:Key="LOCDTCGenericEditItem">Edit Item</sys:String>
 </ResourceDictionary>
