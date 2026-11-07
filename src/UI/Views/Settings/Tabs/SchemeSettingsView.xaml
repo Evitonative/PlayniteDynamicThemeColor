@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="DynamicThemeColor.UI.Views.Settings.Tabs.SchemeSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
+             xmlns:settings="clr-namespace:DynamicThemeColor.UI.Views.Settings"
+             mc:Ignorable="d" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance Type=settings:SettingsViewModel, IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/DynamicThemeColor;component/src/UI/Resources/SharedResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="{StaticResource Layout.Spacing.Root}">
+            <TextBlock Text="{DynamicResource LOCDTCActiveSchemes}" Margin="{StaticResource Layout.Spacing.Item}" />
+            <ItemsControl ItemsSource="{Binding ActiveSchemes}"
+                          Margin="{DynamicResource Layout.Spacing.Section}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <c:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
+                                                  SchemeOptions="{Binding OptionsDictionary}"
+                                                  Margin="{StaticResource Layout.Spacing.Item}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Expander Header="{DynamicResource LOCDTCOtherSchemes}"
+                      Visibility="{Binding HasOtherSchemes, Converter={StaticResource BoolToVis}}">
+                <ItemsControl ItemsSource="{Binding OtherSchemes}" Margin="{StaticResource Layout.Spacing.Expander}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <c:ColorSchemeOptionsList ColorScheme="{Binding Scheme}"
+                                                      SchemeOptions="{Binding OptionsDictionary}"
+                                                      Margin="{StaticResource Layout.Spacing.Item}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

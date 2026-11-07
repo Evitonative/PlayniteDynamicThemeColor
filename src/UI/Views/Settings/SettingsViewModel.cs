@@ -42,7 +42,6 @@ namespace DynamicThemeColor.UI.Views.Settings {
             PickColorCommand = new RelayCommand(ExecutePickColor);
             ClearCacheCommand = new RelayCommand(ExecuteClearCache);
             RemoveCachedGameCommand = new RelayCommand<CachedGameItemViewModel>(ExecuteRemoveCachedItem);
-
             ClearSchemeThemeCombinationsCommand = new RelayCommand(ExecuteClearSchemeThemeCombinations);
             ReprepareSchemesCommand = new RelayCommand(ExecuteReprepareSchemes);
             RefreshBrushesCommand = new RelayCommand(ExecuteRefreshBrushes);

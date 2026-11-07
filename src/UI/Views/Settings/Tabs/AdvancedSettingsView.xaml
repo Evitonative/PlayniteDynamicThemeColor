@@ -1,0 +1,144 @@
+﻿<UserControl x:Class="DynamicThemeColor.UI.Views.Settings.Tabs.AdvancedSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:settings="clr-namespace:DynamicThemeColor.UI.Views.Settings"
+             mc:Ignorable="d" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance Type=settings:SettingsViewModel, IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/DynamicThemeColor;component/src/UI/Resources/SharedResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="{StaticResource Layout.Spacing.Root}">
+            <Border Margin="{StaticResource Layout.Spacing.Section}"
+                    BorderThickness="{StaticResource Layout.Border.Thickness}"
+                    CornerRadius="{StaticResource Layout.Border.Radius}"
+                    BorderBrush="{DynamicResource WarningBrush}">
+                <TextBlock Margin="{DynamicResource Layout.Padding.Box}" TextWrapping="Wrap"
+                           Text="{DynamicResource LOCDTCAdvancedWarning}" />
+            </Border>
+
+            <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="{StaticResource Layout.Padding.GroupBox}">
+                        <TextBlock Text="{DynamicResource LOCDTCAdvancedCacheTitle}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </GroupBox.Header>
+
+                <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220" />
+                            <ColumnDefinition Width="64" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="{DynamicResource LOCDTCAdvancedCacheCount}"
+                                   VerticalAlignment="Center"
+                                   Margin="{StaticResource Layout.Spacing.Item}" />
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   Text="{Binding CachedGamesCount}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Margin="{StaticResource Layout.Spacing.Item}" />
+                        <Button Grid.Row="0" Grid.Column="2"
+                                Content="{DynamicResource LOCDTCAdvancedCacheClear}"
+                                Command="{Binding ClearCacheCommand}"
+                                Margin="{StaticResource Layout.Spacing.ItemBetween}"
+                                VerticalAlignment="Center" />
+                    </Grid>
+
+                    <Expander Header="{DynamicResource LOCDTCAdvancedCacheGames}">
+                        <ListBox ItemsSource="{Binding CachedGames}"
+                                 HorizontalAlignment="Stretch"
+                                 Background="Transparent"
+                                 BorderBrush="Transparent"
+                                 BorderThickness="0"
+                                 Margin="{StaticResource Layout.Padding.GroupBox}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding GameName}"
+                                                   VerticalAlignment="Center" />
+
+                                        <Button Grid.Column="1"
+                                                Content="🗑"
+                                                Command="{Binding DataContext.RemoveCachedGameCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}"
+                                                VerticalAlignment="Center"
+                                                ToolTip="{DynamicResource LOCDTCAdvancedCacheRemoveSingleGameHint}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Expander>
+                </StackPanel>
+            </GroupBox>
+
+
+            <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="{StaticResource Layout.Padding.GroupBox}">
+                        <TextBlock Text="{DynamicResource LOCDTCAdvancedSchemeEngineTitle}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </GroupBox.Header>
+
+                <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Row="0" Grid.Column="0"
+                                Content="{DynamicResource LOCDTCAdvancedSchemeEngineThemeSchemeClearButton}"
+                                ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint}"
+                                Command="{Binding ClearSchemeThemeCombinationsCommand}"
+                                Margin="{StaticResource Layout.Spacing.Item}"
+                                VerticalAlignment="Center" />
+
+                        <Button Grid.Row="1" Grid.Column="0"
+                                Content="{DynamicResource LOCDTCAdvancedSchemeEngineReprepareButton}"
+                                ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineReprepareButtonHint}"
+                                Command="{Binding ReprepareSchemesCommand}"
+                                Margin="{StaticResource Layout.Spacing.Item}"
+                                VerticalAlignment="Center" />
+
+                        <Button Grid.Row="2" Grid.Column="0"
+                                Content="{DynamicResource LOCDTCAdvancedSchemeEngineRefreshBrushesButton}"
+                                ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint}"
+                                Command="{Binding RefreshBrushesCommand}"
+                                Margin="{StaticResource Layout.Spacing.Item}"
+                                VerticalAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
