@@ -36,7 +36,15 @@ namespace DynamicThemeColor.UI.Components.RankableList {
 
         private void RemoveItem(object _) {
             if (!(ListBody?.ItemsSource is IList list)) return;
-            list.Remove(ListBody.SelectedItem);
+
+            int idx = ListBody.ItemsSource.IndexOf(ListBody.SelectedItem);
+            if (idx < 0) return;
+
+            list.RemoveAt(idx);
+            if (list.Count > 0) {
+                int newIdx = idx >= list.Count ? list.Count - 1 : idx;
+                ListBody.SelectedItem = list[newIdx];
+            } else ListBody.SelectedItem = null;
         }
 
         private bool CanEditItem(object _) => ListBody?.SelectedItem is IEditableItem;
