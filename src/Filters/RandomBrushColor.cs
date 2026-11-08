@@ -1,6 +1,7 @@
 ﻿using System;
 using DynamicThemeColor.Model;
 using DynamicThemeColor.Model.Filters;
+using DynamicThemeColor.Utils;
 using JetBrains.Annotations;
 using Playnite.SDK;
 using Playnite.SDK.Models;
@@ -12,7 +13,11 @@ namespace DynamicThemeColor.Filters {
         public override string Name => "[TESTING] Random Brush Color";
         internal override object SettingsObject { get; set; }
 
-        public override uint ApplyBrushFilters(string brushKey, uint brushArgb, Game game,  IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
+        public override uint ApplyBrushFilters(
+            string brushKey, uint brushArgb,
+            ColorExtractionResults colorExtractionResults,
+            Game game,  IPlayniteAPI playniteApi,
+            Func<AddonSettings> addonSettings) {
             return 0xFF000000 + (uint)new Random().Next(0xFFFFFF);
         }
     }

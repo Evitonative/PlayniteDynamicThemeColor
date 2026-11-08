@@ -8,8 +8,8 @@ using Newtonsoft.Json.Linq;
 
 namespace DynamicThemeColor {
     public static class FilterRegistry {
-        private static readonly Dictionary<Guid, Type> registeredFilters = new Dictionary<Guid, Type>();
-        private static readonly Dictionary<Guid, FilterDescriptor> availableFilters = new Dictionary<Guid, FilterDescriptor>();
+        private static readonly Dictionary<Guid, FilterDescriptor> filters =
+            new Dictionary<Guid, FilterDescriptor>();
 
         static FilterRegistry() {
             IEnumerable<Type> filterTypes = Assembly.GetExecutingAssembly().GetTypes()
@@ -20,16 +20,22 @@ namespace DynamicThemeColor {
 
             foreach (Type type in filterTypes) {
                 if (!(Activator.CreateInstance(type) is SchemeFilter instance)) continue;
-                registeredFilters[instance.Id] = type;
-                availableFilters.Add(instance.Id, new FilterDescriptor(instance.Id, instance.Name, type));
+                filters.Add(instance.Id, new FilterDescriptor(instance.Id, instance.Name, type));
             }
         }
 
-        public static SchemeFilter CreateInstance([NotNull] FilterConfiguration config) {
-            if (!registeredFilters.TryGetValue(config.FilterId, out Type filterType))
+        [CanBeNull]
+        private static SchemeFilter CreateSimpleInstance(Guid filterId) {
+            if (!filters.TryGetValue(filterId, out FilterDescriptor descriptor))
                 return null;
 
-            if (!(Activator.CreateInstance(filterType) is SchemeFilter filter)) return null;
+            if (!(Activator.CreateInstance(descriptor.FilterType) is SchemeFilter filter)) return null;
+            return filter;
+        }
+
+        public static SchemeFilter CreateInstance([NotNull] FilterConfiguration config) {
+            SchemeFilter filter = CreateSimpleInstance(config.FilterId);
+            if (filter == null) return null;
 
             object defaultSettings = filter.SettingsObject;
 
@@ -54,11 +60,17 @@ namespace DynamicThemeColor {
             return filter;
         }
 
-        public static IReadOnlyDictionary<Guid, FilterDescriptor> GetAvailableFilters() => availableFilters;
+        public static IReadOnlyDictionary<Guid, FilterDescriptor> GetAvailableFilters() => filters;
 
         [CanBeNull]
         public static FilterDescriptor GetFilter(Guid id) {
-            return availableFilters.TryGetValue(id, out FilterDescriptor descriptor) ? descriptor : null;
+            return filters.TryGetValue(id, out FilterDescriptor descriptor) ? descriptor : null;
+        }
+
+        public static void ClearFilterCaches() {
+            foreach (SchemeFilter filter in filters.Keys.Select(CreateSimpleInstance)) {
+                filter?.ClearCache();
+            }
         }
     }
 

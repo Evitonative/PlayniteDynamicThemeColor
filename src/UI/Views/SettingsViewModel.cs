@@ -238,6 +238,7 @@ namespace DynamicThemeColor.UI.Views {
 
         private void ExecuteClearCache() {
             addon.ThemingEngine.PaletteCache.Clear();
+            FilterRegistry.ClearFilterCaches();
             RefreshCachedGames();
         }
 

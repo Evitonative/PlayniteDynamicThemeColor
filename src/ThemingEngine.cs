@@ -50,30 +50,31 @@ namespace DynamicThemeColor {
 
             if (PaletteCache.TryGet(game.Id, out ThemePalette cached)) {
                 logger.Trace($"Cache hit for game '{game.Name}' ({game.Id}). Applying cached palette.");
-                ApplyResolvedTheme(cached, game);
+                ApplyResolvedTheme(cached,  game);
                 return;
             }
 
-            string imgPath = ResolveAssetPath(game);
+            string imgPath = ResolveAssetPath(game, addonSettings(), playniteApi);
             if (string.IsNullOrEmpty(imgPath) || !File.Exists(imgPath)) {
                 ApplyFallbackPalette();
                 return;
             }
 
-            uint rawSeed = MaterialColorHelper.ExtractSeedColor(imgPath, settings.ColorSelectionRange, game.Id.GetHashCode());
-            if (rawSeed == 0) {
+            ColorExtractionResults colorExtractionResults =
+                MaterialColorHelper.ExtractSeedColor(imgPath, settings.ColorSelectionRange, game.Id.GetHashCode());
+            if (colorExtractionResults.SeedColor == 0) {
                 ApplyFallbackPalette();
                 return;
             }
 
-            uint filteredSeed = ApplySeedFilters(rawSeed, game);
+            uint filteredSeed = ApplySeedFilters(colorExtractionResults, game);
 
             CorePalette palette = MaterialColorHelper.GetPalette(filteredSeed, settings.PaletteStyle);
             ThemePalette themePalette = new ThemePalette(palette, filteredSeed);
-            ApplyPaletteFilters(themePalette, game);
+            ApplyPaletteFilters(themePalette, colorExtractionResults, game);
 
             PaletteCache.Set(game.Id, themePalette);
-            ApplyResolvedTheme(themePalette, game);
+            ApplyResolvedTheme(themePalette, game, colorExtractionResults);
         }
 
         public void ApplyFallbackPalette() {
@@ -95,7 +96,9 @@ namespace DynamicThemeColor {
             }
         }
 
-        private void ApplyResolvedTheme(ThemePalette palette, [CanBeNull] Game game = null) {
+        private void ApplyResolvedTheme(ThemePalette palette,
+            [CanBeNull] Game game = null,
+            ColorExtractionResults colorExtractionResults = null) {
             Dictionary<string, uint> resolvedVariables = ResolveVariables(palette);
 
             playniteApi.MainView.UIDispatcher.Invoke(() => {
@@ -105,7 +108,7 @@ namespace DynamicThemeColor {
 
                     HashSet<string> recursionStack = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     uint finalArgb = EvaluateColorReference(brushDef, palette, resolvedVariables, recursionStack);
-                    finalArgb = ApplyBrushFilters(brushKey, finalArgb, game);
+                    finalArgb = ApplyBrushFilters(brushKey, finalArgb, colorExtractionResults, game);
 
                     byte alpha = (byte)((brushDef.Alpha * 255) / 100);
                     SolidColorBrush brush = MaterialColorHelper.CreateFrozenBrush(finalArgb, alpha);
@@ -185,8 +188,7 @@ namespace DynamicThemeColor {
             return 0xFFFFFFFF;
         }
 
-        private string ResolveAssetPath(Game game) {
-            AddonSettings settings = addonSettings();
+        public static string ResolveAssetPath(Game game, AddonSettings settings, IPlayniteAPI playniteApi) {
             foreach (GameAssetType assetType in settings.AssetPriority) {
                 string relPath;
                 switch(assetType) {
@@ -208,32 +210,33 @@ namespace DynamicThemeColor {
             return null;
         }
 
-        private uint ApplySeedFilters(uint seedArgb, Game game) {
+        private uint ApplySeedFilters(ColorExtractionResults colorExtractionResults, Game game) {
+            uint seedArgb = colorExtractionResults.SeedColor;
             AddonSettings settings = addonSettings();
             return settings.SeedFilters
                 .Where(f => f.IsEnabled)
                 .Select(FilterRegistry.CreateInstance)
                 .Where(filter => filter != null)
                 .Aggregate(seedArgb, (current, filter) =>
-                    filter.ApplySeedFilters(current, game, playniteApi, addonSettings));
+                    filter.ApplySeedFilters(current, colorExtractionResults, game, playniteApi, addonSettings));
         }
 
-        private void ApplyPaletteFilters(ThemePalette palette, Game game) {
+        private void ApplyPaletteFilters(ThemePalette palette, ColorExtractionResults colorExtractionResults, Game game) {
             AddonSettings settings = addonSettings();
             foreach (FilterConfiguration config in settings.PaletteFilters.Where(f => f.IsEnabled)) {
                 SchemeFilter filter = FilterRegistry.CreateInstance(config);
-                filter?.ApplyPaletteFilters(palette, game, playniteApi, addonSettings);
+                filter?.ApplyPaletteFilters(palette, colorExtractionResults, game, playniteApi, addonSettings);
             }
         }
 
-        private uint ApplyBrushFilters(string brushKey, uint brushArgb, Game game) {
+        private uint ApplyBrushFilters(string brushKey, uint brushArgb, [CanBeNull] ColorExtractionResults colorExtractionResults, [CanBeNull] Game game) {
             AddonSettings settings = addonSettings();
             return settings.BrushFilters
                 .Where(f => f.IsEnabled)
                 .Select(FilterRegistry.CreateInstance)
                 .Where(filter => filter != null)
                 .Aggregate(brushArgb, (current, filter) =>
-                    filter.ApplyBrushFilters(brushKey, current, game, playniteApi, addonSettings));
+                    filter.ApplyBrushFilters(brushKey, current, colorExtractionResults, game, playniteApi, addonSettings));
         }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using System;
 using DynamicThemeColor.Utils;
 using JetBrains.Annotations;
+using Newtonsoft.Json.Linq;
 using Playnite.SDK;
 using Playnite.SDK.Models;
 
 namespace DynamicThemeColor.Model.Filters {
     public abstract class SchemeFilter {
-        protected readonly ILogger Logger = LogManager.GetLogger();
-
         /// <summary>
         /// A unique but never changing id for this filter.
         ///
@@ -16,7 +15,6 @@ namespace DynamicThemeColor.Model.Filters {
         /// You can use https://www.uuidgenerator.net/version4 to generate it.
         /// </summary>
         public abstract Guid Id { get; }
-
 
         /// <summary>
         /// The name of the filter
@@ -36,12 +34,13 @@ namespace DynamicThemeColor.Model.Filters {
         /// <summary>
         /// Apply a color to the seed color for theming before palette generation.
         /// </summary>
-        /// <param name="seedArgb">
+        /// <param name="currentSeed">
         /// The current seed color in ARGB format.
         ///
         /// It may have been already modified by other filters beforehand.
         /// Other filters may be applied after.
         /// </param>
+        /// <param name="colorExtractionResults">The results from the color extractor.</param>
         /// <param name="game">
         /// The current selected game.
         ///
@@ -52,8 +51,11 @@ namespace DynamicThemeColor.Model.Filters {
         /// <returns>
         /// The new seed color in ARGB format.
         /// </returns>
-        public virtual uint ApplySeedFilters(uint seedArgb, [CanBeNull] Game game, IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
-            return seedArgb;
+        public virtual uint ApplySeedFilters(
+            uint currentSeed, ColorExtractionResults colorExtractionResults,
+            [CanBeNull] Game game, IPlayniteAPI playniteApi,
+            Func<AddonSettings> addonSettings) {
+            return currentSeed;
         }
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace DynamicThemeColor.Model.Filters {
         /// It may have been already modified by other filters beforehand.
         /// Other filters may be applied after.
         /// </param>
+        /// <param name="colorExtractionResults">The results from the color extractor.</param>
         /// <param name="game">
         /// The current selected game.
         ///
@@ -72,7 +75,10 @@ namespace DynamicThemeColor.Model.Filters {
         /// </param>
         /// <param name="playniteApi">The playnite API</param>
         /// <param name="addonSettings">The addons Settings</param>
-        public virtual void ApplyPaletteFilters(ThemePalette palette, [CanBeNull] Game game, IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
+        public virtual void ApplyPaletteFilters(
+            ThemePalette palette, ColorExtractionResults colorExtractionResults,
+            [CanBeNull] Game game, IPlayniteAPI playniteApi,
+            Func<AddonSettings> addonSettings) {
         }
 
         /// <summary>
@@ -87,6 +93,7 @@ namespace DynamicThemeColor.Model.Filters {
         /// It may have been already modified by other filters beforehand.
         /// Other filters may be applied after.
         /// </param>
+        /// <param name="colorExtractionResults">The results from the color extractor.</param>
         /// <param name="game">
         /// The current selected game.
         ///
@@ -97,17 +104,47 @@ namespace DynamicThemeColor.Model.Filters {
         /// <returns>
         /// The new brush color in ARGB format.
         /// </returns>
-        public virtual uint ApplyBrushFilters(string brushKey, uint brushArgb, [CanBeNull] Game game, IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
+        public virtual uint ApplyBrushFilters(
+            string brushKey, uint brushArgb,
+            [CanBeNull] ColorExtractionResults colorExtractionResults,
+            [CanBeNull] Game game, IPlayniteAPI playniteApi,
+            Func<AddonSettings> addonSettings) {
             return brushArgb;
+        }
+
+        /// <summary>
+        /// This is called when the addon is instructed to clear cache.
+        /// </summary>
+        public virtual void ClearCache() {
         }
     }
 
-    public abstract class SchemeFilter<TSettings> : SchemeFilter where TSettings : new() {
-        protected TSettings Settings { get; set; } = new TSettings();
+    public abstract class SchemeFilter<TSettings> : SchemeFilter where TSettings : class, new() {
+        protected TSettings Settings { get; private set; } = new TSettings();
 
         internal override object SettingsObject {
             get => Settings;
-            set => Settings = (TSettings)value;
+            set {
+                switch (value)
+                {
+                    case null:
+                        Settings = new TSettings(); return;
+                    case TSettings typed:
+                        Settings = typed; return;
+                    case JObject jObj:
+                        Settings = jObj.ToObject<TSettings>(); return;
+                    default:
+                        try {
+                            Settings = Playnite.SDK.Data.Serialization.FromJson<TSettings>(
+                                Playnite.SDK.Data.Serialization.ToJson(value)
+                            ) ?? new TSettings();
+                        } catch {
+                            Settings = new TSettings();
+                        }
+
+                        break;
+                }
+            }
         }
     }
 }

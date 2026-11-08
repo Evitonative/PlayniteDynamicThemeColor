@@ -1,6 +1,7 @@
 ﻿using System;
 using DynamicThemeColor.Model;
 using DynamicThemeColor.Model.Filters;
+using DynamicThemeColor.Utils;
 using JetBrains.Annotations;
 using Playnite.SDK;
 using Playnite.SDK.Models;
@@ -12,7 +13,10 @@ namespace DynamicThemeColor.Filters {
         public override string Name => "[TESTING] Pink Seed Filter";
         internal override object SettingsObject { get; set; }
 
-        public override uint ApplySeedFilters(uint seedArgb, Game game, IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
+        public override uint ApplySeedFilters(
+            uint currentSeed, ColorExtractionResults colorExtractionResults,
+            Game game, IPlayniteAPI playniteApi,
+            Func<AddonSettings> addonSettings) {
             return 0xFFFF00FF;
         }
     }
