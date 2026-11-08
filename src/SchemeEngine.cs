@@ -219,7 +219,6 @@ namespace DynamicThemeColor {
             seenThemes.Add(schemeId);
 
             if (!RegisteredSchemes.TryGetValue(schemeId, out RegisteredColorScheme registeredScheme)) {
-                // TODO: This should be the case when a scheme depends on a scheme that was not loaded. We should ask the user if they want the default scheme.
                 logger.Error($"Invalid scheme in while flattening: {schemeId}");
                 return;
             }
