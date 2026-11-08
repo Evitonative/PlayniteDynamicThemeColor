@@ -54,6 +54,7 @@
     <!-- Advanced Tab -->
     <sys:String x:Key="LOCDTCAdvancedWarning">Achtung: Diese Einstellungen existieren weites gehend für debugging Zwecke. Es kann unvorhergesehenes Verhalten auftreten. Verwendung unter eigener Gefahr.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheDisable">Cache Deaktivieren</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheCount">Zwischengespeicherte Spiele:</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheClear">Cache Leeren</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheGames">Zwischengespeicherte Spiele</sys:String>

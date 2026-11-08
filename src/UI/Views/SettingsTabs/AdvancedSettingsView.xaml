@@ -44,18 +44,26 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="{DynamicResource LOCDTCAdvancedCacheDisable}"
+                                   VerticalAlignment="Center"
+                                   Margin="{StaticResource Layout.Spacing.Item}" />
+                        <CheckBox Grid.Row="0" Grid.Column="2" IsChecked="{Binding Settings.CacheDisabled}"
+                                  Margin="{StaticResource Layout.Spacing.ItemBetween}"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0"
                                    Text="{DynamicResource LOCDTCAdvancedCacheCount}"
                                    VerticalAlignment="Center"
                                    Margin="{StaticResource Layout.Spacing.Item}" />
-                        <TextBlock Grid.Row="0" Grid.Column="1"
+                        <TextBlock Grid.Row="1" Grid.Column="1"
                                    Text="{Binding CachedGamesCount}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Right"
                                    Margin="{StaticResource Layout.Spacing.Item}" />
-                        <Button Grid.Row="0" Grid.Column="2"
+                        <Button Grid.Row="1" Grid.Column="2"
                                 Content="{DynamicResource LOCDTCAdvancedCacheClear}"
                                 Command="{Binding ClearCacheCommand}"
                                 Margin="{StaticResource Layout.Spacing.ItemBetween}"

@@ -20,12 +20,13 @@ namespace DynamicThemeColor {
         private readonly SchemeEngine schemeEngine;
         private readonly ILogger logger = LogManager.GetLogger();
         private readonly Dictionary<string, object> originalResources =  new Dictionary<string, object>();
-        public readonly ThemePaletteCache PaletteCache = new ThemePaletteCache();
+        public readonly ThemePaletteCache PaletteCache;
 
         public ThemingEngine(IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings, SchemeEngine schemeEngine) {
             this.playniteApi = playniteApi;
             this.addonSettings = addonSettings;
             this.schemeEngine = schemeEngine;
+            PaletteCache = new ThemePaletteCache(addonSettings);
         }
 
         public void ApplyPalette(Game game) {

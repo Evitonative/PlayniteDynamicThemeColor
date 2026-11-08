@@ -105,6 +105,12 @@ namespace DynamicThemeColor.Model {
         }
 
         // Advanced
+        private bool cacheDisabled = false;
+        public bool CacheDisabled {
+            get => cacheDisabled;
+            set => SetValue(ref cacheDisabled, value);
+        }
+
         public Dictionary<string, Guid> RememberedSchemeForThemes { get; } = new Dictionary<string, Guid>();
     }
 }

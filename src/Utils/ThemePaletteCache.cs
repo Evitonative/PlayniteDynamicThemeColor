@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using DynamicThemeColor.Model;
 
 namespace DynamicThemeColor.Utils {
     public class ThemePaletteCache {
+        private readonly Func<AddonSettings> addonSettings;
         private readonly ConcurrentDictionary<Guid, ThemePalette> cache =
             new ConcurrentDictionary<Guid, ThemePalette>();
 
+        public ThemePaletteCache(Func<AddonSettings> addonSettings) {
+            this.addonSettings = addonSettings;
+        }
+
         public bool TryGet(Guid gameId, out ThemePalette palette) {
-            if (cache.TryGetValue(gameId, out ThemePalette cached)) {
-                palette = cached;
-                return true;
+            if (addonSettings().CacheDisabled || !cache.TryGetValue(gameId, out ThemePalette cached)) {
+                palette = null;
+                return false;
             }
 
-            palette = null;
-            return false;
+            palette = cached;
+            return true;
         }
 
         public void Set(Guid gameId, ThemePalette palette) {
-            // TODO: Settings hook to disable
+            if (addonSettings().CacheDisabled) return;
             cache[gameId] = palette;
         }
 
