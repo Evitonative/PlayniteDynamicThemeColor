@@ -215,14 +215,14 @@ namespace DynamicThemeColor {
                 .Select(FilterRegistry.CreateInstance)
                 .Where(filter => filter != null)
                 .Aggregate(seedArgb, (current, filter) =>
-                    filter.ApplySeedFilters(current, game));
+                    filter.ApplySeedFilters(current, game, playniteApi, addonSettings));
         }
 
         private void ApplyPaletteFilters(ThemePalette palette, Game game) {
             AddonSettings settings = addonSettings();
             foreach (FilterConfiguration config in settings.PaletteFilters.Where(f => f.IsEnabled)) {
                 SchemeFilter filter = FilterRegistry.CreateInstance(config);
-                filter?.ApplyPaletteFilters(palette, game);
+                filter?.ApplyPaletteFilters(palette, game, playniteApi, addonSettings);
             }
         }
 
@@ -233,7 +233,7 @@ namespace DynamicThemeColor {
                 .Select(FilterRegistry.CreateInstance)
                 .Where(filter => filter != null)
                 .Aggregate(brushArgb, (current, filter) =>
-                    filter.ApplyBrushFilters(brushKey, current, game));
+                    filter.ApplyBrushFilters(brushKey, current, game, playniteApi, addonSettings));
         }
     }
 }

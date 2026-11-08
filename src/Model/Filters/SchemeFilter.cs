@@ -47,10 +47,12 @@ namespace DynamicThemeColor.Model.Filters {
         ///
         /// May be null if no game is selected.
         /// </param>
+        /// <param name="playniteApi">The playnite API</param>
+        /// <param name="addonSettings">The addons Settings</param>
         /// <returns>
         /// The new seed color in ARGB format.
         /// </returns>
-        public virtual uint ApplySeedFilters(uint seedArgb, [CanBeNull] Game game) {
+        public virtual uint ApplySeedFilters(uint seedArgb, [CanBeNull] Game game, IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
             return seedArgb;
         }
 
@@ -68,7 +70,9 @@ namespace DynamicThemeColor.Model.Filters {
         ///
         /// May be null if no game is selected.
         /// </param>
-        public virtual void ApplyPaletteFilters(ThemePalette palette, [CanBeNull] Game game) {
+        /// <param name="playniteApi">The playnite API</param>
+        /// <param name="addonSettings">The addons Settings</param>
+        public virtual void ApplyPaletteFilters(ThemePalette palette, [CanBeNull] Game game, IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
         }
 
         /// <summary>
@@ -88,10 +92,12 @@ namespace DynamicThemeColor.Model.Filters {
         ///
         /// May be null if no game is selected.
         /// </param>
+        /// <param name="playniteApi">The playnite API</param>
+        /// <param name="addonSettings">The addons Settings</param>
         /// <returns>
         /// The new brush color in ARGB format.
         /// </returns>
-        public virtual uint ApplyBrushFilters(string brushKey, uint brushArgb, [CanBeNull] Game game) {
+        public virtual uint ApplyBrushFilters(string brushKey, uint brushArgb, [CanBeNull] Game game, IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
             return brushArgb;
         }
     }
