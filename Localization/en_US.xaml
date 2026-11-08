@@ -43,6 +43,14 @@
     <sys:String x:Key="LOCDTCSchemeSourceTheme">Theme</sys:String>
     <sys:String x:Key="LOCDTCSchemeSourceCustom">Custom</sys:String>
 
+    <!-- Filters Tab -->
+    <sys:String x:Key="LOCDTCFiltersSeedFilters">Seed Filters</sys:String>
+    <sys:String x:Key="LOCDTCFiltersSeedFiltersHint">Seed filters are applied after the dominant color has been extracted from the artwork.</sys:String>
+    <sys:String x:Key="LOCDTCFiltersPaletteFilters">Palette Filters</sys:String>
+    <sys:String x:Key="LOCDTCFiltersPaletteFiltersHint">Palette filters are applied after a color palette has been generated from the seed color.</sys:String>
+    <sys:String x:Key="LOCDTCFiltersBrushFilters">Brush Filters</sys:String>
+    <sys:String x:Key="LOCDTCFiltersBrushFiltersHint">Brush filters are applied just before color is applied to components, it's the last change to change a color.</sys:String>
+
     <!-- Advanced Tab -->
     <sys:String x:Key="LOCDTCAdvancedWarning">Warning: These are advanced settings meant mostly for debugging purposes. They may cause unexpected behaviour. Proceed at your own risk.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>

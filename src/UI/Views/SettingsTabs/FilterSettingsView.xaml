@@ -29,10 +29,10 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="TODO Seed Filters"
+                        <TextBlock Grid.Column="0" Text="{DynamicResource LOCDTCFiltersSeedFilters}"
                                    VerticalAlignment="Center" />
                         <c:HelpIcon Grid.Column="1" VerticalAlignment="Center"
-                                    HelpToolTip="TODO Seed Filters Tooltip" />
+                                    HelpToolTip="{DynamicResource LOCDTCFiltersSeedFiltersHint}" />
 
                         <rl:RankableToolbarHeader
                             Grid.Column="2" VerticalAlignment="Center"
@@ -58,11 +58,11 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="TODO Palette Filters"
+                        <TextBlock Grid.Column="0" Text="{DynamicResource LOCDTCFiltersPaletteFilters}"
                                    VerticalAlignment="Center" />
 
                         <c:HelpIcon Grid.Column="1" VerticalAlignment="Center"
-                                    HelpToolTip="TODO Palette Filters Tooltip" />
+                                    HelpToolTip="{DynamicResource LOCDTCFiltersPaletteFiltersHint}" />
 
                         <rl:RankableToolbarHeader
                             Grid.Column="2" VerticalAlignment="Center"
@@ -88,11 +88,11 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="TODO Brush Filters"
+                        <TextBlock Grid.Column="0" Text="{DynamicResource LOCDTCFiltersBrushFilters}"
                                    VerticalAlignment="Center" />
 
                         <c:HelpIcon Grid.Column="1" VerticalAlignment="Center"
-                                    HelpToolTip="TODO Brush Filters Tooltip" />
+                                    HelpToolTip="{DynamicResource LOCDTCFiltersBrushFiltersHint}" />
 
                         <rl:RankableToolbarHeader
                             Grid.Column="2" VerticalAlignment="Center"

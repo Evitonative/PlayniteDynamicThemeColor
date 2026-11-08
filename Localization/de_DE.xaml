@@ -43,6 +43,14 @@
     <sys:String x:Key="LOCDTCSchemeSourceTheme">Design</sys:String>
     <sys:String x:Key="LOCDTCSchemeSourceCustom">Benutzerdefiniert</sys:String>
 
+    <!-- Filters Tab -->
+    <sys:String x:Key="LOCDTCFiltersSeedFilters">Seed Filter</sys:String>
+    <sys:String x:Key="LOCDTCFiltersSeedFiltersHint">Seed Filter werden auf die Farbe angewandt die aus dem Artwork entnommen wurden.</sys:String>
+    <sys:String x:Key="LOCDTCFiltersPaletteFilters">Palette Filter</sys:String>
+    <sys:String x:Key="LOCDTCFiltersPaletteFiltersHint">Palette Filter werden auf die Farbpalette angewandt die aus der Seed Farbe generiert wurde.</sys:String>
+    <sys:String x:Key="LOCDTCFiltersBrushFilters">Brush Filter</sys:String>
+    <sys:String x:Key="LOCDTCFiltersBrushFiltersHint">Brush Filter werden genutzt direkt vor dem Färben der UI-Komponenten. Es ist die letzte Möglichkeit Farben anzupassen.</sys:String>
+
     <!-- Advanced Tab -->
     <sys:String x:Key="LOCDTCAdvancedWarning">Achtung: Diese Einstellungen existieren weites gehend für debugging Zwecke. Es kann unvorhergesehenes Verhalten auftreten. Verwendung unter eigener Gefahr.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>
