@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DynamicThemeColor.Model.Filters {
+﻿namespace DynamicThemeColor.Model.Filters {
     public abstract class FilterSettingAttribute {
         public string Label { get; set; }
         public string Tooltip { get; set; }

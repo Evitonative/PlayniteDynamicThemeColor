@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DynamicThemeColor.Model;
 using DynamicThemeColor.Model.Filters;
 using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
@@ -10,15 +9,19 @@ using Newtonsoft.Json.Linq;
 namespace DynamicThemeColor {
     public static class FilterRegistry {
         private static readonly Dictionary<Guid, Type> registeredFilters = new Dictionary<Guid, Type>();
+        private static readonly Dictionary<Guid, FilterDescriptor> availableFilters = new Dictionary<Guid, FilterDescriptor>();
 
         static FilterRegistry() {
             IEnumerable<Type> filterTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => typeof(SchemeFilter).IsAssignableFrom(t) && !t.IsAbstract);
+                .Where(t => !t.IsAbstract
+                            && typeof(SchemeFilter).IsAssignableFrom(t)
+                            && t.Namespace != null
+                            && t.Namespace.StartsWith("DynamicThemeColor.Filters"));
 
             foreach (Type type in filterTypes) {
-                if (Activator.CreateInstance(type) is SchemeFilter instance) {
-                    registeredFilters[instance.Id] = type;
-                }
+                if (!(Activator.CreateInstance(type) is SchemeFilter instance)) continue;
+                registeredFilters[instance.Id] = type;
+                availableFilters.Add(instance.Id, new FilterDescriptor(instance.Id, instance.Name, type));
             }
         }
 
@@ -51,6 +54,23 @@ namespace DynamicThemeColor {
             return filter;
         }
 
-        public static IEnumerable<Guid> GetRegisteredFilterIds() => registeredFilters.Keys;
+        public static IReadOnlyDictionary<Guid, FilterDescriptor> GetAvailableFilters() => availableFilters;
+
+        [CanBeNull]
+        public static FilterDescriptor GetFilter(Guid id) {
+            return availableFilters.TryGetValue(id, out FilterDescriptor descriptor) ? descriptor : null;
+        }
+    }
+
+    public class FilterDescriptor {
+        public Guid Id { get; }
+        public string Name { get; }
+        public Type FilterType { get; }
+
+        public FilterDescriptor(Guid id, string name, Type filterType) {
+            Id = id;
+            Name = name;
+            FilterType = filterType;
+        }
     }
 }

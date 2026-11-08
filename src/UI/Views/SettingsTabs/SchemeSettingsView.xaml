@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
              xmlns:settings="clr-namespace:DynamicThemeColor.UI.Views.Settings"
-             xmlns:viewModels="clr-namespace:DynamicThemeColor.UI.ViewModels"
              xmlns:views="clr-namespace:DynamicThemeColor.UI.Views"
              mc:Ignorable="d" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance Type=views:SettingsViewModel, IsDesignTimeCreatable=False}">

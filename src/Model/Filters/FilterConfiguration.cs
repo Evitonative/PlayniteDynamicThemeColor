@@ -12,7 +12,10 @@ namespace DynamicThemeColor.Model.Filters {
         private bool isEnabled = true;
         public bool IsEnabled {
             get => isEnabled;
-            set => SetValue(ref isEnabled, value);
+            set {
+                SetValue(ref isEnabled, value);
+                OnPropertyChanged(string.Empty);
+            }
         }
 
         private object settings;

@@ -3,19 +3,110 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:settings="clr-namespace:DynamicThemeColor.UI.Views.Settings"
-             xmlns:viewModels="clr-namespace:DynamicThemeColor.UI.ViewModels"
+             xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
+             xmlns:rl="clr-namespace:DynamicThemeColor.UI.Components.RankableList"
              xmlns:views="clr-namespace:DynamicThemeColor.UI.Views"
              mc:Ignorable="d" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance Type=views:SettingsViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/DynamicThemeColor;component/src/UI/Resources/SharedResources.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/DynamicThemeColor;component/src/UI/Resources/SharedResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" />
-</UserControl>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="{StaticResource Layout.Spacing.Root}">
+            <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                <GroupBox.Header>
+                    <Grid Width="{Binding ActualWidth, ElementName=SeedListBody}"
+                          Margin="{StaticResource Layout.Padding.GroupBox}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
+                        <TextBlock Grid.Column="0" Text="TODO Seed Filters"
+                                   VerticalAlignment="Center" />
+                        <c:HelpIcon Grid.Column="1" VerticalAlignment="Center"
+                                    HelpToolTip="TODO Seed Filters Tooltip" />
+
+                        <rl:RankableToolbarHeader
+                            Grid.Column="2" VerticalAlignment="Center"
+                            Margin="{StaticResource Layout.Spacing.Between}"
+                            ListBody="{Binding ElementName=SeedListBody}"
+                            EditingEnabled="True" RemovingEnabled="True"
+                            AddCommand="{Binding AddSeedFilterCommand}"/>
+                    </Grid>
+                </GroupBox.Header>
+
+                <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+                    <rl:RankableListBody ItemsSource="{Binding SeedFilters}" x:Name="SeedListBody" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                <GroupBox.Header>
+                    <Grid Width="{Binding ActualWidth, ElementName=PaletteListBody}"
+                          Margin="{StaticResource Layout.Padding.GroupBox}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="TODO Palette Filters"
+                                   VerticalAlignment="Center" />
+
+                        <c:HelpIcon Grid.Column="1" VerticalAlignment="Center"
+                                    HelpToolTip="TODO Palette Filters Tooltip" />
+
+                        <rl:RankableToolbarHeader
+                            Grid.Column="2" VerticalAlignment="Center"
+                            Margin="{StaticResource Layout.Spacing.Between}"
+                            ListBody="{Binding ElementName=PaletteListBody}"
+                            EditingEnabled="True" RemovingEnabled="True"
+                            AddCommand="{Binding AddPaletteFilterCommand}"/>
+                    </Grid>
+                </GroupBox.Header>
+
+                <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+                    <rl:RankableListBody ItemsSource="{Binding PaletteFilters}" x:Name="PaletteListBody" />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                <GroupBox.Header>
+                    <Grid Width="{Binding ActualWidth, ElementName=BrushesListBody}"
+                          Margin="{StaticResource Layout.Padding.GroupBox}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="TODO Brush Filters"
+                                   VerticalAlignment="Center" />
+
+                        <c:HelpIcon Grid.Column="1" VerticalAlignment="Center"
+                                    HelpToolTip="TODO Brush Filters Tooltip" />
+
+                        <rl:RankableToolbarHeader
+                            Grid.Column="2" VerticalAlignment="Center"
+                            Margin="{StaticResource Layout.Spacing.Between}"
+                            ListBody="{Binding ElementName=BrushesListBody}"
+                            EditingEnabled="True" RemovingEnabled="True"
+                            AddCommand="{Binding AddBrushFilterCommand}"/>
+                    </Grid>
+                </GroupBox.Header>
+
+                <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+                    <rl:RankableListBody ItemsSource="{Binding BrushFilters}" x:Name="BrushesListBody"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -68,6 +68,12 @@
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Remember my choice</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">You can delete your choices at any time in the advanced settings.</sys:String>
 
+    <!-- Filter Select Dialog -->
+    <sys:String x:Key="LOCDTCFilterSelectNoFiltersForStage">No filters available for {0}.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectWindowTitel">Select Filter</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectDescription">Select the filter for the filter stage {0}.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
+
     <!-- Generic Buttons & Tooltips -->
     <sys:String x:Key="LOCDTCGenericCancel">Cancel</sys:String>
     <sys:String x:Key="LOCDTCGenericSelect">Select</sys:String>

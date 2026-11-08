@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:vm="clr-namespace:DynamicThemeColor.UI.Views"
                     mc:Ignorable="d">
-
     <ResourceDictionary.MergedDictionaries>
         <d:ResourceDictionary Source="pack://application:,,,/DynamicThemeColor;component/Localization/en_US.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -55,5 +55,22 @@
     <SolidColorBrush x:Key="Brush.Badge.BuiltIn.Foreground" Color="{StaticResource Palette.Badge.BuiltIn.Text}" />
     <SolidColorBrush x:Key="Brush.Badge.Theme.Foreground" Color="{StaticResource Palette.Badge.Theme.Text}" />
     <SolidColorBrush x:Key="Brush.Badge.Custom.Foreground" Color="{StaticResource Palette.Badge.Custom.Text}" />
+
+    <!-- Data Templates -->
+    <DataTemplate DataType="{x:Type vm:FilterItemViewModel}">
+        <TextBlock Text="{Binding DisplayName}"
+                   VerticalAlignment="Center">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource TextBrushDarker}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </DataTemplate>
 </ResourceDictionary>
 

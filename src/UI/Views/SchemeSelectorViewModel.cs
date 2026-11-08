@@ -4,7 +4,7 @@ using System.Windows;
 using DynamicThemeColor.Model;
 using Playnite.SDK;
 
-namespace DynamicThemeColor.UI.ViewModels {
+namespace DynamicThemeColor.UI.Views {
     public class SchemeSelectorViewModel : ObservableObject {
         public IEnumerable<RegisteredColorScheme> Candidates { get; }
         public string DescriptionMessage { get; }
@@ -34,7 +34,7 @@ namespace DynamicThemeColor.UI.ViewModels {
             SelectCommand = new RelayCommand<Window>(ExecuteSelect, window => SelectedItem != null);
         }
 
-        private void ExecuteSelect(Window window) {
+        private static void ExecuteSelect(Window window) {
             if (window == null) return;
             window.DialogResult = true;
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using DynamicThemeColor.Utils;
 using JetBrains.Annotations;
 using Playnite.SDK;
@@ -98,12 +97,7 @@ namespace DynamicThemeColor.Model.Filters {
     }
 
     public abstract class SchemeFilter<TSettings> : SchemeFilter where TSettings : new() {
-        private TSettings settings = new TSettings();
-
-        protected TSettings Settings {
-            get => settings;
-            set => settings = value;
-        }
+        protected TSettings Settings { get; set; } = new TSettings();
 
         internal override object SettingsObject {
             get => Settings;

@@ -68,6 +68,12 @@
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Auswahl merken</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">Du kannst im Advanced-Tab der Einstellung dies jederzeit widerrufen.</sys:String>
 
+    <!-- Filter Select Dialog -->
+    <sys:String x:Key="LOCDTCFilterSelectNoFiltersForStage">Keine Filter für {0} verfügbar.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectWindowTitel">Filter Auswählen</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectDescription">Wähle einen Filter für Schritt {0} aus.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
+
     <!-- Generic Buttons & Tooltips -->
     <sys:String x:Key="LOCDTCGenericCancel">Abbrechen</sys:String>
     <sys:String x:Key="LOCDTCGenericSelect">Wählen</sys:String>

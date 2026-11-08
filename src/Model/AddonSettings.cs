@@ -86,29 +86,25 @@ namespace DynamicThemeColor.Model {
         }
 
         // Filters
-        private ObservableCollection<FilterConfiguration> seedFilters = new ObservableCollection<FilterConfiguration>();
-        public ObservableCollection<FilterConfiguration> SeedFilters {
+        private List<FilterConfiguration> seedFilters = new List<FilterConfiguration>();
+        public List<FilterConfiguration> SeedFilters {
             get => seedFilters;
             set => SetValue(ref seedFilters, value);
         }
 
-        private ObservableCollection<FilterConfiguration> paletteFilters = new ObservableCollection<FilterConfiguration>();
-        public ObservableCollection<FilterConfiguration> PaletteFilters {
+        private List<FilterConfiguration> paletteFilters = new List<FilterConfiguration>();
+        public List<FilterConfiguration> PaletteFilters {
             get => paletteFilters;
             set => SetValue(ref paletteFilters, value);
         }
 
-        private ObservableCollection<FilterConfiguration> brushFilters = new ObservableCollection<FilterConfiguration>();
-        public ObservableCollection<FilterConfiguration> BrushFilters {
+        private IEnumerable<FilterConfiguration> brushFilters = new List<FilterConfiguration>();
+        public IEnumerable<FilterConfiguration> BrushFilters {
             get => brushFilters;
             set => SetValue(ref brushFilters, value);
         }
 
         // Advanced
-        private Dictionary<string, Guid> rememberedSchemeForThemes = new Dictionary<string, Guid>();
-        public Dictionary<string, Guid> RememberedSchemeForThemes {
-            get => rememberedSchemeForThemes;
-            set => SetValue(ref rememberedSchemeForThemes, value);
-        }
+        public Dictionary<string, Guid> RememberedSchemeForThemes { get; } = new Dictionary<string, Guid>();
     }
 }
