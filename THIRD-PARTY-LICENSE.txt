@@ -15,6 +15,14 @@ Newtonsoft.Json
 	License: MIT LICENSE
 	Copyright (c) 2007 James Newton-King
 
+material-design-icons:
+	Project: https://github.com/google/material-design-icons
+	License: Apache License, Version 2.0.
+	Changes: Material design icons were used in the addons icon.
+		From the material history icon the clock hands have been used; the rest of the icon has been removed.
+		From the material settings icon the outer part or the cog has been recolored to a color gradient; the inner circle has been colored dark gray.
+		The settings icon was layered below the history icons clock hands.
+
 =======================
 ==== License Texts ====
 =======================
