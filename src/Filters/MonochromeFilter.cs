@@ -129,6 +129,9 @@ namespace DynamicThemeColor.Filters {
                 count++;
             }
 
+            if (count == 0)
+                return MonochromeType.None;
+
             double averageChroma = totalChroma / count;
             averageHue /= count;
 
@@ -188,7 +191,7 @@ namespace DynamicThemeColor.Filters {
         [BoolToggleSetting(Label = "Disable B&W Detection", Tooltip = "Don't act on black and white art.")]
         public bool DisableBw { get; [UsedImplicitly] set; } = false;
 
-        [DoubleSliderSetting(Label = "Chroma Croma Threshold", Min = 0.0, Max = 50.0, Step = 0.5)]
+        [DoubleSliderSetting(Label = "Chroma Chroma Threshold", Min = 0.0, Max = 50.0, Step = 0.5)]
         public double SepiaChromaThreshold { get; [UsedImplicitly] set; } = 15.0;
 
         [DoubleSliderSetting(Label = "Sepia Hue Minimum Threshold", Min = 0.0, Max = 100.0, Step = 1.0)]
@@ -197,7 +200,7 @@ namespace DynamicThemeColor.Filters {
         [DoubleSliderSetting(Label = "Sepia Hue Maximum Threshold", Min = 0.0, Max = 100.0, Step = 1.0)]
         public double SepiaHueMaxThreshold { get; [UsedImplicitly] set; } = 65.0;
 
-        [DoubleSliderSetting(Label = "B&W Croma Threshold", Min = 0.0, Max = 50.0, Step = 0.5)]
+        [DoubleSliderSetting(Label = "B&W Chroma Threshold", Min = 0.0, Max = 50.0, Step = 0.5)]
         public double BwChromaThreshold { get; [UsedImplicitly] set; } = 12.0;
     }
 }
