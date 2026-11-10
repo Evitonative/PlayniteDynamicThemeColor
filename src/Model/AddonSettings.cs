@@ -7,6 +7,13 @@ using MaterialColorUtilities.Palettes;
 // ReSharper disable RedundantDefaultMemberInitializer
 namespace DynamicThemeColor.Model {
     public class AddonSettings : ObservableObject {
+        // Settings Version
+        private int version = 2;
+        public int Version {
+            get => version;
+            set => SetValue(ref version, value);
+        }
+
         // View Targets
         private bool applyInListView = true;
         public bool ApplyInListView {
