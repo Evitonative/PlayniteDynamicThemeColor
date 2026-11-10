@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -7,11 +6,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DynamicThemeColor.Model.Filters;
+using DynamicThemeColor.Utils;
 using Playnite.SDK;
 
-namespace DynamicThemeColor.UI.Views
-{
-    public class FilterSettingsItemViewModel : INotifyPropertyChanged {
+namespace DynamicThemeColor.UI.Views {
+    public sealed class FilterSettingsItemViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
 
         private readonly object targetObject;
@@ -131,12 +130,14 @@ namespace DynamicThemeColor.UI.Views
         }
 
         public ICommand ResetCommand { get; }
+        public ICommand PickColorCommand { get; }
 
         public FilterSettingsItemViewModel(object targetObject, PropertyInfo prop, FilterSettingAttribute attr) {
             this.targetObject = targetObject;
             this.prop = prop;
             this.attr = attr;
             ResetCommand = new RelayCommand(Reset);
+            PickColorCommand = new RelayCommand(ExecuteColorPicker);
         }
 
         public void Reset() {
@@ -144,7 +145,14 @@ namespace DynamicThemeColor.UI.Views
             Value = prop.GetValue(newInstance);
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        private void ExecuteColorPicker() {
+            if (prop.PropertyType != typeof(string) || SettingType != typeof(ColorSetting)) return;
+
+            string color = MaterialColorHelper.ExecutePickColor(Value as string);
+            Value = color;
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
@@ -154,6 +162,7 @@ namespace DynamicThemeColor.UI.Views
         public DataTemplate DoubleSliderTemplate { get; set; }
         public DataTemplate BoolTemplate { get; set; }
         public DataTemplate StringTemplate { get; set; }
+        public DataTemplate ColorTemplate { get; set; }
         public DataTemplate EnumTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
@@ -167,6 +176,8 @@ namespace DynamicThemeColor.UI.Views
                 return BoolTemplate;
             if (vm.SettingType == typeof(StringSetting))
                 return StringTemplate;
+            if (vm.SettingType == typeof(ColorSetting))
+                return ColorTemplate;
             return vm.SettingType == typeof(EnumDropdownSetting)
                 ? EnumTemplate
                 : throw new ArgumentOutOfRangeException();

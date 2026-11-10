@@ -12,7 +12,7 @@ using Playnite.SDK.Models;
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
     public class MonochromeFilter : SchemeFilter<MonochromeFilterSettings> {
-        private const uint sepiaArgb = 0xFFFF7A00;
+        private const uint sepiaArgbFallback = 0xFFFF7A00;
         private static readonly HashSet<Guid> bwGames = new HashSet<Guid>();
         private static readonly HashSet<Guid> sepiaGames = new HashSet<Guid>();
         private static readonly HashSet<Guid> otherGames = new HashSet<Guid>();
@@ -32,7 +32,7 @@ namespace DynamicThemeColor.Filters {
 
             if (game != null && !addonSettings().CacheDisabled) {
                 if (bwGames.Contains(game.Id) || otherGames.Contains(game.Id)) return FilterDefault();
-                if (sepiaGames.Contains(game.Id)) return sepiaArgb;
+                if (sepiaGames.Contains(game.Id)) return MaterialColorHelper.ConvertHexToArgb(Settings.SepiaHex) ?? sepiaArgbFallback;
             }
 
             switch (GetMonochromeType(colorExtractionResults.QuantiserResult)) {
@@ -43,7 +43,7 @@ namespace DynamicThemeColor.Filters {
                 case MonochromeType.Sepia:
                     if (!addonSettings().CacheDisabled && game != null)
                         sepiaGames.Add(game.Id);
-                    return sepiaArgb;
+                    return MaterialColorHelper.ConvertHexToArgb(Settings.SepiaHex) ?? sepiaArgbFallback;
                 case MonochromeType.None:
                     if (!addonSettings().CacheDisabled && game != null)
                         otherGames.Add(game.Id);
@@ -194,6 +194,11 @@ namespace DynamicThemeColor.Filters {
             Label = "Disable Sepia Detection",
             Tooltip = "Don't act on sepia art.")]
         public bool DisableSepia { get; [UsedImplicitly] set; } = false;
+
+        [ColorSetting(
+            Label = "Sepia Hex Color",
+            Tooltip = "Seed color used when a sepia image is detect.")]
+        public string SepiaHex { get; [UsedImplicitly] set; } = "#FF7A00";
 
         [BoolToggleSetting(
             Label = "Disable B&W Detection",

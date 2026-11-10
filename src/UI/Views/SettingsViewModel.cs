@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Channels;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using DynamicThemeColor.Model;
 using DynamicThemeColor.Model.Filters;
+using DynamicThemeColor.Utils;
 using Newtonsoft.Json.Linq;
 using Playnite.SDK;
 using Playnite.SDK.Data;
@@ -53,7 +52,8 @@ namespace DynamicThemeColor.UI.Views {
         public SettingsViewModel(Addon addon) {
             this.addon = addon;
 
-            PickColorCommand = new RelayCommand(ExecutePickColor);
+            PickColorCommand = new RelayCommand(() =>
+                addon.AddonSettings.FallbackSeedColor = MaterialColorHelper.ExecutePickColor(addon.AddonSettings.FallbackSeedColor));
 
             AddSeedFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Seed));
             AddPaletteFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Palette));
@@ -157,22 +157,6 @@ namespace DynamicThemeColor.UI.Views {
             OnPropertyChanged(nameof(CachedGames));
         }
 
-        private void ExecutePickColor() {
-            using (ColorDialog dialog = new ColorDialog()) {
-                try {
-                    if (ColorConverter.ConvertFromString(addon.AddonSettings.FallbackSeedColor) is Color c) {
-                        dialog.Color = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
-                    }
-                } catch {
-                    // ignored
-                }
-
-                if (dialog.ShowDialog() == DialogResult.OK) {
-                    addon.AddonSettings.FallbackSeedColor = $"#{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";
-                }
-            }
-        }
-
         private void ExecuteAddFilter(FilterStage stage) {
             IEnumerable<FilterDescriptor> compatibleFilters = FilterRegistry.GetAvailableFilters().Values
                 .Where(f => {
@@ -209,7 +193,7 @@ namespace DynamicThemeColor.UI.Views {
             window.MinHeight = 200;
             window.MaxHeight = 450;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Icon = new System.Windows.Media.Imaging.BitmapImage(
+            window.Icon = new BitmapImage(
                 new Uri("pack://application:,,,/DynamicThemeColor;component/assets/img/icon.ico", UriKind.Absolute)
             );
 
@@ -342,7 +326,7 @@ namespace DynamicThemeColor.UI.Views {
             window.MinHeight = 200;
             window.MaxHeight = 450;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Icon = new System.Windows.Media.Imaging.BitmapImage(
+            window.Icon = new BitmapImage(
                 new Uri("pack://application:,,,/DynamicThemeColor;component/assets/img/icon.ico", UriKind.Absolute)
             );
             window.Loaded += (sender, args) => window.MaxHeight = double.PositiveInfinity;

@@ -24,6 +24,9 @@ namespace DynamicThemeColor.Model.Filters {
     public class StringSetting : FilterSettingAttribute {
     }
 
+    public class ColorSetting : FilterSettingAttribute {
+    }
+
     public class EnumDropdownSetting : FilterSettingAttribute {
     }
 }

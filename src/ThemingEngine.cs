@@ -174,21 +174,15 @@ namespace DynamicThemeColor {
             }
         }
 
+        private static uint ConvertHexToArgb(string hex) {
+            return MaterialColorHelper.ConvertHexToArgb(hex) ?? 0xFFFFFFFF;
+        }
+
         private static uint GetMaterialColorValue(ColorScheme.MaterialColor mat, ThemePalette palette) {
             return palette.GetColor(mat.Palette, (uint)mat.Value);
         }
 
-        private static uint ConvertHexToArgb(string hex) {
-            if (string.IsNullOrEmpty(hex) || !hex.StartsWith("#")) return 0xFFFFFFFF;
-
-            if (ColorConverter.ConvertFromString(hex) is Color color) {
-                return (uint)((color.A << 24) | (color.R << 16) | (color.G << 8) | color.B);
-            }
-
-            return 0xFFFFFFFF;
-        }
-
-        public static string ResolveAssetPath(Game game, AddonSettings settings, IPlayniteAPI playniteApi) {
+        private static string ResolveAssetPath(Game game, AddonSettings settings, IPlayniteAPI playniteApi) {
             foreach (GameAssetType assetType in settings.AssetPriority) {
                 string relPath;
                 switch(assetType) {

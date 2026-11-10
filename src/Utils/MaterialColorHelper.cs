@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using JetBrains.Annotations;
@@ -31,7 +32,7 @@ namespace DynamicThemeColor.Utils {
             return new ColorExtractionResults(quantiserResult, rankedColors, maxColors, index);
         }
 
-        public static FormatConvertedBitmap GetFormatConvertedBitmap(string filePath) {
+        private static FormatConvertedBitmap GetFormatConvertedBitmap(string filePath) {
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(Path.GetFullPath(filePath));
@@ -61,6 +62,40 @@ namespace DynamicThemeColor.Utils {
             ));
             brush.Freeze();
             return brush;
+        }
+
+        public static uint? ConvertHexToArgb(string hex) {
+            if (string.IsNullOrEmpty(hex) || !hex.StartsWith("#")) return null;
+
+            string cleanHex = hex.Substring(1);
+
+            if (!uint.TryParse(cleanHex, System.Globalization.NumberStyles.HexNumber, null, out uint argb)) return null;
+            switch (cleanHex.Length) {
+                case 6:
+                    return 0xFF000000 | argb;
+                case 8:
+                    return argb;
+                default:
+                    return null;
+            }
+        }
+
+        public static string ExecutePickColor(string color) {
+            using (ColorDialog dialog = new ColorDialog()) {
+                try {
+                    if (ColorConverter.ConvertFromString(color) is Color c) {
+                        dialog.Color = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
+                    }
+                } catch {
+                    // ignored
+                }
+
+                if (dialog.ShowDialog() == DialogResult.OK) {
+                    color = $"#{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";
+                }
+            }
+
+            return color;
         }
     }
 

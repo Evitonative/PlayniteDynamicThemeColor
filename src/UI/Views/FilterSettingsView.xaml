@@ -45,6 +45,38 @@
                          d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
             </DataTemplate>
 
+            <DataTemplate x:Key="ColorTemplate">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="45" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0"
+                             Text="{Binding Value, Mode=TwoWay}"
+                             VerticalAlignment="Center"
+                             d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}"/>
+                    <Button Grid.Column="1"
+                            Command="{Binding PickColorCommand}"
+                            Padding="0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Margin="{StaticResource Layout.Spacing.Between}"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}">
+                        <Border CornerRadius="{DynamicResource ControlCornerRadius}"
+                                Background="{Binding Value}"
+                                BorderBrush="{DynamicResource PanelSeparatorBrush}"
+                                BorderThickness="{DynamicResource ControlBorderThickness}"
+                                d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
+                    </Button>
+                </Grid>
+            </DataTemplate>
+
             <DataTemplate x:Key="EnumTemplate">
                 <ComboBox ItemsSource="{Binding EnumValues}"
                           SelectedItem="{Binding Value, Mode=TwoWay}"
@@ -58,6 +90,7 @@
                 DoubleSliderTemplate="{StaticResource SliderTemplate}"
                 BoolTemplate="{StaticResource BoolTemplate}"
                 StringTemplate="{StaticResource StringTemplate}"
+                ColorTemplate="{StaticResource ColorTemplate}"
                 EnumTemplate="{StaticResource EnumTemplate}" />
         </ResourceDictionary>
     </UserControl.Resources>
