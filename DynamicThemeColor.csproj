@@ -10,7 +10,7 @@
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" PrivateAssets="All" ExcludeAssets="runtime"/>
         <PackageReference Include="MaterialColorUtilities" Version="0.3.0"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.4"/>
+        <PackageReference Include="Newtonsoft.Json" Version="10.0.3" PrivateAssets="All"/>
         <PackageReference Include="PlayniteSDK" Version="6.17.0"/>
     </ItemGroup>
 
@@ -23,9 +23,6 @@
             <SubType>Designer</SubType>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="assets\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Include="THIRD-PARTY-LICENSE.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -36,6 +33,14 @@
         <Reference Include="System.ComponentModel.DataAnnotations"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Resource Include="assets\icon.ico" />
+
+        <None Update="assets\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    
     <ItemGroup>
         <Page Update="src\UI\Resources\*.xaml">
             <Generator>MSBuild:Compile</Generator>

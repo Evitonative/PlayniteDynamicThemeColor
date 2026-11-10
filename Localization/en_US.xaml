@@ -72,8 +72,6 @@
     <sys:String x:Key="LOCDTCSchemeSelectWindowTitel">Select Scheme</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectDescription">You have multiple schemes that support your current theme "{0}". Please select one.</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectColumnSchemeName">Scheme Name</sys:String>
-    <sys:String x:Key="LOCDTCSchemeSelectColumnAuthor">Author</sys:String>
-    <sys:String x:Key="LOCDTCSchemeSelectColumnVersion">Version</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Remember my choice</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">You can delete your choices at any time in the advanced settings.</sys:String>
 
@@ -82,11 +80,30 @@
     <sys:String x:Key="LOCDTCFilterSelectWindowTitel">Select Filter</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectDescription">Select the filter for the filter stage {0}.</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectColumnVersion">Version</sys:String>
 
-    <!-- Generic Buttons & Tooltips -->
+    <!-- Filter Settings Dialog -->
+    <sys:String x:Key="LOCDTCFilterSettingsWindowTitel">{0} Settings</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsDescription">These settings only apply for this instance of the filter.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterEnabled">Filter Enabled</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettings">Filter Options</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettingsHint">These settings are provided by the filter. Text may not be localised.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterNone">This filter does not offer any options.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterSettingResetHint">Reset Option</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsResetAll">↺ Reset All</sys:String>
+
+    <!-- Generics -->
     <sys:String x:Key="LOCDTCGenericCancel">Cancel</sys:String>
     <sys:String x:Key="LOCDTCGenericSelect">Select</sys:String>
+    <sys:String x:Key="LOCDTCGenericSave">Save</sys:String>
+
+    <sys:String x:Key="LOCDTCGenericResetIcon">↺</sys:String>
+    <sys:String x:Key="LOCDTCGenericResetAll">↺ Reset All</sys:String>
+
     <sys:String x:Key="LOCDTCGenericAddItem">Add Item</sys:String>
     <sys:String x:Key="LOCDTCGenericRemoveItem">Remove Item</sys:String>
     <sys:String x:Key="LOCDTCGenericEditItem">Edit Item</sys:String>
+
+    <sys:String x:Key="LOCDTCGenericColumnAuthor">Author</sys:String>
+    <sys:String x:Key="LOCDTCGenericColumnVersion">Version</sys:String>
 </ResourceDictionary>

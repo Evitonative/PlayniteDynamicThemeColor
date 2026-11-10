@@ -277,6 +277,9 @@ namespace DynamicThemeColor {
             window.MinHeight = 200;
             window.MaxHeight = 450;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Icon = new System.Windows.Media.Imaging.BitmapImage(
+                new Uri("pack://application:,,,/DynamicThemeColor;component/assets/icon.ico", UriKind.Absolute)
+            );
 
             SchemeSelectorViewModel viewModel = new SchemeSelectorViewModel(candidates, theme);
             SchemeSelectorView selectorView = new SchemeSelectorView { DataContext = viewModel };

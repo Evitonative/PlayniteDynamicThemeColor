@@ -21,20 +21,20 @@ namespace DynamicThemeColor.UI.Components.RankableList {
 
 
         public RankableToolbarHeader() {
-            RemoveCommand = new RelayCommand<object>(RemoveItem, CanRemoveItem);
-            EditCommand = new RelayCommand<object>(EditItem, CanEditItem);
-            MoveUpCommand = new RelayCommand<object>(MoveItemUp, CanMoveItemUp);
-            MoveDownCommand = new RelayCommand<object>(MoveItemDown, CanMoveItemDown);
+            RemoveCommand = new RelayCommand(RemoveItem, CanRemoveItem);
+            EditCommand = new RelayCommand(EditItem, CanEditItem);
+            MoveUpCommand = new RelayCommand(MoveItemUp, CanMoveItemUp);
+            MoveDownCommand = new RelayCommand(MoveItemDown, CanMoveItemDown);
 
             InitializeComponent();
         }
 
-        private bool CanRemoveItem(object _) =>
+        private bool CanRemoveItem() =>
             ListBody?.SelectedItem != null &&
             ListBody.ItemsSource != null &&
             ListBody.ItemsSource.Contains(ListBody.SelectedItem);
 
-        private void RemoveItem(object _) {
+        private void RemoveItem() {
             if (!(ListBody?.ItemsSource is IList list)) return;
 
             int idx = ListBody.ItemsSource.IndexOf(ListBody.SelectedItem);
@@ -47,19 +47,19 @@ namespace DynamicThemeColor.UI.Components.RankableList {
             } else ListBody.SelectedItem = null;
         }
 
-        private bool CanEditItem(object _) => ListBody?.SelectedItem is IEditableItem;
+        private bool CanEditItem() => ListBody?.SelectedItem is IEditableItem;
 
-        private void EditItem(object _) {
+        private void EditItem() {
             if (!(ListBody?.SelectedItem is IEditableItem editable)) return;
-            editable.Edit();
+            editable.EditFilter();
         }
 
-        private bool CanMoveItemUp(object _) =>
+        private bool CanMoveItemUp() =>
             ListBody?.SelectedItem != null &&
             ListBody.ItemsSource != null &&
             ListBody.ItemsSource.IndexOf(ListBody.SelectedItem) > 0;
 
-        private void MoveItemUp(object _) {
+        private void MoveItemUp() {
             if (ListBody == null) return;
             object item = ListBody.SelectedItem;
             int index = ListBody.ItemsSource.IndexOf(item);
@@ -69,12 +69,12 @@ namespace DynamicThemeColor.UI.Components.RankableList {
             ListBody.SelectedItem = item;
         }
 
-        private bool CanMoveItemDown(object _) =>
+        private bool CanMoveItemDown() =>
             ListBody?.SelectedItem != null &&
             ListBody.ItemsSource != null &&
             ListBody.ItemsSource.IndexOf(ListBody.SelectedItem) < ListBody.ItemsSource.Count - 1;
 
-        private void MoveItemDown(object _) {
+        private void MoveItemDown() {
             if (ListBody == null) return;
             object item = ListBody.SelectedItem;
             int index = ListBody.ItemsSource.IndexOf(item);

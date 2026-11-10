@@ -24,6 +24,30 @@ namespace DynamicThemeColor.Model.Filters {
         [NotNull]
         public abstract string Name { get; }
 
+        /// <summary>
+        /// The author of the filter.
+        ///
+        /// This will be shown to the user.
+        /// </summary>
+        [NotNull]
+        public abstract string Author { get; }
+
+        /// <summary>
+        /// The version of the filter.
+        ///
+        /// Currently only shown to the user.
+        /// May later be used for validation or update logic.
+        /// </summary>
+        public abstract int Version { get; }
+
+        /// <summary>
+        /// Description of what the filter does.
+        ///
+        /// This will be shown to the user.
+        /// </summary>
+        [CanBeNull]
+        public abstract string Description { get; }
+
         [CanBeNull]
         internal virtual object SettingsObject {
             get => null;

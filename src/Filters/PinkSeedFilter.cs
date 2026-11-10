@@ -11,7 +11,9 @@ namespace DynamicThemeColor.Filters {
     public class PinkSeedFilter : SchemeFilter {
         public override Guid Id { get; } = Guid.Parse("d42292e9-8c73-4c45-a286-8919ba0efde2");
         public override string Name => "[TESTING] Pink Seed Filter";
-        internal override object SettingsObject { get; set; }
+        public override string Author => "Evito";
+        public override int Version => 1;
+        public override string Description => "Makes the seed color pink for testing";
 
         public override uint ApplySeedFilters(
             uint currentSeed, ColorExtractionResults colorExtractionResults,

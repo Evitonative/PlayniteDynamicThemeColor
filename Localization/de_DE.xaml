@@ -72,8 +72,6 @@
     <sys:String x:Key="LOCDTCSchemeSelectWindowTitel">Schema Auswählen</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectDescription">Du hast mehrere Schemata installiert welche dein Design "{0}" unterstützen. Bitte wähle eins aus.</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectColumnSchemeName">Schema Name</sys:String>
-    <sys:String x:Key="LOCDTCSchemeSelectColumnAuthor">Author</sys:String>
-    <sys:String x:Key="LOCDTCSchemeSelectColumnVersion">Version</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Auswahl merken</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">Du kannst im Advanced-Tab der Einstellung dies jederzeit widerrufen.</sys:String>
 

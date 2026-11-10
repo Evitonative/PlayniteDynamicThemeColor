@@ -48,7 +48,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="{DynamicResource LOCDTCSchemeSelectColumnAuthor}" Width="130">
+                            <GridViewColumn Header="{DynamicResource LOCDTCGenericColumnAuthor}" Width="130">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type model:RegisteredColorScheme}">
                                         <TextBlock Text="{Binding AuthorDisplay}"
@@ -57,7 +57,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="{DynamicResource LOCDTCSchemeSelectColumnVersion}" Width="70">
+                            <GridViewColumn Header="{DynamicResource LOCDTCGenericColumnVersion}" Width="70">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type model:RegisteredColorScheme}">
                                         <TextBlock Text="{Binding Scheme.Version}"

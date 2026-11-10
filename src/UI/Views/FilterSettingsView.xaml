@@ -1,0 +1,189 @@
+﻿<UserControl x:Class="DynamicThemeColor.UI.Views.FilterSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DynamicThemeColor.UI.Views"
+             xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
+             mc:Ignorable="d"
+             d:DesignHeight="250" d:DesignWidth="550"
+             d:DataContext="{d:DesignInstance Type=local:FilterSettingsViewModel, IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="pack://application:,,,/DynamicThemeColor;component/src/UI/Resources/SharedResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="SliderTemplate">
+                <Grid VerticalAlignment="Center"
+                      d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" MinWidth="45" />
+                    </Grid.ColumnDefinitions>
+
+                    <Slider Grid.Column="0"
+                            Minimum="{Binding Min}" Maximum="{Binding Max}" TickFrequency="{Binding Step}"
+                            IsSnapToTickEnabled="True" Value="{Binding Value, Mode=TwoWay}"
+                            VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding Value, Mode=TwoWay}"
+                             VerticalAlignment="Center" TextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="BoolTemplate">
+                <CheckBox IsChecked="{Binding Value, Mode=TwoWay}"
+                          VerticalAlignment="Center" HorizontalAlignment="Left"
+                          d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="StringTemplate">
+                <TextBox Text="{Binding Value, Mode=TwoWay}"
+                         VerticalAlignment="Center"
+                         d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="EnumTemplate">
+                <ComboBox ItemsSource="{Binding EnumValues}"
+                          SelectedItem="{Binding Value, Mode=TwoWay}"
+                          VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                          d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
+            </DataTemplate>
+
+            <local:SettingTemplateSelector
+                x:Key="SettingSelector"
+                IntSliderTemplate="{StaticResource SliderTemplate}"
+                DoubleSliderTemplate="{StaticResource SliderTemplate}"
+                BoolTemplate="{StaticResource BoolTemplate}"
+                StringTemplate="{StaticResource StringTemplate}"
+                EnumTemplate="{StaticResource EnumTemplate}" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="{StaticResource Layout.Spacing.Root}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" Grid.IsSharedSizeScope="True"
+                      VerticalScrollBarVisibility="Auto"
+                      Margin="{StaticResource Layout.Spacing.Section}">
+            <StackPanel>
+                <StackPanel Margin="{StaticResource Layout.Spacing.Section}">
+                    <TextBlock Text="{DynamicResource LOCDTCFilterSettingsDescription}"
+                               Margin="{StaticResource Layout.Spacing.Item}"
+                               Foreground="{DynamicResource TextBrush}"
+                               TextWrapping="Wrap" />
+
+                    <CheckBox IsChecked="{Binding IsEnabled}"
+                              Margin="{StaticResource Layout.Spacing.Item}"
+                              Content="{DynamicResource LOCDTCFilterSettingsFilterEnabled}" />
+                </StackPanel>
+
+                <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="{StaticResource Layout.Padding.GroupBox}">
+                            <TextBlock Text="{DynamicResource LOCDTCFilterSettingsFilterProvidedSettings}"
+                                       Foreground="{DynamicResource TextBrush}"
+                                       VerticalAlignment="Center" />
+                            <c:HelpIcon VerticalAlignment="Center"
+                                        HelpToolTip="{DynamicResource LOCDTCFilterSettingsFilterProvidedSettingsHint}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+
+                    <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+                        <StackPanel Visibility="{Binding HasNoSettings, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="{DynamicResource LOCDTCFilterSettingsFilterNone}"
+                                       Foreground="{DynamicResource TextBrushDarker}"
+                                       Margin="{StaticResource Layout.Spacing.Item}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding HasSettings, Converter={StaticResource BoolToVis}}">
+                            <ItemsControl ItemsSource="{Binding FilterSettingsItems}"
+                                          HorizontalContentAlignment="Stretch"
+                                          Margin="{StaticResource Layout.Spacing.Item}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel HorizontalAlignment="Stretch" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="220" SharedSizeGroup="LabelCol" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="ResetCol" />
+                                                <ColumnDefinition Width="Auto" SharedSizeGroup="HelpCol" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" SharedSizeGroup="ItemRow" />
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding Label}"
+                                                       Foreground="{DynamicResource TextBrush}"
+                                                       Margin="{StaticResource Layout.Spacing.Item}"
+                                                       VerticalAlignment="Center" />
+
+                                            <ContentControl Grid.Column="1"
+                                                            Content="{Binding}"
+                                                            ContentTemplateSelector="{StaticResource SettingSelector}"
+                                                            Margin="{StaticResource Layout.Spacing.Item}"
+                                                            VerticalAlignment="Center"
+                                                            HorizontalAlignment="Stretch" />
+
+                                            <Button Grid.Column="2" Content="{DynamicResource LOCDTCGenericResetIcon}"
+                                                    ToolTip="{DynamicResource LOCDTCFilterSettingsFilterSettingResetHint}"
+                                                    Margin="{StaticResource Layout.Spacing.ItemBetween}"
+                                                    Visibility="{Binding AddingEnabled, ElementName=Root, Converter={StaticResource BoolToVis}}"
+                                                    Command="{Binding ResetCommand}" />
+
+                                            <c:HelpIcon Grid.Column="3"
+                                                        Margin="{StaticResource Layout.Spacing.Item}"
+                                                        VerticalAlignment="Center"
+                                                        HelpToolTip="{Binding Tooltip}"
+                                                        Visibility="{Binding HasTooltip, Converter={StaticResource BoolToVis}}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button Content="{DynamicResource LOCDTCGenericResetAll}"
+                                    Margin="{StaticResource Layout.Spacing.Item}"
+                                    Visibility="{Binding AddingEnabled, ElementName=Root, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding ResetAllCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="{DynamicResource LOCDTCGenericSave}"
+                        IsDefault="True"
+                        Width="80"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+
+                <Button Content="{DynamicResource LOCDTCGenericCancel}"
+                        IsCancel="True"
+                        Margin="{StaticResource Layout.Spacing.Between}"
+                        Width="80" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

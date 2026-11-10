@@ -86,11 +86,11 @@
                     </StackPanel>
                 </GroupBox.Header>
 
-                <Grid Margin="{StaticResource Layout.Padding.GroupBox}">
+                <Grid Margin="{StaticResource Layout.Padding.GroupBox}" IsSharedSizeScope="True">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="220" />
+                        <ColumnDefinition Width="220" SharedSizeGroup="LabelCol" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="HelpCol" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>

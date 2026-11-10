@@ -20,7 +20,7 @@ namespace DynamicThemeColor {
 
             foreach (Type type in filterTypes) {
                 if (!(Activator.CreateInstance(type) is SchemeFilter instance)) continue;
-                filters.Add(instance.Id, new FilterDescriptor(instance.Id, instance.Name, type));
+                filters.Add(instance.Id, new FilterDescriptor(instance, type));
             }
         }
 
@@ -75,13 +75,16 @@ namespace DynamicThemeColor {
     }
 
     public class FilterDescriptor {
-        public Guid Id { get; }
-        public string Name { get; }
+        private readonly SchemeFilter instance;
+        public Guid Id => instance.Id;
+        public string Name => instance.Name;
+        public string Author => instance.Author;
+        public int Version => instance.Version;
+        public string Description => instance.Description;
         public Type FilterType { get; }
 
-        public FilterDescriptor(Guid id, string name, Type filterType) {
-            Id = id;
-            Name = name;
+        public FilterDescriptor(SchemeFilter instance, Type filterType) {
+            this.instance = instance;
             FilterType = filterType;
         }
     }

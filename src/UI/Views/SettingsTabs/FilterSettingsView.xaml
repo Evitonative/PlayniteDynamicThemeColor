@@ -14,6 +14,22 @@
                 <ResourceDictionary
                     Source="pack://application:,,,/DynamicThemeColor;component/src/UI/Resources/SharedResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type views:FilterItemViewModel}">
+                <TextBlock Text="{Binding DisplayName}"
+                           VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextBrushDarker}"/>
+                                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
 

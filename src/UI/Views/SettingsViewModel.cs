@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Channels;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
 using DynamicThemeColor.Model;
 using DynamicThemeColor.Model.Filters;
+using Newtonsoft.Json.Linq;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using Playnite.SDK.Models;
@@ -43,9 +46,9 @@ namespace DynamicThemeColor.UI.Views {
         public RelayCommand ClearCacheCommand { get; }
         public RelayCommand<CachedGameItemViewModel> RemoveCachedGameCommand { get; }
 
-        public RelayCommand ClearSchemeThemeCombinationsCommand { get; }
-        public RelayCommand ReprepareSchemesCommand { get; }
-        public RelayCommand RefreshBrushesCommand { get; }
+        public ICommand ClearSchemeThemeCombinationsCommand { get; }
+        public ICommand ReprepareSchemesCommand { get; }
+        public ICommand RefreshBrushesCommand { get; }
 
         public SettingsViewModel(Addon addon) {
             this.addon = addon;
@@ -87,6 +90,7 @@ namespace DynamicThemeColor.UI.Views {
 
             Game currentGame = addon.PlayniteApi.MainView.SelectedGames?.FirstOrDefault();
             addon.ThemingEngine.PaletteCache.Clear();
+            FilterRegistry.ClearFilterCaches();
             addon.ThemingEngine.ApplyPalette(currentGame);
         }
 
@@ -121,17 +125,17 @@ namespace DynamicThemeColor.UI.Views {
             SeedFilters.Clear();
             if (Settings.SeedFilters != null)
                 foreach (FilterConfiguration config in Settings.SeedFilters)
-                    SeedFilters.Add(new FilterItemViewModel(config));
+                    SeedFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
 
             PaletteFilters.Clear();
             if (Settings.PaletteFilters != null)
                 foreach (FilterConfiguration config in Settings.PaletteFilters)
-                    PaletteFilters.Add(new FilterItemViewModel(config));
+                    PaletteFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
 
             BrushFilters.Clear();
             if (Settings.BrushFilters == null) return;
             foreach (FilterConfiguration config in Settings.BrushFilters)
-                BrushFilters.Add(new FilterItemViewModel(config));
+                BrushFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
         }
 
         private void SaveFilterCollections() {
@@ -204,6 +208,9 @@ namespace DynamicThemeColor.UI.Views {
             window.MinHeight = 200;
             window.MaxHeight = 450;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Icon = new System.Windows.Media.Imaging.BitmapImage(
+                new Uri("pack://application:,,,/DynamicThemeColor;component/assets/icon.ico", UriKind.Absolute)
+            );
 
             AddFilterViewModel viewModel = new AddFilterViewModel(compatibleFilters, stage);
             AddFilterView selectorView = new AddFilterView { DataContext = viewModel };
@@ -223,13 +230,13 @@ namespace DynamicThemeColor.UI.Views {
 
             switch (stage) {
                 case FilterStage.Seed:
-                    SeedFilters.Add(new FilterItemViewModel(config));
+                    SeedFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
                     break;
                 case FilterStage.Palette:
-                    PaletteFilters.Add(new FilterItemViewModel(config));
+                    PaletteFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
                     break;
                 case FilterStage.Brush:
-                    BrushFilters.Add(new FilterItemViewModel(config));
+                    BrushFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(stage), stage, null);
@@ -290,9 +297,11 @@ namespace DynamicThemeColor.UI.Views {
     }
 
     public class FilterItemViewModel : ObservableObject, IEditableItem {
+        private readonly IPlayniteAPI playniteApi;
         public FilterConfiguration Configuration { get; }
 
-        public FilterItemViewModel(FilterConfiguration configuration) {
+        public FilterItemViewModel(FilterConfiguration configuration, IPlayniteAPI playniteApi) {
+            this.playniteApi = playniteApi;
             Configuration = configuration;
         }
 
@@ -313,8 +322,79 @@ namespace DynamicThemeColor.UI.Views {
             }
         }
 
-        public void Edit() {
-            IsEnabled = !IsEnabled;
+        public void EditFilter() {
+            EnsureStronglyTypedSettings();
+            object filterSettingsClone = Configuration.Settings != null ? CloneObject(Configuration.Settings) : null;
+
+            Window window = playniteApi.Dialogs.CreateWindow(new WindowCreationOptions {
+                ShowMinimizeButton = false,
+                ShowMaximizeButton = false,
+                ShowCloseButton = true,
+            });
+
+            window.Title = string.Format(
+                ResourceProvider.GetString("LOCDTCFilterSettingsWindowTitel"),
+                FilterRegistry.CreateInstance(Configuration).Name);
+            window.Width = 550;
+            window.MinWidth = 400;
+            window.SizeToContent = SizeToContent.Height;
+            window.MinHeight = 200;
+            window.MaxHeight = 450;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Icon = new System.Windows.Media.Imaging.BitmapImage(
+                new Uri("pack://application:,,,/DynamicThemeColor;component/assets/icon.ico", UriKind.Absolute)
+            );
+            window.Loaded += (sender, args) => window.MaxHeight = double.PositiveInfinity;
+
+            FilterSettingsViewModel viewModel = new FilterSettingsViewModel(filterSettingsClone, Configuration);
+            FilterSettingsView selectorView = new FilterSettingsView { DataContext = viewModel };
+            window.Content = selectorView;
+
+            bool? result = window.ShowDialog();
+            if (result != true) return;
+
+            if (Configuration.Settings != null) {
+                if (viewModel.FilterSettings == null) return;
+                if (viewModel.FilterSettings.GetType() != Configuration.Settings.GetType()) return;
+
+                CopyProperties(viewModel.FilterSettings, Configuration.Settings);
+            }
+
+            IsEnabled = viewModel.IsEnabled;
+        }
+
+        private void EnsureStronglyTypedSettings() {
+            if (!(Configuration.Settings is JObject jObj)) return;
+            Type correctType = FilterRegistry.CreateInstance(Configuration).SettingsObject?.GetType();
+            Configuration.Settings = jObj.ToObject(correctType);
+        }
+
+        private static T CloneObject<T>(T source) where T : class, new() {
+            if (source == null) return null;
+
+            Type type = source.GetType();
+            T clone = (T)Activator.CreateInstance(type);
+
+            foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+                if (!prop.CanRead || !prop.CanWrite) continue;
+                if (prop.GetIndexParameters().Length > 0) continue;
+                object value = prop.GetValue(source);
+                prop.SetValue(clone, value);
+            }
+
+            return clone;
+        }
+
+        private static void CopyProperties(object source, object destination) {
+            if (source == null || destination == null) return;
+
+            Type type = source.GetType();
+            foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+                if (!prop.CanRead || !prop.CanWrite) continue;
+                if (prop.GetIndexParameters().Length > 0) continue;
+                object value = prop.GetValue(source);
+                prop.SetValue(destination, value);
+            }
         }
     }
 }
