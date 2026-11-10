@@ -209,7 +209,7 @@ namespace DynamicThemeColor.UI.Views {
             window.MaxHeight = 450;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Icon = new System.Windows.Media.Imaging.BitmapImage(
-                new Uri("pack://application:,,,/DynamicThemeColor;component/assets/icon.ico", UriKind.Absolute)
+                new Uri("pack://application:,,,/DynamicThemeColor;component/assets/img/icon.ico", UriKind.Absolute)
             );
 
             AddFilterViewModel viewModel = new AddFilterViewModel(compatibleFilters, stage);
@@ -342,7 +342,7 @@ namespace DynamicThemeColor.UI.Views {
             window.MaxHeight = 450;
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Icon = new System.Windows.Media.Imaging.BitmapImage(
-                new Uri("pack://application:,,,/DynamicThemeColor;component/assets/icon.ico", UriKind.Absolute)
+                new Uri("pack://application:,,,/DynamicThemeColor;component/assets/img/icon.ico", UriKind.Absolute)
             );
             window.Loaded += (sender, args) => window.MaxHeight = double.PositiveInfinity;
 

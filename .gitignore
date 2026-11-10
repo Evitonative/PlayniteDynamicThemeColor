@@ -62,3 +62,6 @@ nunit-*.xml
 # Playnite specific
 *.pext
 /build
+
+# Icon Design
+/assets/design

@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net462</TargetFramework>
         <AssemblyName>DynamicThemeColor</AssemblyName>
@@ -18,12 +17,24 @@
         <None Include="extension.yaml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Include="Localization\*.xaml">
+        
+        <None Include="Localization/*.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        
         <None Include="THIRD-PARTY-LICENSE.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="assets/img/**/*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+
+        <None Update="assets/schemes/*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
@@ -34,28 +45,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="assets\icon.ico" />
-
-        <None Update="assets\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-    
-    <ItemGroup>
-        <Page Update="src\UI\Resources\*.xaml">
+        <Page Update="src/UI/**/*.xaml">
             <Generator>MSBuild:Compile</Generator>
             <XamlRuntime>Wpf</XamlRuntime>
             <SubType>Designer</SubType>
-        </Page>
-        <Page Update="src\UI\Components\**\*.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <XamlRuntime>Wpf</XamlRuntime>
-            <SubType>Designer</SubType>
-        </Page>
-        <Page Update="src\UI\Views\**\*.xaml">
-          <Generator>MSBuild:Compile</Generator>
-          <XamlRuntime>Wpf</XamlRuntime>
-          <SubType>Designer</SubType>
         </Page>
     </ItemGroup>
 
@@ -63,5 +56,4 @@
         <DebugType>none</DebugType>
         <DebugSymbols>false</DebugSymbols>
     </PropertyGroup>
-
 </Project>
