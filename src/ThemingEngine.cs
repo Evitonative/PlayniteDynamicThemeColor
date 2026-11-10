@@ -34,7 +34,7 @@ namespace DynamicThemeColor {
             DesktopView activeView = playniteApi.MainView.ActiveDesktopView;
             bool isFullscreen = playniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen;
 
-            if (isFullscreen && !addonSettings().ApplyInFullscreen || game == null) {
+            if (ApplyGameFilters(game) || isFullscreen && !addonSettings().ApplyInFullscreen || game == null) {
                 ApplyFallbackPalette();
                 return;
             }
@@ -204,22 +204,34 @@ namespace DynamicThemeColor {
             return null;
         }
 
+        private bool ApplyGameFilters(Game game) {
+            AddonSettings settings = addonSettings();
+            return settings.GameFilters
+                .Where(f => f.IsEnabled)
+                .Select(FilterRegistry.CreateInstance)
+                .Where(f => f != null)
+                .Aggregate(false, (keepGame, filter) => {
+                    bool? result = filter.ApplyGameFilter(game);
+                    return result ?? keepGame;
+                });
+        }
+
         private uint ApplySeedFilters(ColorExtractionResults colorExtractionResults, Game game) {
             uint seedArgb = colorExtractionResults.SeedColor;
             AddonSettings settings = addonSettings();
             return settings.SeedFilters
                 .Where(f => f.IsEnabled)
                 .Select(FilterRegistry.CreateInstance)
-                .Where(filter => filter != null)
+                .Where(f => f != null)
                 .Aggregate(seedArgb, (current, filter) =>
-                    filter.ApplySeedFilters(current, colorExtractionResults, game, playniteApi, addonSettings));
+                    filter.ApplySeedFilter(current, colorExtractionResults, game, playniteApi, addonSettings));
         }
 
         private void ApplyPaletteFilters(ThemePalette palette, ColorExtractionResults colorExtractionResults, Game game) {
             AddonSettings settings = addonSettings();
             foreach (FilterConfiguration config in settings.PaletteFilters.Where(f => f.IsEnabled)) {
                 SchemeFilter filter = FilterRegistry.CreateInstance(config);
-                filter?.ApplyPaletteFilters(palette, colorExtractionResults, game, playniteApi, addonSettings);
+                filter?.ApplyPaletteFilter(palette, colorExtractionResults, game, playniteApi, addonSettings);
             }
         }
 
@@ -228,9 +240,9 @@ namespace DynamicThemeColor {
             return settings.BrushFilters
                 .Where(f => f.IsEnabled)
                 .Select(FilterRegistry.CreateInstance)
-                .Where(filter => filter != null)
+                .Where(f => f != null)
                 .Aggregate(brushArgb, (current, filter) =>
-                    filter.ApplyBrushFilters(brushKey, current, colorExtractionResults, game, playniteApi, addonSettings));
+                    filter.ApplyBrushFilter(brushKey, current, colorExtractionResults, game, playniteApi, addonSettings));
         }
     }
 }

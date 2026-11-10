@@ -25,7 +25,7 @@ namespace DynamicThemeColor {
         }
 
         [CanBeNull]
-        private static SchemeFilter CreateSimpleInstance(Guid filterId) {
+        public static SchemeFilter CreateSimpleInstance(Guid filterId) {
             if (!filters.TryGetValue(filterId, out FilterDescriptor descriptor))
                 return null;
 

@@ -37,6 +37,36 @@
         <StackPanel Margin="{StaticResource Layout.Spacing.Root}">
             <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
                 <GroupBox.Header>
+                    <Grid Width="{Binding ActualWidth, ElementName=GameListBody}"
+                          Margin="{StaticResource Layout.Padding.GroupBox}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="{DynamicResource LOCDTCFiltersGameFilters}"
+                                   VerticalAlignment="Center" />
+                        <c:HelpIcon Grid.Column="1" VerticalAlignment="Center"
+                                    HelpToolTip="{DynamicResource LOCDTCFiltersGameFiltersHint}" />
+
+                        <rl:RankableToolbarHeader
+                            Grid.Column="2" VerticalAlignment="Center"
+                            Margin="{StaticResource Layout.Spacing.Between}"
+                            ListBody="{Binding ElementName=GameListBody}"
+                            EditingEnabled="True" RemovingEnabled="True"
+                            AddCommand="{Binding AddGameFilterCommand}"/>
+                    </Grid>
+                </GroupBox.Header>
+
+                <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+                    <rl:RankableListBody ItemsSource="{Binding GameFilters}" x:Name="GameListBody" />
+                </StackPanel>
+            </GroupBox>
+
+
+            <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                <GroupBox.Header>
                     <Grid Width="{Binding ActualWidth, ElementName=SeedListBody}"
                           Margin="{StaticResource Layout.Padding.GroupBox}">
                         <Grid.ColumnDefinitions>

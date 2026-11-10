@@ -24,7 +24,7 @@ namespace DynamicThemeColor.Filters {
         public override int Version => 1;
         public override string Description => "Detect sepia and black and white artwork and color them appropriately instead of cyan.";
 
-        public override uint ApplySeedFilters(
+        public override uint ApplySeedFilter(
             uint currentSeed, ColorExtractionResults colorExtractionResults,
             Game game, IPlayniteAPI playniteApi,
             Func<AddonSettings> addonSettings) {
@@ -52,10 +52,10 @@ namespace DynamicThemeColor.Filters {
                     throw new InvalidOperationException("Invalid Monochrome filter type");
             }
 
-            uint FilterDefault() => base.ApplySeedFilters(currentSeed, colorExtractionResults, game, playniteApi, addonSettings);
+            uint FilterDefault() => base.ApplySeedFilter(currentSeed, colorExtractionResults, game, playniteApi, addonSettings);
         }
 
-        public override void ApplyPaletteFilters(
+        public override void ApplyPaletteFilter(
             ThemePalette palette, ColorExtractionResults colorExtractionResults,
             Game game, IPlayniteAPI playniteApi,
             Func<AddonSettings> addonSettings) {
@@ -99,7 +99,7 @@ namespace DynamicThemeColor.Filters {
                 palette.SetColor(ColorScheme.MaterialPalette.Tertiary, tone.Key, tone.Value);
         }
 
-        public override uint ApplyBrushFilters(
+        public override uint ApplyBrushFilter(
             string brushKey, uint brushArgb,
             ColorExtractionResults colorExtractionResults,
             Game game, IPlayniteAPI playniteApi,
@@ -116,7 +116,7 @@ namespace DynamicThemeColor.Filters {
             sharedSettings = null;
             return FilterDefault();
 
-            uint FilterDefault() => base.ApplyBrushFilters(brushKey, brushArgb, colorExtractionResults, game, playniteApi, addonSettings);
+            uint FilterDefault() => base.ApplyBrushFilter(brushKey, brushArgb, colorExtractionResults, game, playniteApi, addonSettings);
         }
 
         private MonochromeType GetMonochromeType([CanBeNull] IReadOnlyDictionary<uint, uint> quantiserResult) {

@@ -15,7 +15,7 @@ namespace DynamicThemeColor.Filters {
         public override int Version => 1;
         public override string Description => "Makes the seed color pink for testing";
 
-        public override uint ApplySeedFilters(
+        public override uint ApplySeedFilter(
             uint currentSeed, ColorExtractionResults colorExtractionResults,
             Game game, IPlayniteAPI playniteApi,
             Func<AddonSettings> addonSettings) {

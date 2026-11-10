@@ -56,6 +56,17 @@ namespace DynamicThemeColor.Model.Filters {
         }
 
         /// <summary>
+        /// Prefilter Games before anything is done for a game.
+        /// </summary>
+        /// <param name="game">
+        /// The current selected game.
+        /// </param>
+        /// <returns>true if a game should be excluded, false it shouldn't. Null for no action.</returns>
+        public virtual bool? ApplyGameFilter(Game game) {
+            return null;
+        }
+
+        /// <summary>
         /// Apply a color to the seed color for theming before palette generation.
         /// </summary>
         /// <param name="currentSeed">
@@ -75,7 +86,7 @@ namespace DynamicThemeColor.Model.Filters {
         /// <returns>
         /// The new seed color in ARGB format.
         /// </returns>
-        public virtual uint ApplySeedFilters(
+        public virtual uint ApplySeedFilter(
             uint currentSeed, ColorExtractionResults colorExtractionResults,
             [CanBeNull] Game game, IPlayniteAPI playniteApi,
             Func<AddonSettings> addonSettings) {
@@ -99,7 +110,7 @@ namespace DynamicThemeColor.Model.Filters {
         /// </param>
         /// <param name="playniteApi">The playnite API</param>
         /// <param name="addonSettings">The addons Settings</param>
-        public virtual void ApplyPaletteFilters(
+        public virtual void ApplyPaletteFilter(
             ThemePalette palette, ColorExtractionResults colorExtractionResults,
             [CanBeNull] Game game, IPlayniteAPI playniteApi,
             Func<AddonSettings> addonSettings) {
@@ -128,7 +139,7 @@ namespace DynamicThemeColor.Model.Filters {
         /// <returns>
         /// The new brush color in ARGB format.
         /// </returns>
-        public virtual uint ApplyBrushFilters(
+        public virtual uint ApplyBrushFilter(
             string brushKey, uint brushArgb,
             [CanBeNull] ColorExtractionResults colorExtractionResults,
             [CanBeNull] Game game, IPlayniteAPI playniteApi,
@@ -144,7 +155,7 @@ namespace DynamicThemeColor.Model.Filters {
     }
 
     public abstract class SchemeFilter<TSettings> : SchemeFilter where TSettings : class, new() {
-        protected TSettings Settings { get; private set; } = new TSettings();
+        public TSettings Settings { get; private set; } = new TSettings();
 
         internal override object SettingsObject {
             get => Settings;

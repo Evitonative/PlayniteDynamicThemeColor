@@ -93,6 +93,12 @@ namespace DynamicThemeColor.Model {
         }
 
         // Filters
+        private List<FilterConfiguration> gameFilters = new List<FilterConfiguration>();
+        public List<FilterConfiguration> GameFilters {
+            get => gameFilters;
+            set => SetValue(ref gameFilters, value);
+        }
+
         private List<FilterConfiguration> seedFilters = new List<FilterConfiguration>();
         public List<FilterConfiguration> SeedFilters {
             get => seedFilters;

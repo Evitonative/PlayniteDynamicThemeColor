@@ -12,7 +12,7 @@ using Playnite.SDK.Plugins;
 
 namespace DynamicThemeColor {
     [UsedImplicitly]
-    public class Addon : GenericPlugin {
+    public partial class Addon : GenericPlugin {
         public sealed override Guid Id { get; } = Guid.Parse("a7a76873-8465-4273-a8a6-d460550ce627");
 
         public readonly SchemeEngine SchemeEngine;

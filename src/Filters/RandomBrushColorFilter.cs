@@ -15,7 +15,7 @@ namespace DynamicThemeColor.Filters {
         public override int Version => 1;
         public override string Description => "Makes every brush a random color for testing.";
 
-        public override uint ApplyBrushFilters(
+        public override uint ApplyBrushFilter(
             string brushKey, uint brushArgb,
             ColorExtractionResults colorExtractionResults,
             Game game,  IPlayniteAPI playniteApi,

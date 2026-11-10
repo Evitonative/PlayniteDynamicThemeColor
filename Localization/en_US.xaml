@@ -44,6 +44,9 @@
     <sys:String x:Key="LOCDTCSchemeSourceCustom">Custom</sys:String>
 
     <!-- Filters Tab -->
+
+    <sys:String x:Key="LOCDTCFiltersGameFilters">Game Filter</sys:String>
+    <sys:String x:Key="LOCDTCFiltersGameFiltersHint">Game filters can be used to exclude a game from having its palette applied.</sys:String>
     <sys:String x:Key="LOCDTCFiltersSeedFilters">Seed Filters</sys:String>
     <sys:String x:Key="LOCDTCFiltersSeedFiltersHint">Seed filters are applied after the dominant color has been extracted from the artwork.</sys:String>
     <sys:String x:Key="LOCDTCFiltersPaletteFilters">Palette Filters</sys:String>
@@ -89,6 +92,16 @@
     <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettingsHint">These settings are provided by the filter. Text may not be localised.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterNone">This filter does not offer any options.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterSettingResetHint">Reset Option</sys:String>
+
+    <!-- Context Menu -->
+    <sys:String x:Key="LOCDTCContextMain">Dynamic Theme Color</sys:String>
+    <sys:String x:Key="LOCDTCContextCopyGameId">Copy Game ID</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGame">Blacklist Game</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGame">Whitelist Game</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGameAdded">Game successfully blacklisted. You can remove game from the blacklist in the filters tab of the Dynamic Theme Color plugin settings. (Shift-click to not show this message)</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGameAdded">Game successfully whitelisted. You can remove game from the whitelist in the filters tab of the Dynamic Theme Color plugin settings. (Shift-click to not show this message)</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGameFailed">Failed to blacklist game.</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGameFailed">Failed to whitelist game.</sys:String>
 
     <!-- Generics -->
     <sys:String x:Key="LOCDTCGenericCancel">Cancel</sys:String>

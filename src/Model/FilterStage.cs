@@ -1,5 +1,5 @@
 ﻿namespace DynamicThemeColor.Model {
     public enum FilterStage {
-        Seed, Palette, Brush,
+        Game, Seed, Palette, Brush,
     }
 }

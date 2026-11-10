@@ -19,7 +19,7 @@ namespace DynamicThemeColor.Filters {
             "pulled from the image instead of blending into the background theme.\n\n" +
             "This potentially results in poor contrast. Use with care.";
 
-        public override uint ApplyBrushFilters(string brushKey, uint brushArgb, ColorExtractionResults colorExtractionResults, Game game,
+        public override uint ApplyBrushFilter(string brushKey, uint brushArgb, ColorExtractionResults colorExtractionResults, Game game,
             IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
             uint accentColor = colorExtractionResults?.SeedColor ?? brushArgb;
 

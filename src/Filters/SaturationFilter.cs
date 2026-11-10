@@ -16,12 +16,12 @@ namespace DynamicThemeColor.Filters {
         public override int Version => 1;
         public override string Description => "Adjust the saturation for the primary color.";
 
-        public override uint ApplySeedFilters(uint currentSeed, ColorExtractionResults colorExtractionResults, Game game,
+        public override uint ApplySeedFilter(uint currentSeed, ColorExtractionResults colorExtractionResults, Game game,
             IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
             return AdjustSaturation(currentSeed, Settings.Saturation);
         }
 
-        public override void ApplyPaletteFilters(ThemePalette palette, ColorExtractionResults colorExtractionResults, Game game,
+        public override void ApplyPaletteFilter(ThemePalette palette, ColorExtractionResults colorExtractionResults, Game game,
             IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
 
             if (Settings.PaletteToneMin < 0) Settings.PaletteToneMin = 0;
@@ -37,7 +37,7 @@ namespace DynamicThemeColor.Filters {
             }
         }
 
-        public override uint ApplyBrushFilters(string brushKey, uint brushArgb, ColorExtractionResults colorExtractionResults, Game game,
+        public override uint ApplyBrushFilter(string brushKey, uint brushArgb, ColorExtractionResults colorExtractionResults, Game game,
             IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
 
             switch (brushKey) {

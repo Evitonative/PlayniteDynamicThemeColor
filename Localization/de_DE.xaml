@@ -44,6 +44,8 @@
     <sys:String x:Key="LOCDTCSchemeSourceCustom">Benutzerdefiniert</sys:String>
 
     <!-- Filters Tab -->
+    <sys:String x:Key="LOCDTCFiltersGameFilters">Spiel Filter</sys:String>
+    <sys:String x:Key="LOCDTCFiltersGameFiltersHint">Spiel Filter angewandt bevor Farben für das Spiel generieret werden und können verwendet werden um ein Spiel auszulassen.</sys:String>
     <sys:String x:Key="LOCDTCFiltersSeedFilters">Seed Filter</sys:String>
     <sys:String x:Key="LOCDTCFiltersSeedFiltersHint">Seed Filter werden auf die Farbe angewandt die aus dem Artwork entnommen wurden.</sys:String>
     <sys:String x:Key="LOCDTCFiltersPaletteFilters">Palette Filter</sys:String>
@@ -90,7 +92,19 @@
     <sys:String x:Key="LOCDTCFilterSettingsFilterNone">Dieser Filter hat keine Optionen.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterSettingResetHint">Option Zurücksetzen</sys:String>
 
+    <!-- Context Menu -->
+    <sys:String x:Key="LOCDTCContextMain">Dynamic Theme Color</sys:String>
+    <sys:String x:Key="LOCDTCContextCopyGameId">Spiel ID Kopieren</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGame">Spiel Blacklisten</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGame">Spiel Whitelisten</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGameAdded">Spiel erfolgreich geblacklisted. Du kannst den Filter jederzeit in den Addon-Einstellungen von Dynamic Theme Color im Tab Filter entfernen. (Shift-Click halten um diese Nachricht zu überspringen)</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGameAdded">Spiel erfolgreich gewhitelisted. Du kannst den Filter jederzeit in den Addon-Einstellungen von Dynamic Theme Color im Tab Filter entfernen. (Shift-Click halten um diese Nachricht zu überspringen)</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGameFailed">Spiel konnte nicht geblacklisted werden.</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGameFailed">Spiel konnte nicht gewhitelisted werden.</sys:String>
+
     <!-- Generic Buttons & Tooltips -->
+    <sys:String x:Key="LOCDTCGenericDTC">Dynamic Theme Color</sys:String>
+
     <sys:String x:Key="LOCDTCGenericCancel">Abbrechen</sys:String>
     <sys:String x:Key="LOCDTCGenericSelect">Wählen</sys:String>
     <sys:String x:Key="LOCDTCGenericSave">Speichern</sys:String>

@@ -32,9 +32,11 @@ namespace DynamicThemeColor.UI.Views {
         public bool HasOtherSchemes => OtherSchemes.Count > 0;
 
         // Filters Tab
+        public ObservableCollection<FilterItemViewModel> GameFilters { get; } = new ObservableCollection<FilterItemViewModel>();
         public ObservableCollection<FilterItemViewModel> SeedFilters { get; } = new ObservableCollection<FilterItemViewModel>();
         public ObservableCollection<FilterItemViewModel> PaletteFilters { get; } = new ObservableCollection<FilterItemViewModel>();
         public ObservableCollection<FilterItemViewModel> BrushFilters { get; } = new ObservableCollection<FilterItemViewModel>();
+        public RelayCommand AddGameFilterCommand { get; }
         public RelayCommand AddSeedFilterCommand { get; }
         public RelayCommand AddPaletteFilterCommand { get; }
         public RelayCommand AddBrushFilterCommand { get; }
@@ -55,6 +57,7 @@ namespace DynamicThemeColor.UI.Views {
             PickColorCommand = new RelayCommand(() =>
                 addon.AddonSettings.FallbackSeedColor = MaterialColorHelper.ExecutePickColor(addon.AddonSettings.FallbackSeedColor));
 
+            AddGameFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Game));
             AddSeedFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Seed));
             AddPaletteFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Palette));
             AddBrushFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Brush));
@@ -84,7 +87,10 @@ namespace DynamicThemeColor.UI.Views {
         public void EndEdit() {
             logger.Debug("Settings editing session committed (EndEdit). Saving settings and refreshing SchemeEngine.");
             SaveFilterCollections();
+            EndEditRefresh();
+        }
 
+        public void EndEditRefresh() {
             addon.SavePluginSettings(addon.AddonSettings);
             addon.SchemeEngine.RefreshBrushes();
 
@@ -123,6 +129,11 @@ namespace DynamicThemeColor.UI.Views {
         }
 
         private void LoadFilterCollections() {
+            GameFilters.Clear();
+            if (Settings.GameFilters != null)
+                foreach (FilterConfiguration config in Settings.GameFilters)
+                    GameFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
+
             SeedFilters.Clear();
             if (Settings.SeedFilters != null)
                 foreach (FilterConfiguration config in Settings.SeedFilters)
@@ -140,6 +151,7 @@ namespace DynamicThemeColor.UI.Views {
         }
 
         private void SaveFilterCollections() {
+            Settings.GameFilters = new List<FilterConfiguration>(GameFilters.Select(vm => vm.Configuration));
             Settings.SeedFilters = new List<FilterConfiguration>(SeedFilters.Select(vm => vm.Configuration));
             Settings.PaletteFilters = new List<FilterConfiguration>(PaletteFilters.Select(vm => vm.Configuration));
             Settings.BrushFilters = new List<FilterConfiguration>(BrushFilters.Select(vm => vm.Configuration));
@@ -162,9 +174,10 @@ namespace DynamicThemeColor.UI.Views {
                 .Where(f => {
                     string methodName;
                     switch (stage) {
-                        case FilterStage.Seed: methodName = nameof(SchemeFilter.ApplySeedFilters); break;
-                        case FilterStage.Palette: methodName = nameof(SchemeFilter.ApplyPaletteFilters); break;
-                        case FilterStage.Brush: methodName = nameof(SchemeFilter.ApplyBrushFilters); break;
+                        case FilterStage.Game: methodName = nameof(SchemeFilter.ApplyGameFilter); break;
+                        case FilterStage.Seed: methodName = nameof(SchemeFilter.ApplySeedFilter); break;
+                        case FilterStage.Palette: methodName = nameof(SchemeFilter.ApplyPaletteFilter); break;
+                        case FilterStage.Brush: methodName = nameof(SchemeFilter.ApplyBrushFilter); break;
                         default: throw new ArgumentOutOfRangeException(nameof(stage), stage, null);
                     }
 
@@ -214,6 +227,9 @@ namespace DynamicThemeColor.UI.Views {
             };
 
             switch (stage) {
+                case FilterStage.Game:
+                    GameFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
+                    break;
                 case FilterStage.Seed:
                     SeedFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
                     break;
