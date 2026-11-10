@@ -30,11 +30,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="assets/img/**/*.*">
+        <Resource Include="assets/img/icon.ico" />
+        
+        <None Update="assets/img/**/*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
 
-        <None Update="assets/schemes/*">
+        <None Update="assets/schemes/**/*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
