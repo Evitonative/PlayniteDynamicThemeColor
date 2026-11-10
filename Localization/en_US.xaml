@@ -80,7 +80,6 @@
     <sys:String x:Key="LOCDTCFilterSelectWindowTitel">Select Filter</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectDescription">Select the filter for the filter stage {0}.</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
-    <sys:String x:Key="LOCDTCFilterSelectColumnVersion">Version</sys:String>
 
     <!-- Filter Settings Dialog -->
     <sys:String x:Key="LOCDTCFilterSettingsWindowTitel">{0} Settings</sys:String>
@@ -90,7 +89,6 @@
     <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettingsHint">These settings are provided by the filter. Text may not be localised.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterNone">This filter does not offer any options.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterSettingResetHint">Reset Option</sys:String>
-    <sys:String x:Key="LOCDTCFilterSettingsResetAll">↺ Reset All</sys:String>
 
     <!-- Generics -->
     <sys:String x:Key="LOCDTCGenericCancel">Cancel</sys:String>

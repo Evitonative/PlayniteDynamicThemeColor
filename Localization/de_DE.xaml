@@ -25,7 +25,7 @@
     <!-- Extraction & Fallback Defaults -->
     <sys:String x:Key="LOCDTCExtractionFallbackTitle">Extraktion &amp; Fallback-Standards</sys:String>
     <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyle">Paletten-Stil</sys:String>
-    <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyleHint">Welcher Stil soll für zum Erstellen der Farbpalette verwendet werden?</sys:String>
+    <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyleHint">Welcher Stil soll zum Erstellen der Farbpalette verwendet werden?</sys:String>
     <sys:String x:Key="LOCDTCExtractionColorSelectionRange">Farbauswahl-Bereich</sys:String>
     <sys:String x:Key="LOCDTCExtractionColorSelectionRangeHint">Aus wie vielen Farben soll für Erstellen der Palette gewählt werden. Weniger Farben sind liefern ein passenderes Ergebnis, mehr Farben sorgen für mehr Variation.</sys:String>
     <sys:String x:Key="LOCDTCExtractionFallbackSeedColor">Fallback-Farbe</sys:String>
@@ -58,11 +58,11 @@
     <sys:String x:Key="LOCDTCAdvancedCacheCount">Zwischengespeicherte Spiele:</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheClear">Cache Leeren</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheGames">Zwischengespeicherte Spiele</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGame">Spiel aus dem Cache entfernen.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGameHint">Spiel aus dem Cache entfernen.</sys:String>
 
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineTitle">Scheme Engine</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButton">Alle Design-Schema Verbindungen Löschen</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint">Dies wird erst beim speichern umgesetzt. Du wirst möglicherweise sofort gefragt um neue Verbindungen zu erstellen fallst nötig.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint">Dies wird erst beim speichern umgesetzt. Du wirst möglicherweise sofort gefragt, neue Verbindungen zu erstellen, falls nötig.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButton">Alle Schema Neu Laden</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButtonHint">Du willst wahrscheinlich auch die Brushes erneuern.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButton">Alle Brushes Erneuern</sys:String>
@@ -81,10 +81,27 @@
     <sys:String x:Key="LOCDTCFilterSelectDescription">Wähle einen Filter für Schritt {0} aus.</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
 
+    <!-- Filter Settings Dialog -->
+    <sys:String x:Key="LOCDTCFilterSettingsWindowTitel">{0} Einstellungen</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsDescription">Diese Einstellungen sind nur für diese Instanz des Filters.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterEnabled">Filter Aktiv</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettings">Filter Optionen</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettingsHint">Diese Einstellungen werden vom Filter bereitgestellt. Übersetzungen sind möglicherweise nicht vorhanden.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterNone">Dieser Filter hat keine Optionen.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterSettingResetHint">Option Zurücksetzen</sys:String>
+
     <!-- Generic Buttons & Tooltips -->
     <sys:String x:Key="LOCDTCGenericCancel">Abbrechen</sys:String>
     <sys:String x:Key="LOCDTCGenericSelect">Wählen</sys:String>
+    <sys:String x:Key="LOCDTCGenericSave">Speichern</sys:String>
+
+    <sys:String x:Key="LOCDTCGenericResetIcon">↺</sys:String>
+    <sys:String x:Key="LOCDTCGenericResetAll">↺ Alle Zurücksetzen</sys:String>
+
     <sys:String x:Key="LOCDTCGenericAddItem">Element Hinzufügen</sys:String>
     <sys:String x:Key="LOCDTCGenericRemoveItem">Element Entfernen</sys:String>
     <sys:String x:Key="LOCDTCGenericEditItem">Element Bearbeiten</sys:String>
+
+    <sys:String x:Key="LOCDTCGenericColumnAuthor">Author</sys:String>
+    <sys:String x:Key="LOCDTCGenericColumnVersion">Version</sys:String>
 </ResourceDictionary>
