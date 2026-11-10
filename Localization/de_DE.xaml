@@ -83,7 +83,7 @@
 
     <!-- Filter Settings Dialog -->
     <sys:String x:Key="LOCDTCFilterSettingsWindowTitel">{0} Einstellungen</sys:String>
-    <sys:String x:Key="LOCDTCFilterSettingsDescription">Diese Einstellungen sind nur für diese Instanz des Filters.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsDescription">Diese Einstellungen sind nur für diese Instanz des Filters. Manche Optionen sind nur in bestimmten Schritten verfügbar.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterEnabled">Filter Aktiv</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettings">Filter Optionen</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettingsHint">Diese Einstellungen werden vom Filter bereitgestellt. Übersetzungen sind möglicherweise nicht vorhanden.</sys:String>

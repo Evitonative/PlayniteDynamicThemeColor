@@ -54,6 +54,11 @@
         </Page>
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Remove="src/Filters/RandomBrushColorFilter.cs" Condition="'$(Configuration)' == 'Release'" />
+        <Compile Remove="src/Filters/PinkSeedFilter.cs" Condition="'$(Configuration)' == 'Release'" />
+    </ItemGroup>
+
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <DebugType>none</DebugType>
         <DebugSymbols>false</DebugSymbols>

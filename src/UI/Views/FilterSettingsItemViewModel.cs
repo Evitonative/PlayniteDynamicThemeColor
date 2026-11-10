@@ -24,7 +24,17 @@ namespace DynamicThemeColor.UI.Views
         public bool HasTooltip => !string.IsNullOrEmpty(Tooltip);
 
         public object Value {
-            get => prop.GetValue(targetObject);
+            get {
+                object val = prop.GetValue(targetObject);
+                switch (val) {
+                    case null:
+                        return null;
+                    case int intVal:
+                        return Convert.ToDouble(intVal);
+                    default:
+                        return prop.GetValue(targetObject);
+                }
+            }
             set {
                 switch (value) {
                     case null:
@@ -64,7 +74,7 @@ namespace DynamicThemeColor.UI.Views
             }
         }
 
-        public object Min {
+        public double? Min {
             get {
                 Type underlyingType = Nullable.GetUnderlyingType(prop.PropertyType)
                                       ?? prop.PropertyType;
@@ -79,7 +89,7 @@ namespace DynamicThemeColor.UI.Views
             }
         }
 
-        public object Max {
+        public double? Max {
             get {
                 Type underlyingType = Nullable.GetUnderlyingType(prop.PropertyType)
                                       ?? prop.PropertyType;
@@ -94,7 +104,7 @@ namespace DynamicThemeColor.UI.Views
             }
         }
 
-        public object Step {
+        public double? Step {
             get {
                 Type underlyingType = Nullable.GetUnderlyingType(prop.PropertyType)
                                       ?? prop.PropertyType;
