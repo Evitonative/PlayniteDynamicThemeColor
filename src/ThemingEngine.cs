@@ -90,7 +90,7 @@ namespace DynamicThemeColor {
             UnapplyPalette();
         }
 
-        private void UnapplyPalette() {
+        public void UnapplyPalette() {
             foreach (KeyValuePair<string, object> keyValuePair in originalResources) {
                 Application.Current.Resources[keyValuePair.Key] = keyValuePair.Value;
             }

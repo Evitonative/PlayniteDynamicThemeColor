@@ -91,6 +91,7 @@ namespace DynamicThemeColor.UI.Views {
             Game currentGame = addon.PlayniteApi.MainView.SelectedGames?.FirstOrDefault();
             addon.ThemingEngine.PaletteCache.Clear();
             FilterRegistry.ClearFilterCaches();
+            addon.ThemingEngine.UnapplyPalette();
             addon.ThemingEngine.ApplyPalette(currentGame);
         }
 
