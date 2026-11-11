@@ -319,12 +319,7 @@ namespace DynamicThemeColor.UI.Views {
             }
         }
 
-        public string DisplayName {
-            get {
-                FilterDescriptor descriptor = FilterRegistry.GetFilter(Configuration.FilterId);
-                return descriptor?.Name ?? "Unknown Filter";
-            }
-        }
+        public string DisplayName => FilterRegistry.CreateInstance(Configuration).Name;
 
         public void EditFilter() {
             EnsureStronglyTypedSettings();
@@ -365,6 +360,7 @@ namespace DynamicThemeColor.UI.Views {
             }
 
             IsEnabled = viewModel.IsEnabled;
+            OnPropertyChanged(nameof(DisplayName));
         }
 
         private void EnsureStronglyTypedSettings() {
