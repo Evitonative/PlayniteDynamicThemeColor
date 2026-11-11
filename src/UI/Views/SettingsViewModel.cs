@@ -319,7 +319,7 @@ namespace DynamicThemeColor.UI.Views {
             }
         }
 
-        public string DisplayName => FilterRegistry.CreateInstance(Configuration).Name;
+        public string DisplayName => FilterRegistry.CreateInstance(Configuration)?.Name ?? "Unknown Filter";
 
         public void EditFilter() {
             EnsureStronglyTypedSettings();
@@ -333,7 +333,7 @@ namespace DynamicThemeColor.UI.Views {
 
             window.Title = string.Format(
                 ResourceProvider.GetString("LOCDTCFilterSettingsWindowTitel"),
-                FilterRegistry.CreateInstance(Configuration).Name);
+                DisplayName);
             window.Width = 550;
             window.MinWidth = 400;
             window.SizeToContent = SizeToContent.Height;
@@ -365,7 +365,7 @@ namespace DynamicThemeColor.UI.Views {
 
         private void EnsureStronglyTypedSettings() {
             if (!(Configuration.Settings is JObject jObj)) return;
-            Type correctType = FilterRegistry.CreateInstance(Configuration).SettingsObject?.GetType();
+            Type correctType = FilterRegistry.CreateInstance(Configuration)?.SettingsObject?.GetType();
             Configuration.Settings = jObj.ToObject(correctType);
         }
 
