@@ -9,58 +9,62 @@
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" PrivateAssets="All" ExcludeAssets="runtime"/>
         <PackageReference Include="MaterialColorUtilities" Version="0.3.0"/>
-        <PackageReference Include="Newtonsoft.Json" Version="10.0.3" PrivateAssets="All"/>
-        <PackageReference Include="PlayniteSDK" Version="6.17.0"/>
-    </ItemGroup>
+        <!--
+        No Warn Added because playnite is using 10.0.3 as of 2026-11-11, using a higher version breaks loding the addon.
+        Once Playnite updates NoWarn should be removed.
+         -->
+       <PackageReference Include="Newtonsoft.Json" Version="10.0.3" PrivateAssets="All" NoWarn="NU1903"/>
+       <PackageReference Include="PlayniteSDK" Version="6.17.0"/>
+   </ItemGroup>
 
-    <ItemGroup>
-        <None Include="extension.yaml">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        
-        <None Include="Localization/*.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <SubType>Designer</SubType>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        
-        <None Include="THIRD-PARTY-LICENSE.txt">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
+   <ItemGroup>
+       <None Include="extension.yaml">
+           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+       </None>
 
-    <ItemGroup>
-        <Resource Include="assets/img/icon.ico" />
-        
-        <None Update="assets/img/**/*">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+       <None Include="Localization/*.xaml">
+           <Generator>MSBuild:Compile</Generator>
+           <SubType>Designer</SubType>
+           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+       </None>
 
-        <None Update="assets/schemes/**/*">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
+       <None Include="THIRD-PARTY-LICENSE.txt">
+           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+       </None>
+   </ItemGroup>
 
-    <ItemGroup>
-        <Reference Include="System.Windows.Forms"/>
-        <Reference Include="System.ComponentModel.DataAnnotations"/>
-    </ItemGroup>
+   <ItemGroup>
+       <Resource Include="assets/img/icon.ico" />
 
-    <ItemGroup>
-        <Page Update="src/UI/**/*.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <XamlRuntime>Wpf</XamlRuntime>
-            <SubType>Designer</SubType>
-        </Page>
-    </ItemGroup>
+       <None Update="assets/img/**/*">
+           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+       </None>
 
-    <ItemGroup>
-        <Compile Remove="src/Filters/RandomBrushColorFilter.cs" Condition="'$(Configuration)' == 'Release'" />
-        <Compile Remove="src/Filters/PinkSeedFilter.cs" Condition="'$(Configuration)' == 'Release'" />
-    </ItemGroup>
+       <None Update="assets/schemes/**/*">
+           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+       </None>
+   </ItemGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <DebugType>none</DebugType>
-        <DebugSymbols>false</DebugSymbols>
-    </PropertyGroup>
+   <ItemGroup>
+       <Reference Include="System.Windows.Forms"/>
+       <Reference Include="System.ComponentModel.DataAnnotations"/>
+   </ItemGroup>
+
+   <ItemGroup>
+       <Page Update="src/UI/**/*.xaml">
+           <Generator>MSBuild:Compile</Generator>
+           <XamlRuntime>Wpf</XamlRuntime>
+           <SubType>Designer</SubType>
+       </Page>
+   </ItemGroup>
+
+   <ItemGroup>
+       <Compile Remove="src/Filters/RandomBrushColorFilter.cs" Condition="'$(Configuration)' == 'Release'" />
+       <Compile Remove="src/Filters/PinkSeedFilter.cs" Condition="'$(Configuration)' == 'Release'" />
+   </ItemGroup>
+
+   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+       <DebugType>none</DebugType>
+       <DebugSymbols>false</DebugSymbols>
+   </PropertyGroup>
 </Project>
