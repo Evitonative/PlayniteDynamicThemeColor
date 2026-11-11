@@ -101,10 +101,10 @@
     <sys:String x:Key="LOCDTCContextWhitelistGameAdded">Game successfully whitelisted. You can remove game from the whitelist in the filters tab of the Dynamic Theme Color plugin settings. (Shift-click to not show this message)</sys:String>
     <sys:String x:Key="LOCDTCContextBlacklistGameFailed">Failed to blacklist game.</sys:String>
     <sys:String x:Key="LOCDTCContextWhitelistGameFailed">Failed to whitelist game.</sys:String>
-    <sys:String x:Key="LOCDTCContextBlacklistGameDuplicate">The game is already blacklisted. Blacklist it again?</sys:String>
-    <sys:String x:Key="LOCDTCContextWhitelistGameDuplicate">The game is already whitelisted. Whitelist it again?</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGameDuplicate">The game is already blacklisted. Do you want to unblacklist it instead? If the game is not currently blacklisted for you, click yes and try blacklisting it again.</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGameDuplicate">The game is already whitelisted. Do you want to unwhitelist it instead? If the game is not currently whitelisted for you, click yes and try whitelisting it again.</sys:String>
     <sys:String x:Key="LOCDTCContextOverrideGameSeed">Override Game Color</sys:String>
-    <sys:String x:Key="LOCDTCContextOverrideGameSeedPreviousFound">The game already has it's color overriden. Do you want to update the existing entry?</sys:String>
+    <sys:String x:Key="LOCDTCContextOverrideGameSeedPreviousFound">The game already has it's color overriden. Do you want to override the existing entry?</sys:String>
 
 
     <!-- Generics -->

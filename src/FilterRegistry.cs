@@ -33,6 +33,7 @@ namespace DynamicThemeColor {
             return filter;
         }
 
+        [CanBeNull]
         public static SchemeFilter CreateInstance([NotNull] FilterConfiguration config) {
             SchemeFilter filter = CreateSimpleInstance(config.FilterId);
             if (filter == null) return null;

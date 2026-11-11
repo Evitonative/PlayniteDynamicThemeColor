@@ -90,50 +90,45 @@ namespace DynamicThemeColor {
                     if (game == null) return;
 
                     Guid filterId = Guid.Parse(GameOverrideSeedColor.FilterId);
-                    GameOverrideSeedColorSettings oldInstanceSettings = AddonSettings.SeedFilters
+                    bool exists = AddonSettings.SeedFilters
                         .Where(f => f.FilterId == filterId)
                         .Select(FilterRegistry.CreateInstance)
                         .Select(f => f?.SettingsObject)
                         .Where(f => f != null)
                         .OfType<GameOverrideSeedColorSettings>()
-                        .Where(f => {
-                            if (!Guid.TryParse(f.GameId, out Guid id)) return false;
-                            return id == game.Id;
-                        })
-                        .LastOrDefault();
+                        .Any(s => Guid.TryParse(s.GameId, out Guid id) && id == game.Id);
 
-                     if(!MaterialColorHelper.ExecutePickColor(out string newColor)) return;
-
-                    if (oldInstanceSettings != null) {
+                    if (exists) {
                         MessageBoxResult result = PlayniteApi.Dialogs.ShowMessage(
                             ResourceProvider.GetString("LOCDTCContextOverrideGameSeedPreviousFound"),
                             ResourceProvider.GetString("LOCDTCContextOverrideGameSeed"),
                             MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 
-                        if (result == MessageBoxResult.Cancel) return;
-                        if (result != MessageBoxResult.Yes) oldInstanceSettings = null;
+                        if (result != MessageBoxResult.Yes) return;
+
+                        AddonSettings.SeedFilters.RemoveAll(f =>
+                            f.FilterId == filterId &&
+                            FilterRegistry.CreateInstance(f)?.SettingsObject is GameOverrideSeedColorSettings s &&
+                            Guid.TryParse(s.GameId, out Guid id) &&
+                            id == game.Id);
                     }
 
-                    GameOverrideSeedColorSettings settings = oldInstanceSettings;
-                    if (oldInstanceSettings == null) {
-                        SchemeFilter simpleInstance = FilterRegistry.CreateSimpleInstance(filterId);
-                        if (!(simpleInstance?.SettingsObject is GameOverrideSeedColorSettings newSettings)) return;
-                        settings = newSettings;
-                    }
+                    if(!MaterialColorHelper.ExecutePickColor(out string newColor)) return;
+
+                    SchemeFilter simpleInstance = FilterRegistry.CreateSimpleInstance(filterId);
+                    if (!(simpleInstance?.SettingsObject is GameOverrideSeedColorSettings settings)) return;
 
                     settings.GameId = game.Id.ToString();
                     settings.GameName = game.Name;
                     settings.Hex = newColor;
 
-                    if (oldInstanceSettings == null) {
-                        FilterConfiguration config = new FilterConfiguration {
-                            FilterId = filterId,
-                            IsEnabled = true,
-                            Settings = settings,
-                        };
+                    FilterConfiguration config = new FilterConfiguration {
+                        FilterId = filterId,
+                        IsEnabled = true,
+                        Settings = settings,
+                    };
 
-                        AddonSettings.SeedFilters.Add(config);
-                    }
+                    AddonSettings.SeedFilters.Add(config);
                     SettingsView.EndEditRefresh();
                 },
                 MenuSection = menuRoot,
@@ -155,7 +150,17 @@ namespace DynamicThemeColor {
                 MessageBoxResult result = PlayniteApi.Dialogs.ShowMessage(
                     dialogTitleMessage, dialogTitle,
                     MessageBoxButton.YesNo, MessageBoxImage.Question);
+
                 if (result != MessageBoxResult.Yes) return null;
+
+                AddonSettings.GameFilters.RemoveAll(f =>
+                    f.FilterId == filterId &&
+                    FilterRegistry.CreateInstance(f)?.SettingsObject is GameContextMenuAddedFilterSettings s &&
+                    Guid.TryParse(s.GameId, out Guid id) &&
+                    id == game.Id);
+
+                SettingsView.EndEditRefresh();
+                return null;
             }
 
             SchemeFilter simpleInstance = FilterRegistry.CreateSimpleInstance(filterId);
