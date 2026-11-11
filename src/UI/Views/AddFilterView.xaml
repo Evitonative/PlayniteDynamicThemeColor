@@ -77,17 +77,32 @@
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="{DynamicResource LOCDTCGenericSelect}"
-                    IsDefault="True"
-                    Width="80"
-                    Command="{Binding SelectCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-            <Button Content="{DynamicResource LOCDTCGenericCancel}"
-                    IsCancel="True"
-                    Margin="{StaticResource Layout.Spacing.Between}"
-                    Width="80" />
-        </StackPanel>
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                <CheckBox Content="{DynamicResource LOCDTCFilterSelectEditNow}"
+                          IsChecked="{Binding EditOnAdd, Mode=TwoWay}"
+                          VerticalAlignment="Center" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="{DynamicResource LOCDTCGenericSelect}"
+                        IsDefault="True"
+                        Width="80"
+                        Command="{Binding SelectCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+
+                <Button Content="{DynamicResource LOCDTCGenericCancel}"
+                        IsCancel="True"
+                        Margin="{StaticResource Layout.Spacing.Between}"
+                        Width="80" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

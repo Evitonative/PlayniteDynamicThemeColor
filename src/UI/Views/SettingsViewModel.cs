@@ -229,22 +229,25 @@ namespace DynamicThemeColor.UI.Views {
                 Settings = filterInstance.SettingsObject
             };
 
+            FilterItemViewModel itemVm = new FilterItemViewModel(config, addon.PlayniteApi);
             switch (stage) {
                 case FilterStage.Game:
-                    GameFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
+                    GameFilters.Add(itemVm);
                     break;
                 case FilterStage.Seed:
-                    SeedFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
+                    SeedFilters.Add(itemVm);
                     break;
                 case FilterStage.Palette:
-                    PaletteFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
+                    PaletteFilters.Add(itemVm);
                     break;
                 case FilterStage.Brush:
-                    BrushFilters.Add(new FilterItemViewModel(config, addon.PlayniteApi));
+                    BrushFilters.Add(itemVm);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(stage), stage, null);
             }
+
+            if (viewModel.EditOnAdd) itemVm.EditFilter();
         }
 
         private void ExecuteClearCache() {

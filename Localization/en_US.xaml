@@ -82,6 +82,7 @@
     <sys:String x:Key="LOCDTCFilterSelectWindowTitel">Select Filter</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectDescription">Select the filter for the filter stage {0}.</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectEditNow">Edit Filter after adding it</sys:String>
 
     <!-- Filter Settings Dialog -->
     <sys:String x:Key="LOCDTCFilterSettingsWindowTitel">Filter Settings | {0}</sys:String>
@@ -105,7 +106,6 @@
     <sys:String x:Key="LOCDTCContextWhitelistGameDuplicate">The game is already whitelisted. Do you want to unwhitelist it instead? If the game is not currently whitelisted for you, click yes and try whitelisting it again.</sys:String>
     <sys:String x:Key="LOCDTCContextOverrideGameSeed">Override Game Color</sys:String>
     <sys:String x:Key="LOCDTCContextOverrideGameSeedPreviousFound">The game already has it's color overriden. Do you want to override the existing entry?</sys:String>
-
 
     <!-- Generics -->
     <sys:String x:Key="LOCDTCGenericCancel">Cancel</sys:String>

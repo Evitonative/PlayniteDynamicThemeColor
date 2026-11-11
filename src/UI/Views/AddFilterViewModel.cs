@@ -15,6 +15,13 @@ namespace DynamicThemeColor.UI.Views {
             get => selectedItem;
             set => SetValue(ref selectedItem, value);
         }
+
+        private bool editOnAdd = true;
+        public bool EditOnAdd {
+            get => editOnAdd;
+            set => SetValue(ref editOnAdd, value);
+        }
+
         public RelayCommand<Window> SelectCommand { get; }
 
         public AddFilterViewModel(IEnumerable<FilterDescriptor> candidates, FilterStage stage) {
