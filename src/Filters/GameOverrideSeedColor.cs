@@ -34,7 +34,7 @@ namespace DynamicThemeColor.Filters {
         [ColorSetting(
             Label = "Hex Color",
             Tooltip = "Seed color used for the game.")]
-        public string Hex { get; [UsedImplicitly] set; } = "#1cd8fc";
+        public string Hex { get; [UsedImplicitly] set; } = "#80FF80";
 
     }
 }

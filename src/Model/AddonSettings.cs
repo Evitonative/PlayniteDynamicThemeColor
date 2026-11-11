@@ -73,7 +73,7 @@ namespace DynamicThemeColor.Model {
             set => SetValue(ref colorSelectionRange, value);
         }
 
-        private string fallbackSeedColor = "#1cd8fc";
+        private string fallbackSeedColor = "#80FF80";
         public string FallbackSeedColor {
             get => fallbackSeedColor;
             set => SetValue(ref fallbackSeedColor, value);
