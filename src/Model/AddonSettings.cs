@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DynamicThemeColor.Model.Filters;
 using MaterialColorUtilities.Palettes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 // ReSharper disable RedundantDefaultMemberInitializer
 namespace DynamicThemeColor.Model {
@@ -62,6 +64,7 @@ namespace DynamicThemeColor.Model {
 
         // Extraction & Fallback Defaults
         private Style paletteStyle = Style.TonalSpot;
+        [JsonConverter(typeof(StringEnumConverter))]
         public Style PaletteStyle {
             get => paletteStyle;
             set => SetValue(ref paletteStyle, value);
