@@ -65,3 +65,8 @@ nunit-*.xml
 
 # Icon Design
 /assets/design
+
+# IDE specific
+.idea
+.vs
+.vscode
