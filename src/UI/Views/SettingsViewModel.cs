@@ -54,8 +54,11 @@ namespace DynamicThemeColor.UI.Views {
         public SettingsViewModel(Addon addon) {
             this.addon = addon;
 
-            PickColorCommand = new RelayCommand(() =>
-                addon.AddonSettings.FallbackSeedColor = MaterialColorHelper.ExecutePickColor(addon.AddonSettings.FallbackSeedColor));
+            PickColorCommand = new RelayCommand(() => {
+                if (MaterialColorHelper.ExecutePickColor(out string color, defaultColor: addon.AddonSettings.FallbackSeedColor))
+                    return;
+                addon.AddonSettings.FallbackSeedColor = color;
+            });
 
             AddGameFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Game));
             AddSeedFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Seed));

@@ -101,6 +101,7 @@
     <sys:String x:Key="LOCDTCContextWhitelistGameAdded">Spiel erfolgreich gewhitelisted. Du kannst den Filter jederzeit in den Addon-Einstellungen von Dynamic Theme Color im Tab Filter entfernen. (Shift-Click halten um diese Nachricht zu überspringen)</sys:String>
     <sys:String x:Key="LOCDTCContextBlacklistGameFailed">Spiel konnte nicht geblacklisted werden.</sys:String>
     <sys:String x:Key="LOCDTCContextWhitelistGameFailed">Spiel konnte nicht gewhitelisted werden.</sys:String>
+    <sys:String x:Key="LOCDTCContextOverrideGameSeed">Spiel Farbe Überschreiben</sys:String>
 
     <!-- Generic Buttons & Tooltips -->
     <sys:String x:Key="LOCDTCGenericDTC">Dynamic Theme Color</sys:String>

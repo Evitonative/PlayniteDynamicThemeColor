@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 
 namespace DynamicThemeColor.Filters {
-    public abstract class GameBlackWhitelistFilter {
+    public abstract class GameContextMenuAddedFilterSettings {
         [StringSetting(
             Label = "Game ID",
             Tooltip = "You can get this by right clicking a game > Dynamic Theme Color > Copy Game ID")]

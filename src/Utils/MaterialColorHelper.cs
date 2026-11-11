@@ -80,10 +80,10 @@ namespace DynamicThemeColor.Utils {
             }
         }
 
-        public static string ExecutePickColor(string color) {
+        public static bool ExecutePickColor(out string newColor, string defaultColor = null) {
             using (ColorDialog dialog = new ColorDialog()) {
                 try {
-                    if (ColorConverter.ConvertFromString(color) is Color c) {
+                    if (defaultColor != null && ColorConverter.ConvertFromString(defaultColor) is Color c) {
                         dialog.Color = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
                     }
                 } catch {
@@ -91,11 +91,13 @@ namespace DynamicThemeColor.Utils {
                 }
 
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    color = $"#{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";
+                    newColor = $"#{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";
+                    return true;
                 }
             }
 
-            return color;
+            newColor = string.Empty;
+            return false;
         }
     }
 

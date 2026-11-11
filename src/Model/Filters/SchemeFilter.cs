@@ -155,7 +155,7 @@ namespace DynamicThemeColor.Model.Filters {
     }
 
     public abstract class SchemeFilter<TSettings> : SchemeFilter where TSettings : class, new() {
-        public TSettings Settings { get; private set; } = new TSettings();
+        protected TSettings Settings { get; private set; } = new TSettings();
 
         internal override object SettingsObject {
             get => Settings;

@@ -148,7 +148,7 @@ namespace DynamicThemeColor.UI.Views {
         private void ExecuteColorPicker() {
             if (prop.PropertyType != typeof(string) || SettingType != typeof(ColorSetting)) return;
 
-            string color = MaterialColorHelper.ExecutePickColor(Value as string);
+            if(!MaterialColorHelper.ExecutePickColor(out string color, defaultColor: Value as string)) return;
             Value = color;
         }
 

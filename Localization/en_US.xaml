@@ -44,7 +44,6 @@
     <sys:String x:Key="LOCDTCSchemeSourceCustom">Custom</sys:String>
 
     <!-- Filters Tab -->
-
     <sys:String x:Key="LOCDTCFiltersGameFilters">Game Filter</sys:String>
     <sys:String x:Key="LOCDTCFiltersGameFiltersHint">Game filters can be used to exclude a game from having its palette applied.</sys:String>
     <sys:String x:Key="LOCDTCFiltersSeedFilters">Seed Filters</sys:String>
@@ -102,6 +101,11 @@
     <sys:String x:Key="LOCDTCContextWhitelistGameAdded">Game successfully whitelisted. You can remove game from the whitelist in the filters tab of the Dynamic Theme Color plugin settings. (Shift-click to not show this message)</sys:String>
     <sys:String x:Key="LOCDTCContextBlacklistGameFailed">Failed to blacklist game.</sys:String>
     <sys:String x:Key="LOCDTCContextWhitelistGameFailed">Failed to whitelist game.</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGameDuplicate">The game is already blacklisted. Blacklist it again?</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGameDuplicate">The game is already whitelisted. Whitelist it again?</sys:String>
+    <sys:String x:Key="LOCDTCContextOverrideGameSeed">Override Game Color</sys:String>
+    <sys:String x:Key="LOCDTCContextOverrideGameSeedPreviousFound">The game already has it's color overriden. Do you want to update the existing entry?</sys:String>
+
 
     <!-- Generics -->
     <sys:String x:Key="LOCDTCGenericCancel">Cancel</sys:String>
