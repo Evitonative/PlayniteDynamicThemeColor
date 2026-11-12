@@ -19,7 +19,7 @@ namespace DynamicThemeColor.UI.Views {
             set => SetValue(ref selectedItem, value);
         }
 
-        private bool editOnAdd = true;
+        private bool editOnAdd;
         public bool EditOnAdd {
             get => editOnAdd;
             set => SetValue(ref editOnAdd, value);
@@ -27,11 +27,12 @@ namespace DynamicThemeColor.UI.Views {
 
         public RelayCommand<Window> SelectCommand { get; }
 
-        public AddFilterViewModel(IEnumerable<FilterDescriptorNew> candidates, FilterStage stage) {
+        public AddFilterViewModel(IEnumerable<FilterDescriptorNew> candidates, FilterStage stage, bool editOnAdd) {
             Candidates = candidates
                 .Select(c => new FilterCandidateViewModel(c.Attribute))
                 .ToList();
             SelectedItem = null;
+            EditOnAdd = editOnAdd;
 
             DescriptionMessage = string.Format(
                 ResourceProvider.GetString("LOCDTCFilterSelectDescription"), stage);

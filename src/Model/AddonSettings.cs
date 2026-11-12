@@ -120,8 +120,15 @@ namespace DynamicThemeColor.Model {
             set => SetValue(ref brushFilters, value);
         }
 
+        private bool editFilterAfterAdding = true;
+        public bool EditFilterAfterAdding {
+            get => editFilterAfterAdding;
+            set => SetValue(ref editFilterAfterAdding, value);
+        }
+
         // Advanced
         private bool cacheDisabled = false;
+
         public bool CacheDisabled {
             get => cacheDisabled;
             set => SetValue(ref cacheDisabled, value);

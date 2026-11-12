@@ -261,7 +261,7 @@ namespace DynamicThemeColor.UI.Views {
                 new Uri("pack://application:,,,/DynamicThemeColor;component/assets/img/icon.ico", UriKind.Absolute)
             );
 
-            AddFilterViewModel viewModel = new AddFilterViewModel(compatibleFilters, stage);
+            AddFilterViewModel viewModel = new AddFilterViewModel(compatibleFilters, stage, Settings.EditFilterAfterAdding);
             AddFilterView selectorView = new AddFilterView { DataContext = viewModel };
             window.Content = selectorView;
 
@@ -313,6 +313,7 @@ namespace DynamicThemeColor.UI.Views {
                     throw new ArgumentOutOfRangeException(nameof(stage), stage, null);
             }
 
+            Settings.EditFilterAfterAdding = viewModel.EditOnAdd;
             if (viewModel.EditOnAdd) itemVm.EditFilter();
         }
 
