@@ -128,7 +128,6 @@ namespace DynamicThemeColor.Model {
 
         // Advanced
         private bool cacheDisabled = false;
-
         public bool CacheDisabled {
             get => cacheDisabled;
             set => SetValue(ref cacheDisabled, value);

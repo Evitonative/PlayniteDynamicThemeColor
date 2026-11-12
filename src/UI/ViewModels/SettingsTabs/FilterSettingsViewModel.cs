@@ -4,33 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using DynamicThemeColor.Model;
 using DynamicThemeColor.Model.Filters;
-using DynamicThemeColor.Utils;
+using DynamicThemeColor.UI.Views;
 using Playnite.SDK;
-using Playnite.SDK.Data;
-using Playnite.SDK.Models;
-using Style = MaterialColorUtilities.Palettes.Style;
 
-namespace DynamicThemeColor.UI.Views {
-    public class SettingsViewModel : ObservableObject, ISettings {
-        private readonly Addon addon;
-        private readonly ILogger logger = LogManager.GetLogger();
-        private AddonSettings EditingClone { get; set; }
-
-        // General Tab
-        public AddonSettings Settings => addon.AddonSettings;
-        public Array AvailableStyles { get; } = Enum.GetValues(typeof(Style));
-        public RelayCommand PickColorCommand { get; }
-
-        // Schemes Tab
-        public ObservableCollection<SchemeItemViewModel> ActiveSchemes { get; } = new ObservableCollection<SchemeItemViewModel>();
-        public ObservableCollection<SchemeItemViewModel> OtherSchemes { get; } = new ObservableCollection<SchemeItemViewModel>();
-        public bool HasOtherSchemes => OtherSchemes.Count > 0;
-
-        // Filters Tab
+namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
+    public class FilterSettingsViewModel : ISettings {
         public ObservableCollection<FilterItemViewModel> GameFilters { get; set; } = new ObservableCollection<FilterItemViewModel>();
         public ObservableCollection<FilterItemViewModel> SeedFilters { get; set; } = new ObservableCollection<FilterItemViewModel>();
         public ObservableCollection<FilterItemViewModel> PaletteFilters { get; set; } = new ObservableCollection<FilterItemViewModel>();
@@ -42,82 +23,38 @@ namespace DynamicThemeColor.UI.Views {
         public RelayCommand AddPaletteFilterCommand { get; }
         public RelayCommand AddBrushFilterCommand { get; }
 
-        // Advanced Tab
-        public ObservableCollection<CachedGameItemViewModel> CachedGames { get; } = new ObservableCollection<CachedGameItemViewModel>();
-        public int CachedGamesCount => addon.ThemingEngine.PaletteCache.Count;
-        public RelayCommand ClearCacheCommand { get; }
-        public RelayCommand<CachedGameItemViewModel> RemoveCachedGameCommand { get; }
+        public AddonSettings Settings {
+            get => addon.AddonSettings;
+            set => addon.AddonSettings = value;
+        }
 
-        public ICommand ClearSchemeThemeCombinationsCommand { get; }
-        public ICommand ReprepareSchemesCommand { get; }
-        public ICommand RefreshBrushesCommand { get; }
+        private readonly ILogger logger = LogManager.GetLogger();
+        private readonly Addon addon;
 
-        public ICommand ReloadFiltersCommand { get; }
-        public ICommand RefreshFilterInstancesCommand { get; }
-
-        public SettingsViewModel(Addon addon) {
+        public FilterSettingsViewModel(Addon addon) {
             this.addon = addon;
-
-            PickColorCommand = new RelayCommand(() => {
-                if (MaterialColorHelper.ExecutePickColor(out string color, defaultColor: addon.AddonSettings.FallbackSeedColor))
-                    return;
-                addon.AddonSettings.FallbackSeedColor = color;
-            });
 
             AddGameFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Game));
             AddSeedFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Seed));
             AddPaletteFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Palette));
             AddBrushFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Brush));
 
-            ClearCacheCommand = new RelayCommand(ExecuteClearCache);
-            RemoveCachedGameCommand = new RelayCommand<CachedGameItemViewModel>(ExecuteRemoveCachedItem);
-            ClearSchemeThemeCombinationsCommand = new RelayCommand(ExecuteClearSchemeThemeCombinations);
-            ReprepareSchemesCommand = new RelayCommand(ExecuteReprepareSchemes);
-            RefreshBrushesCommand = new RelayCommand(ExecuteRefreshBrushes);
-
-            ReloadFiltersCommand = new RelayCommand(ExecuteRefreshFilter);
-            RefreshFilterInstancesCommand = new RelayCommand(ExecuteRefreshFilterInstances);
-
-            LoadSchemeCollections();
-            RefreshCachedGames();
             WarmupFilterInstances();
         }
 
         public void BeginEdit() {
-            logger.Debug("Settings editing session started (BeginEdit). Creating editing clone.");
+            sessionAddedInstances.Clear();
             LoadFilterCollections();
-            EditingClone = Serialization.GetClone(addon.AddonSettings);
-            RefreshCachedGames();
-            sessionAddedInstances.Clear();
-        }
-
-        public void CancelEdit() {
-            logger.Debug("Settings editing session cancelled (CancelEdit). Reverting changes.");
-
-            foreach (Guid instanceId in sessionAddedInstances) {
-                FilterRegistry.RemoveFilterInstance(instanceId);
-            }
-            sessionAddedInstances.Clear();
-
-            addon.AddonSettings = EditingClone;
         }
 
         public void EndEdit() {
-            logger.Debug("Settings editing session committed (EndEdit). Saving settings and refreshing SchemeEngine.");
             sessionAddedInstances.Clear();
             SaveFilterCollections();
-            EndEditRefresh();
         }
 
-        public void EndEditRefresh() {
-            addon.SavePluginSettings(addon.AddonSettings);
-            addon.SchemeEngine.RefreshBrushes();
-
-            Game currentGame = addon.PlayniteApi.MainView.SelectedGames?.FirstOrDefault();
-            addon.ThemingEngine.PaletteCache.Clear();
-            FilterRegistry.ClearFilterCaches();
-            addon.ThemingEngine.UnapplyPalette();
-            addon.ThemingEngine.ApplyPalette(currentGame);
+        public void CancelEdit() {
+            foreach (Guid instanceId in sessionAddedInstances) FilterRegistry.RemoveFilterInstance(instanceId);
+            sessionAddedInstances.Clear();
         }
 
         public bool VerifySettings(out List<string> errors) {
@@ -125,29 +62,7 @@ namespace DynamicThemeColor.UI.Views {
             return true;
         }
 
-        public void LoadSchemeCollections() {
-            logger.Trace("Reloading active and other scheme collections for UI view.");
-            ActiveSchemes.Clear();
-            OtherSchemes.Clear();
-
-            SchemeEngine engine = addon.SchemeEngine;
-            if (engine?.RegisteredSchemes == null ) return;
-
-            if (engine.ActiveSchemeChain != null)
-                foreach (Guid schemeId in engine.ActiveSchemeChain)
-                    if (engine.RegisteredSchemes.TryGetValue(schemeId, out RegisteredColorScheme scheme))
-                        ActiveSchemes.Add(new SchemeItemViewModel(scheme, () => addon.AddonSettings));
-
-            foreach (SchemeItemViewModel itemVm
-                     in from kvp in engine.RegisteredSchemes
-                     let schemeName = kvp.Key
-                     let scheme = kvp.Value
-                     let itemVm = new SchemeItemViewModel(scheme, () => addon.AddonSettings)
-                     where engine.ActiveSchemeChain == null || !engine.ActiveSchemeChain.Contains(schemeName) select itemVm)
-                OtherSchemes.Add(itemVm);
-        }
-
-        private void WarmupFilterInstances() {
+        public void WarmupFilterInstances() {
             FilterRegistry.ClearFilterInstances();
             foreach (FilterConfiguration config in Settings.GameFilters) WarmupFilter(config);
             foreach (FilterConfiguration config in Settings.SeedFilters) WarmupFilter(config);
@@ -188,12 +103,11 @@ namespace DynamicThemeColor.UI.Views {
 
             BrushFilters.Clear();
             if (Settings.BrushFilters == null) return;
-                foreach (FilterConfiguration config in Settings.BrushFilters) {
-                    FilterItemViewModel vm = FilterSettingsListToVm(config);
-                    if (vm != null) BrushFilters.Add(vm);
-                }
+            foreach (FilterConfiguration config in Settings.BrushFilters) {
+                FilterItemViewModel vm = FilterSettingsListToVm(config);
+                if (vm != null) BrushFilters.Add(vm);
+            }
         }
-
 
         private FilterItemViewModel FilterSettingsListToVm(FilterConfiguration config) {
             if (!FilterRegistry.TryGetFilterInstance(config.InstanceId, out SchemeFilter instance)) return null;
@@ -206,18 +120,6 @@ namespace DynamicThemeColor.UI.Views {
             Settings.SeedFilters = SeedFilters.Select(vm => vm.Instance.FilterConfiguration).ToObservable();
             Settings.PaletteFilters = PaletteFilters.Select(vm => vm.Instance.FilterConfiguration).ToObservable();
             Settings.BrushFilters = BrushFilters.Select(vm => vm.Instance.FilterConfiguration).ToObservable();
-        }
-
-        private void RefreshCachedGames() {
-            CachedGames.Clear();
-            foreach (Guid gameId in addon.ThemingEngine.PaletteCache.GetCachedGameIds()) {
-                Game game = addon.PlayniteApi.Database.Games.Get(gameId);
-                if (game != null)
-                    CachedGames.Add(new CachedGameItemViewModel(gameId, game.Name));
-            }
-
-            OnPropertyChanged(nameof(CachedGamesCount));
-            OnPropertyChanged(nameof(CachedGames));
         }
 
         private void ExecuteAddFilter(FilterStage stage) {
@@ -316,66 +218,6 @@ namespace DynamicThemeColor.UI.Views {
             Settings.EditFilterAfterAdding = viewModel.EditOnAdd;
             if (viewModel.EditOnAdd) itemVm.EditFilter();
         }
-
-        private void ExecuteClearCache() {
-            addon.ThemingEngine.PaletteCache.Clear();
-            FilterRegistry.ClearFilterCaches();
-            RefreshCachedGames();
-        }
-
-        private void ExecuteRemoveCachedItem(CachedGameItemViewModel item) {
-            if (item == null) return;
-            addon.ThemingEngine.PaletteCache.Remove(item.GameId);
-            RefreshCachedGames();
-        }
-
-        private void ExecuteClearSchemeThemeCombinations() {
-            addon.AddonSettings.RememberedSchemeForThemes.Clear();
-        }
-
-        private void ExecuteReprepareSchemes() {
-            addon.SchemeEngine.PrepareSchemes();
-        }
-
-        private void ExecuteRefreshBrushes() {
-            addon.SchemeEngine.RefreshBrushes();
-        }
-
-        private static void ExecuteRefreshFilter() {
-            FilterRegistry.ReloadFilters();
-        }
-
-        private void ExecuteRefreshFilterInstances() {
-            WarmupFilterInstances();
-        }
-    }
-
-    public class CachedGameItemViewModel {
-        public Guid GameId { get; }
-        public string GameName { get; }
-
-        public CachedGameItemViewModel(Guid gameId, string gameName) {
-            GameId = gameId;
-            GameName = gameName;
-        }
-    }
-
-    public class SchemeItemViewModel {
-        public RegisteredColorScheme Scheme { get; }
-        public Dictionary<string, bool> OptionsDictionary { get; }
-
-        public SchemeItemViewModel(RegisteredColorScheme scheme, Func<AddonSettings> addonSettings) {
-            AddonSettings settings = addonSettings();
-            Scheme = scheme;
-
-            settings.SchemeOptionOverrides = settings.SchemeOptionOverrides ?? new Dictionary<Guid, Dictionary<string, bool>>();
-
-            if (!settings.SchemeOptionOverrides.TryGetValue(scheme.Scheme.Id, out Dictionary<string, bool> dict)) {
-                dict = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
-                settings.SchemeOptionOverrides[scheme.Scheme.Id] = dict;
-            }
-            OptionsDictionary = dict;
-        }
     }
 
     public class FilterItemViewModel : ObservableObject, IEditableItem {
@@ -426,8 +268,8 @@ namespace DynamicThemeColor.UI.Views {
             );
             window.Loaded += (sender, args) => window.MaxHeight = double.PositiveInfinity;
 
-            FilterSettingsViewModel viewModel = new FilterSettingsViewModel(filterSettingsClone, FilterConfiguration);
-            FilterSettingsView selectorView = new FilterSettingsView { DataContext = viewModel };
+            FilterInstanceSettingsViewModel viewModel = new FilterInstanceSettingsViewModel(filterSettingsClone, FilterConfiguration);
+            FilterInstanceSettingsView selectorView = new FilterInstanceSettingsView { DataContext = viewModel };
             window.Content = selectorView;
 
             bool? result = window.ShowDialog();

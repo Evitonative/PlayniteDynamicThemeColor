@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using DynamicThemeColor.Model;
+using DynamicThemeColor.UI.ViewModels;
 using DynamicThemeColor.UI.Views;
 using Newtonsoft.Json;
 using Playnite.SDK;

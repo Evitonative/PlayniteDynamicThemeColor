@@ -3,11 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:views="clr-namespace:DynamicThemeColor.UI.Views"
-             xmlns:model="clr-namespace:DynamicThemeColor"
+             xmlns:vm="clr-namespace:DynamicThemeColor.UI.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="250" d:DesignWidth="550"
-             d:DataContext="{d:DesignInstance Type=views:AddFilterViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=vm:AddFilterViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -48,7 +47,7 @@
                             <GridViewColumn Header="{DynamicResource LOCDTCFilterSelectColumnName}" Width="250">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock d:DataContext="{d:DesignInstance Type=views:FilterCandidateViewModel}"
+                                        <TextBlock d:DataContext="{d:DesignInstance Type=vm:FilterCandidateViewModel}"
                                                    Text="{Binding Name}"
                                                    VerticalAlignment="Center" />
                                     </DataTemplate>
@@ -58,7 +57,7 @@
                             <GridViewColumn Header="{DynamicResource LOCDTCGenericColumnAuthor}" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock d:DataContext="{d:DesignInstance Type=views:FilterCandidateViewModel}"
+                                        <TextBlock d:DataContext="{d:DesignInstance Type=vm:FilterCandidateViewModel}"
                                                    Text="{Binding Author}"
                                                    VerticalAlignment="Center" />
                                     </DataTemplate>
@@ -68,7 +67,7 @@
                             <GridViewColumn Header="{DynamicResource LOCDTCGenericColumnVersion}" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock d:DataContext="{d:DesignInstance Type=views:FilterCandidateViewModel}"
+                                        <TextBlock d:DataContext="{d:DesignInstance Type=vm:FilterCandidateViewModel}"
                                                    Text="{Binding Version}"
                                                    VerticalAlignment="Center" />
                                     </DataTemplate>

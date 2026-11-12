@@ -4,7 +4,7 @@ using System.Windows;
 using DynamicThemeColor.Model;
 using Playnite.SDK;
 
-namespace DynamicThemeColor.UI.Views {
+namespace DynamicThemeColor.UI.ViewModels {
     public class SchemeSelectorViewModel : ObservableObject {
         public IEnumerable<RegisteredColorScheme> Candidates { get; }
         public string DescriptionMessage { get; }

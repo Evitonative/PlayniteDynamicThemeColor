@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
              xmlns:model="clr-namespace:DynamicThemeColor.Model"
-             xmlns:views="clr-namespace:DynamicThemeColor.UI.Views"
+             xmlns:vm="clr-namespace:DynamicThemeColor.UI.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="250" d:DesignWidth="550"
-             d:DataContext="{d:DesignInstance Type=views:SchemeSelectorViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=vm:SchemeSelectorViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

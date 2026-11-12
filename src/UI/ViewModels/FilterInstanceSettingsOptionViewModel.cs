@@ -9,8 +9,8 @@ using DynamicThemeColor.Model.Filters;
 using DynamicThemeColor.Utils;
 using Playnite.SDK;
 
-namespace DynamicThemeColor.UI.Views {
-    public sealed class FilterSettingsItemViewModel : INotifyPropertyChanged {
+namespace DynamicThemeColor.UI.ViewModels {
+    public sealed class FilterInstanceSettingsOptionViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
 
         private readonly object targetObject;
@@ -132,7 +132,7 @@ namespace DynamicThemeColor.UI.Views {
         public ICommand ResetCommand { get; }
         public ICommand PickColorCommand { get; }
 
-        public FilterSettingsItemViewModel(object targetObject, PropertyInfo prop, FilterSettingAttribute attr) {
+        public FilterInstanceSettingsOptionViewModel(object targetObject, PropertyInfo prop, FilterSettingAttribute attr) {
             this.targetObject = targetObject;
             this.prop = prop;
             this.attr = attr;
@@ -166,7 +166,7 @@ namespace DynamicThemeColor.UI.Views {
         public DataTemplate EnumTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
-            if (!(item is FilterSettingsItemViewModel vm)) return null;
+            if (!(item is FilterInstanceSettingsOptionViewModel vm)) return null;
 
             if (vm.SettingType == typeof(IntSliderSetting))
                 return IntSliderTemplate;

@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
              xmlns:rl="clr-namespace:DynamicThemeColor.UI.Components.RankableList"
-             xmlns:views="clr-namespace:DynamicThemeColor.UI.Views"
+             xmlns:vm="clr-namespace:DynamicThemeColor.UI.ViewModels.SettingsTabs"
              mc:Ignorable="d" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance Type=views:SettingsViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=vm:GeneralSettingsViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

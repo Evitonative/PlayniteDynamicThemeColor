@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:tabs="clr-namespace:DynamicThemeColor.UI.Views.SettingsTabs"
-             xmlns:views="clr-namespace:DynamicThemeColor.UI.Views"
+             xmlns:vm="clr-namespace:DynamicThemeColor.UI.ViewModels"
              mc:Ignorable="d" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance Type=views:SettingsViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=vm:SettingsViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,19 +17,19 @@
 
     <TabControl>
         <TabItem Header="{DynamicResource LOCDTCTabGeneral}">
-            <tabs:GeneralSettingsView />
+            <tabs:GeneralSettingsView DataContext="{Binding General}" />
         </TabItem>
 
         <TabItem Header="{DynamicResource LOCDTCTabSchemes}">
-            <tabs:SchemeSettingsView />
+            <tabs:SchemeSettingsView DataContext="{Binding Schemes}" />
         </TabItem>
 
         <TabItem Header="{DynamicResource LOCDTCTabFilters}">
-            <tabs:FilterSettingsView />
+            <tabs:FilterSettingsView DataContext="{Binding Filters}" />
         </TabItem>
 
         <TabItem Header="{DynamicResource LOCDTCTabAdvanced}">
-            <tabs:AdvancedSettingsView />
+            <tabs:AdvancedSettingsView DataContext="{Binding Advanced}" />
         </TabItem>
     </TabControl>
 </UserControl>

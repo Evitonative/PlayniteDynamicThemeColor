@@ -7,11 +7,10 @@ using DynamicThemeColor.Model.Filters;
 using JetBrains.Annotations;
 using Playnite.SDK;
 
-namespace DynamicThemeColor.UI.Views
-{
-    public class FilterSettingsViewModel {
-        public ObservableCollection<FilterSettingsItemViewModel> FilterSettingsItems { get; } =
-            new ObservableCollection<FilterSettingsItemViewModel>();
+namespace DynamicThemeColor.UI.ViewModels {
+    public class FilterInstanceSettingsViewModel {
+        public ObservableCollection<FilterInstanceSettingsOptionViewModel> FilterSettingsItems { get; } =
+            new ObservableCollection<FilterInstanceSettingsOptionViewModel>();
 
         [CanBeNull] public object FilterSettings { get; }
         public bool IsEnabled { get; set; }
@@ -21,7 +20,7 @@ namespace DynamicThemeColor.UI.Views
         public RelayCommand<Window> SaveCommand { get; }
         public ICommand ResetAllCommand { get; }
 
-        public FilterSettingsViewModel([CanBeNull] object editingSettings, FilterConfiguration configuration) {
+        public FilterInstanceSettingsViewModel([CanBeNull] object editingSettings, FilterConfiguration configuration) {
             FilterSettings = editingSettings;
             IsEnabled = configuration.IsEnabled;
 
@@ -38,12 +37,12 @@ namespace DynamicThemeColor.UI.Views
             FilterSettingsItems.Clear();
             foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
                 FilterSettingAttribute attr = prop.GetCustomAttribute<FilterSettingAttribute>();
-                if (attr != null) FilterSettingsItems.Add(new FilterSettingsItemViewModel(FilterSettings, prop, attr));
+                if (attr != null) FilterSettingsItems.Add(new FilterInstanceSettingsOptionViewModel(FilterSettings, prop, attr));
             }
         }
 
         private void ExecuteResetAll() {
-            foreach (FilterSettingsItemViewModel item in FilterSettingsItems) item.Reset();
+            foreach (FilterInstanceSettingsOptionViewModel item in FilterSettingsItems) item.Reset();
         }
 
         private static void ExecuteSave(Window window) {

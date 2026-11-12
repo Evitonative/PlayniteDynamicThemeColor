@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Windows.Controls;
 using DynamicThemeColor.Model;
-using DynamicThemeColor.UI.Views;
+using DynamicThemeColor.UI.ViewModels;
 using DynamicThemeColor.UI.Views.Settings;
 using JetBrains.Annotations;
 using Playnite.SDK;
@@ -29,7 +29,7 @@ namespace DynamicThemeColor {
             set {
                 addonSettings = value;
                 SettingsView.OnPropertyChanged();
-                SettingsView.LoadSchemeCollections();
+                SettingsView.Schemes.LoadSchemeCollections();
             }
         }
 

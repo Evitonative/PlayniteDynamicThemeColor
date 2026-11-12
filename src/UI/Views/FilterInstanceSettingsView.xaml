@@ -1,13 +1,13 @@
-﻿<UserControl x:Class="DynamicThemeColor.UI.Views.FilterSettingsView"
+﻿<UserControl x:Class="DynamicThemeColor.UI.Views.FilterInstanceSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:DynamicThemeColor.UI.Views"
              xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
+             xmlns:vm="clr-namespace:DynamicThemeColor.UI.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="250" d:DesignWidth="550"
-             d:DataContext="{d:DesignInstance Type=local:FilterSettingsViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=vm:FilterInstanceSettingsViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,7 +17,7 @@
 
             <DataTemplate x:Key="SliderTemplate">
                 <Grid VerticalAlignment="Center"
-                      d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}">
+                      d:DataContext="{d:DesignInstance Type=vm:FilterInstanceSettingsOptionViewModel}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" MinWidth="45" />
@@ -36,13 +36,13 @@
             <DataTemplate x:Key="BoolTemplate">
                 <CheckBox IsChecked="{Binding Value, Mode=TwoWay}"
                           VerticalAlignment="Center" HorizontalAlignment="Left"
-                          d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
+                          d:DataContext="{d:DesignInstance Type=vm:FilterInstanceSettingsOptionViewModel}" />
             </DataTemplate>
 
             <DataTemplate x:Key="StringTemplate">
                 <TextBox Text="{Binding Value, Mode=TwoWay}"
                          VerticalAlignment="Center"
-                         d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
+                         d:DataContext="{d:DesignInstance Type=vm:FilterInstanceSettingsOptionViewModel}" />
             </DataTemplate>
 
             <DataTemplate x:Key="ColorTemplate">
@@ -55,7 +55,7 @@
                     <TextBox Grid.Column="0"
                              Text="{Binding Value, Mode=TwoWay}"
                              VerticalAlignment="Center"
-                             d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}"/>
+                             d:DataContext="{d:DesignInstance Type=vm:FilterInstanceSettingsOptionViewModel}"/>
                     <Button Grid.Column="1"
                             Command="{Binding PickColorCommand}"
                             Padding="0"
@@ -67,12 +67,12 @@
                             VerticalContentAlignment="Stretch"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}">
+                            d:DataContext="{d:DesignInstance Type=vm:FilterInstanceSettingsOptionViewModel}">
                         <Border CornerRadius="{DynamicResource ControlCornerRadius}"
                                 Background="{Binding Value}"
                                 BorderBrush="{DynamicResource PanelSeparatorBrush}"
                                 BorderThickness="{DynamicResource ControlBorderThickness}"
-                                d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
+                                d:DataContext="{d:DesignInstance Type=vm:FilterInstanceSettingsOptionViewModel}" />
                     </Button>
                 </Grid>
             </DataTemplate>
@@ -81,10 +81,10 @@
                 <ComboBox ItemsSource="{Binding EnumValues}"
                           SelectedItem="{Binding Value, Mode=TwoWay}"
                           VerticalAlignment="Center" HorizontalAlignment="Stretch"
-                          d:DataContext="{d:DesignInstance Type=local:FilterSettingsItemViewModel}" />
+                          d:DataContext="{d:DesignInstance Type=vm:FilterInstanceSettingsOptionViewModel}" />
             </DataTemplate>
 
-            <local:SettingTemplateSelector
+            <vm:SettingTemplateSelector
                 x:Key="SettingSelector"
                 IntSliderTemplate="{StaticResource SliderTemplate}"
                 DoubleSliderTemplate="{StaticResource SliderTemplate}"

@@ -4,10 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:c="clr-namespace:DynamicThemeColor.UI.Components"
-             xmlns:settings="clr-namespace:DynamicThemeColor.UI.Views.Settings"
-             xmlns:views="clr-namespace:DynamicThemeColor.UI.Views"
+             xmlns:vm="clr-namespace:DynamicThemeColor.UI.ViewModels.SettingsTabs"
              mc:Ignorable="d" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance Type=views:SettingsViewModel, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=vm:SchemeSettingsViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

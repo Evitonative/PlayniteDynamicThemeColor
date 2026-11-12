@@ -7,7 +7,7 @@ using DynamicThemeColor.Model.Filters;
 using JetBrains.Annotations;
 using Playnite.SDK;
 
-namespace DynamicThemeColor.UI.Views {
+namespace DynamicThemeColor.UI.ViewModels {
     public class AddFilterViewModel : ObservableObject {
         public List<FilterCandidateViewModel> Candidates { get; }
         public string DescriptionMessage { get; }
