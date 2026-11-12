@@ -75,7 +75,6 @@
         <Button Grid.Column="5" Content="▾"
                 Style="{StaticResource ToolbarButton}"
                 ToolTip="{DynamicResource LOCDTCAssetPriorityMoveDownHint}"
-                Margin="{StaticResource Layout.Spacing.BetweenTrailing}"
                 Visibility="{Binding ReorderingEnabled, ElementName=Root, Converter={StaticResource BoolToVis}}"
                 Command="{Binding MoveDownCommand, ElementName=Root}" />
     </Grid>
