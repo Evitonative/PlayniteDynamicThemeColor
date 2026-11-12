@@ -49,6 +49,22 @@
                 Visibility="{Binding EditingEnabled, ElementName=Root, Converter={StaticResource BoolToVis}}"
                 Command="{Binding EditCommand, ElementName=Root}" />
 
+        <ItemsControl Grid.Column="3"
+                      ItemsSource="{Binding AdditionalButtons, ElementName=Root}"
+                      HorizontalAlignment="{Binding AdditionalButtonsAlignment, ElementName=Root}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="Button" BasedOn="{StaticResource ToolbarButton}">
+                    <Setter Property="Margin" Value="{StaticResource Layout.Spacing.BetweenTrailing}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+
         <Button Grid.Column="4" Content="▴"
                 Style="{StaticResource ToolbarButton}"
                 ToolTip="{DynamicResource LOCDTCAssetPriorityMoveUpHint}"

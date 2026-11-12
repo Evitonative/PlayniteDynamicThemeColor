@@ -1,13 +1,31 @@
 ﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using DynamicThemeColor.Model;
 using Playnite.SDK;
 
 namespace DynamicThemeColor.UI.Components.RankableList {
     public partial class RankableToolbarHeader {
+        public static readonly DependencyProperty AdditionalButtonsProperty = DependencyProperty.Register(
+            nameof(AdditionalButtons), typeof(ObservableCollection<Button>), typeof(RankableToolbarHeader), new PropertyMetadata(null));
+
+        public ObservableCollection<Button> AdditionalButtons {
+            get => (ObservableCollection<Button>)GetValue(AdditionalButtonsProperty);
+            set => SetValue(AdditionalButtonsProperty, value);
+        }
+
+        public static readonly DependencyProperty AdditionalButtonsAlignmentProperty = DependencyProperty.Register(
+            nameof(AdditionalButtonsAlignment), typeof(HorizontalAlignment), typeof(RankableToolbarHeader), new PropertyMetadata(HorizontalAlignment.Left));
+
+        public HorizontalAlignment AdditionalButtonsAlignment {
+            get { return (HorizontalAlignment)GetValue(AdditionalButtonsAlignmentProperty); }
+            set { SetValue(AdditionalButtonsAlignmentProperty, value); }
+        }
+
         public static readonly DependencyProperty ListBodyProperty = DependencyProperty.Register(
-            nameof(ListBody), typeof(RankableListBody), typeof(RankableToolbarHeader), new PropertyMetadata(default(RankableListBody)));
+            nameof(ListBody), typeof(RankableListBody), typeof(RankableToolbarHeader), new PropertyMetadata(null));
 
         public RankableListBody ListBody {
             get { return (RankableListBody)GetValue(ListBodyProperty); }
@@ -19,8 +37,9 @@ namespace DynamicThemeColor.UI.Components.RankableList {
         public ICommand MoveUpCommand { get; }
         public ICommand MoveDownCommand { get; }
 
-
         public RankableToolbarHeader() {
+            AdditionalButtons = new ObservableCollection<Button>();
+
             RemoveCommand = new RelayCommand(RemoveItem, CanRemoveItem);
             EditCommand = new RelayCommand(EditItem, CanEditItem);
             MoveUpCommand = new RelayCommand(MoveItemUp, CanMoveItemUp);
