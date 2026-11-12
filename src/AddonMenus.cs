@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using DynamicThemeColor.Core;
 using DynamicThemeColor.Filters;
 using DynamicThemeColor.Model.Filters;
 using DynamicThemeColor.Utils;
@@ -16,9 +17,9 @@ namespace DynamicThemeColor {
         public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs menuItemsArgs) {
             string menuRoot = ResourceProvider.GetString("LOCDTCContextMain");
 
-            Guid? blacklistFilterId = typeof(GameBlacklistFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
-            Guid? whitelistFilterId = typeof(GameWhitelistFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
-            Guid? seedOverrideFilterId = typeof(GameOverrideSeedColor).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
+            Guid? blacklistFilterId = typeof(BlacklistFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
+            Guid? whitelistFilterId = typeof(WhitelistFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
+            Guid? seedOverrideFilterId = typeof(OverrideSeedFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
 
             yield return new GameMenuItem {
                 Description = ResourceProvider.GetString("LOCDTCContextCopyGameId"),
@@ -49,7 +50,7 @@ namespace DynamicThemeColor {
                         .Where(f => f != null)
                         .Select(f => f.FilterConfiguration?.Settings)
                         .Where(f => f != null)
-                        .OfType<GameOverrideSeedColorSettings>()
+                        .OfType<OverrideSeedColorSettings>()
                         .Any(s => Guid.TryParse(s.GameId, out Guid id) && id == game.Id);
 
                     if (exists) {
@@ -64,7 +65,7 @@ namespace DynamicThemeColor {
                             .Where(f => f.FilterId == filterId)
                             .Where(f => {
                                 if (!FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance)) return false;
-                                if (!(instance.FilterConfiguration?.Settings is GameOverrideSeedColorSettings s)) return false;
+                                if (!(instance.FilterConfiguration?.Settings is OverrideSeedColorSettings s)) return false;
                                 if (!Guid.TryParse(s.GameId, out Guid id)) return false;
                                 return id == game.Id;
                             }).ToList();
@@ -74,12 +75,12 @@ namespace DynamicThemeColor {
                         }
                     }
 
-                    if(!MaterialColorHelper.ExecutePickColor(out string newColor)) return;
+                    if(!ColorPicker.ExecutePickColor(out string newColor)) return;
 
                     FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId);
                     if (filterConfig == null) return;
                     if (!FilterRegistry.TryGetFilterInstance(filterConfig.InstanceId, out SchemeFilter filterInstance)) return;
-                    if (!(filterInstance.FilterConfiguration?.Settings is GameOverrideSeedColorSettings settings)) return;
+                    if (!(filterInstance.FilterConfiguration?.Settings is OverrideSeedColorSettings settings)) return;
 
                     settings.GameId = game.Id.ToString();
                     settings.GameName = game.Name;
@@ -132,7 +133,7 @@ namespace DynamicThemeColor {
                 .Where(f => f != null)
                 .Select(f => f.FilterConfiguration?.Settings)
                 .Where(f => f != null)
-                .OfType<GameContextMenuAddedFilterSettings>()
+                .OfType<ContextMenuAddedFilterSettings>()
                 .Any(s => Guid.TryParse(s.GameId, out Guid id) && id == game.Id);
 
             if (exists) {
@@ -146,7 +147,7 @@ namespace DynamicThemeColor {
                     .Where(f => f.FilterId == filterId)
                     .Where(f => {
                         if (!FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance)) return false;
-                        if (!(instance.FilterConfiguration?.Settings is GameContextMenuAddedFilterSettings s)) return false;
+                        if (!(instance.FilterConfiguration?.Settings is ContextMenuAddedFilterSettings s)) return false;
                         if (!Guid.TryParse(s.GameId, out Guid id)) return false;
                         return id == game.Id;
                     }).ToList();
@@ -163,7 +164,7 @@ namespace DynamicThemeColor {
             FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId);
             if (filterConfig == null) return false;
             if (!FilterRegistry.TryGetFilterInstance(filterConfig.InstanceId, out SchemeFilter filterInstance)) return false;
-            if (!(filterInstance.FilterConfiguration?.Settings is GameContextMenuAddedFilterSettings settings)) return false;
+            if (!(filterInstance.FilterConfiguration?.Settings is ContextMenuAddedFilterSettings settings)) return false;
 
             settings.GameId = game.Id.ToString();
             settings.GameName = game.Name;

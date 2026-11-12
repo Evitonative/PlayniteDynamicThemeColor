@@ -10,11 +10,9 @@ using Playnite.SDK.Models;
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
     [SchemeFilter("bf7c519b-1a3e-4f0e-8c97-7292dfc04323",
-        "Saturation Filter", "Evito", 1,
+        "Saturation", "Evito", 1,
         "Adjust the saturation for the primary color.")]
     public class SaturationFilter : SchemeFilter<SaturationFilterSettings> {
-        public override string Name => "Saturation Filter";
-
         public override uint ApplySeedFilter(uint currentSeed, ColorExtractionResults colorExtractionResults, Game game,
             IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
             return AdjustSaturation(currentSeed, Settings.Saturation);

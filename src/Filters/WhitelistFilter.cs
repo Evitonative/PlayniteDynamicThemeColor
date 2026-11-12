@@ -8,7 +8,7 @@ namespace DynamicThemeColor.Filters {
     [SchemeFilter("aa174ae3-8842-487d-8f28-eb5a9c9eee6c",
         "Whitelist Game", "Evito", 1,
         "Include a game.")]
-    public class GameWhitelistFilter : SchemeFilter<GameWhitelistSettings> {
+    public class WhitelistFilter : SchemeFilter<WhitelistSettings> {
         public override string Name {
             get => "Whitelist " + (!string.IsNullOrWhiteSpace(Settings.GameName) ? Settings.GameName : "Game");
         }
@@ -25,6 +25,6 @@ namespace DynamicThemeColor.Filters {
         }
     }
 
-    public class GameWhitelistSettings : GameContextMenuAddedFilterSettings {
+    public class WhitelistSettings : ContextMenuAddedFilterSettings {
     }
 }

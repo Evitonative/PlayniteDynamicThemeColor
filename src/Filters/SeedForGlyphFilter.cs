@@ -9,7 +9,7 @@ using Playnite.SDK.Models;
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
     [SchemeFilter("2a3c1e2c-3cf2-4d64-b3d2-76412c8923dc",
-        "Original Color for Accents", "Evito", 1,
+        "Original Color For Accents", "Evito", 1,
         "Made for the built-in default and Harmony schemes.\n" +
         "Colorful elements like play buttons and checkmarks will use the exact color\n" +
         "pulled from the image instead of blending into the background theme.\n\n" +

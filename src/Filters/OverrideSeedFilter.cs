@@ -9,13 +9,11 @@ using Playnite.SDK.Models;
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
     [SchemeFilter("679d71ea-63a3-424f-9d03-ebfb3c5490d8",
-        "Custom Color for Games", "Evito", 1,
+        "Seed Color Override", "Evito", 1,
         "Override the seed color of a game.")]
-    public class GameOverrideSeedColor : SchemeFilter<GameOverrideSeedColorSettings> {
+    public class OverrideSeedFilter : SchemeFilter<OverrideSeedColorSettings> {
         private const uint fallbackColor = 0xFF1CD8FC;
-        public override string Name{
-            get => "Custom Color for " + (!string.IsNullOrWhiteSpace(Settings.GameName) ? Settings.GameName : "Games");
-        }
+        public override string Name => "Seed Color Override for " + (!string.IsNullOrWhiteSpace(Settings.GameName) ? Settings.GameName : "Games");
 
         public override uint ApplySeedFilter(uint currentSeed, ColorExtractionResults colorExtractionResults, Game game,
             IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
@@ -23,11 +21,11 @@ namespace DynamicThemeColor.Filters {
                 game == null ||
                 game.Id != Guid.Parse(Settings.GameId)) return currentSeed;
 
-            return MaterialColorHelper.ConvertHexToArgb(Settings.Hex) ?? fallbackColor;
+            return ColorConverters.ConvertHexToArgb(Settings.Hex) ?? fallbackColor;
         }
     }
 
-    public class GameOverrideSeedColorSettings : GameContextMenuAddedFilterSettings {
+    public class OverrideSeedColorSettings : ContextMenuAddedFilterSettings {
         [ColorSetting(
             Label = "Hex Color",
             Tooltip = "Seed color used for the game.")]

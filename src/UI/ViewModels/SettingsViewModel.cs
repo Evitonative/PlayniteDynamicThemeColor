@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DynamicThemeColor.Core;
 using DynamicThemeColor.Model;
 using DynamicThemeColor.UI.ViewModels.SettingsTabs;
 using Playnite.SDK;

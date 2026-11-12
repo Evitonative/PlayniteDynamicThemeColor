@@ -5,7 +5,7 @@ using System.Reflection;
 using DynamicThemeColor.Model.Filters;
 using JetBrains.Annotations;
 
-namespace DynamicThemeColor {
+namespace DynamicThemeColor.Core {
     public static class FilterRegistry {
         private static readonly Dictionary<Guid, FilterDescriptorNew> filters =
             new Dictionary<Guid, FilterDescriptorNew>();

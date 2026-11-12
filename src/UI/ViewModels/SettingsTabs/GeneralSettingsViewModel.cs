@@ -38,7 +38,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
         }
 
         private void ExecuteColorPicker() {
-            if (MaterialColorHelper.ExecutePickColor(out string color, defaultColor: Settings.FallbackSeedColor)) return;
+            if (ColorPicker.ExecutePickColor(out string color, defaultColor: Settings.FallbackSeedColor)) return;
             Settings.FallbackSeedColor = color;
         }
     }

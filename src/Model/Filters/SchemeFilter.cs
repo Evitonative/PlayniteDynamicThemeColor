@@ -14,11 +14,11 @@ namespace DynamicThemeColor.Model.Filters {
         /// This will be shown to the user.
         /// </summary>
         [CanBeNull]
-        public virtual string Name { get; }
+        public virtual string Name => null;
 
         [CanBeNull]
         [JsonIgnore]
-        public virtual FilterConfiguration FilterConfiguration { get; set; }
+        public virtual FilterConfiguration FilterConfiguration { get; internal set; }
 
         /// <summary>
         /// Prefilter Games before anything is done for a game.
@@ -130,7 +130,7 @@ namespace DynamicThemeColor.Model.Filters {
         private FilterConfiguration filterConfiguration;
         public override FilterConfiguration FilterConfiguration {
             get => filterConfiguration;
-            set {
+            internal set {
                 filterConfiguration = value;
                 if (value == null) return;
                 switch (value.Settings) {

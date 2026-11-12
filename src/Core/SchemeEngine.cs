@@ -10,7 +10,7 @@ using DynamicThemeColor.UI.Views;
 using Newtonsoft.Json;
 using Playnite.SDK;
 
-namespace DynamicThemeColor {
+namespace DynamicThemeColor.Core {
     public class SchemeEngine {
         private const string bundledSchemesFolderName = "assets/schemes";
         private const string themeSchemeFileName = "dtc-scheme.json";

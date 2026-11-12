@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
 using System.Windows.Controls;
+using DynamicThemeColor.Core;
 using DynamicThemeColor.Model;
 using DynamicThemeColor.UI.ViewModels;
-using DynamicThemeColor.UI.Views.Settings;
+using DynamicThemeColor.UI.Views;
 using JetBrains.Annotations;
 using Playnite.SDK;
 using Playnite.SDK.Events;

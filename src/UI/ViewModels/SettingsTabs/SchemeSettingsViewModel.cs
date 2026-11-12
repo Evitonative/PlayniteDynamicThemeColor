@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using DynamicThemeColor.Core;
 using DynamicThemeColor.Model;
 using Playnite.SDK;
 

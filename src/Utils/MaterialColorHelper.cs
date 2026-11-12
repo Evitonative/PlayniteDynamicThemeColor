@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using JetBrains.Annotations;
 using MaterialColorUtilities.Palettes;
 using MaterialColorUtilities.Quantize;
 using MaterialColorUtilities.Score;
-using Color = System.Windows.Media.Color;
 
 namespace DynamicThemeColor.Utils {
     public static class MaterialColorHelper {
@@ -27,9 +25,9 @@ namespace DynamicThemeColor.Utils {
             if (rankedColors.Count == 0) return new ColorExtractionResults(quantiserResult);
 
             List<uint> topColors = rankedColors.Take(maxColors).ToList();
-            if (maxColors <= 1) return new ColorExtractionResults(quantiserResult, rankedColors, maxColors, 0);
+            if (maxColors <= 1) return new ColorExtractionResults(quantiserResult, rankedColors, 0);
             int index = (int)(Math.Abs((long)hasCode) % topColors.Count);
-            return new ColorExtractionResults(quantiserResult, rankedColors, maxColors, index);
+            return new ColorExtractionResults(quantiserResult, rankedColors, index);
         }
 
         private static FormatConvertedBitmap GetFormatConvertedBitmap(string filePath) {
@@ -63,69 +61,23 @@ namespace DynamicThemeColor.Utils {
             brush.Freeze();
             return brush;
         }
-
-        public static uint? ConvertHexToArgb(string hex) {
-            if (string.IsNullOrEmpty(hex) || !hex.StartsWith("#")) return null;
-
-            string cleanHex = hex.Substring(1);
-
-            if (!uint.TryParse(cleanHex, System.Globalization.NumberStyles.HexNumber, null, out uint argb)) return null;
-            switch (cleanHex.Length) {
-                case 6:
-                    return 0xFF000000 | argb;
-                case 8:
-                    return argb;
-                default:
-                    return null;
-            }
-        }
-
-        public static bool ExecutePickColor(out string newColor, string defaultColor = null) {
-            using (ColorDialog dialog = new ColorDialog()) {
-                try {
-                    if (defaultColor != null && ColorConverter.ConvertFromString(defaultColor) is Color c) {
-                        dialog.Color = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
-                    }
-                } catch {
-                    // ignored
-                }
-
-                if (dialog.ShowDialog() == DialogResult.OK) {
-                    newColor = $"#{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";
-                    return true;
-                }
-            }
-
-            newColor = string.Empty;
-            return false;
-        }
     }
 
     public class ColorExtractionResults {
         [CanBeNull] public IReadOnlyDictionary<uint, uint> QuantiserResult { get; }
-        [NotNull] public IReadOnlyList<uint> RankedColors  { get; }
-        public int ColorIndex { get; }
-        public int ColorCount { get; }
-        [NotNull] public List<uint> TopColors => RankedColors.Take(ColorCount).ToList();
+        [NotNull] private IReadOnlyList<uint> RankedColors  { get; }
+        private int ColorIndex { get; }
         public uint SeedColor => RankedColors.ElementAt(ColorIndex);
 
-        public ColorExtractionResults(Dictionary<uint, uint> quantiserResult, List<uint> rankedColors,int colorCount, int colorIndex) {
+        public ColorExtractionResults(Dictionary<uint, uint> quantiserResult, List<uint> rankedColors, int colorIndex) {
             QuantiserResult = quantiserResult;
             RankedColors = rankedColors;
-            ColorCount = colorCount;
             ColorIndex = colorIndex;
         }
 
         public ColorExtractionResults(Dictionary<uint, uint> quantiserResult) {
             QuantiserResult = quantiserResult;
             RankedColors = new List<uint> { 0 };
-            ColorCount = 1;
-            ColorIndex = 0;
-        }
-
-        public ColorExtractionResults(uint argb) {
-            RankedColors = new List<uint> { argb };
-            ColorCount = 1;
             ColorIndex = 0;
         }
     }

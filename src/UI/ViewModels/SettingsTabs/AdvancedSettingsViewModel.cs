@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using DynamicThemeColor.Core;
 using DynamicThemeColor.Model;
 using Playnite.SDK;
 using Playnite.SDK.Models;

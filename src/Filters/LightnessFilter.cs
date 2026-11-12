@@ -10,7 +10,7 @@ using Playnite.SDK.Models;
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
     [SchemeFilter("6afe64ec-78b8-4bb5-bb74-09bd3a20b085",
-        "Lightness Filter", "Evito", 1,
+        "Lightness", "Evito", 1,
         "Adjust the saturation for the primary color.")]
     public class LightnessFilter : SchemeFilter<LightnessFilterSettings> {
         public override uint ApplySeedFilter(uint currentSeed, ColorExtractionResults colorExtractionResults, Game game,

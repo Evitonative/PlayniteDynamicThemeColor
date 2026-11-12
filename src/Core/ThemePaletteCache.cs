@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using DynamicThemeColor.Model;
 
-namespace DynamicThemeColor.Utils {
+namespace DynamicThemeColor.Core {
     public class ThemePaletteCache {
         private readonly Func<AddonSettings> addonSettings;
         private readonly ConcurrentDictionary<Guid, ThemePalette> cache =
@@ -28,9 +28,8 @@ namespace DynamicThemeColor.Utils {
             cache[gameId] = palette;
         }
 
-        public ThemePalette Remove(Guid gameId) {
-            cache.TryRemove(gameId, out ThemePalette palette);
-            return palette;
+        public void Remove(Guid gameId) {
+            cache.TryRemove(gameId, out ThemePalette _);
         }
 
         public void Clear() {

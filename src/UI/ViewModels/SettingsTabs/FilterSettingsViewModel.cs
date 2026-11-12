@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using DynamicThemeColor.Core;
 using DynamicThemeColor.Model;
 using DynamicThemeColor.Model.Filters;
 using DynamicThemeColor.UI.Views;

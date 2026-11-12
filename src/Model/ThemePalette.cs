@@ -1,20 +1,16 @@
 ﻿using System.Collections.Generic;
-using DynamicThemeColor.Model;
 using MaterialColorUtilities.Palettes;
 using Playnite.SDK;
 
-namespace DynamicThemeColor.Utils {
+namespace DynamicThemeColor.Model {
     public class ThemePalette {
         private readonly ILogger logger =  LogManager.GetLogger();
         private readonly CorePalette corePalette;
         private readonly Dictionary<ColorScheme.MaterialPalette, Dictionary<uint, uint>> overriddenTones =
             new Dictionary<ColorScheme.MaterialPalette, Dictionary<uint, uint>>();
 
-        public uint SeedColor { get; }
-
-        public ThemePalette(CorePalette corePalette, uint seed) {
+        public ThemePalette(CorePalette corePalette) {
             this.corePalette = corePalette;
-            SeedColor = seed;
         }
 
         public uint GetColor(ColorScheme.MaterialPalette palette, uint tone) {

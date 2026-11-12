@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using DynamicThemeColor.Model;
+using DynamicThemeColor.Core;
 using DynamicThemeColor.Model.Filters;
 using JetBrains.Annotations;
 using Playnite.SDK;

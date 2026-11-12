@@ -12,7 +12,7 @@ using Playnite.SDK.Models;
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
     [SchemeFilter("dc90aca7-ce80-4867-bc05-229ae6fc6963",
-        "Monochrome Filter", "Evito", 1,
+        "Monochrome", "Evito", 1,
         "Detect sepia and black and white artwork and color them appropriately instead of cyan.")]
     public class MonochromeFilter : SchemeFilter<MonochromeFilterSettings> {
         private const uint sepiaArgbFallback = 0xFFFF7A00;
@@ -29,7 +29,7 @@ namespace DynamicThemeColor.Filters {
 
             if (game != null && !addonSettings().CacheDisabled) {
                 if (bwGames.Contains(game.Id) || otherGames.Contains(game.Id)) return FilterDefault();
-                if (sepiaGames.Contains(game.Id)) return MaterialColorHelper.ConvertHexToArgb(Settings.SepiaHex) ?? sepiaArgbFallback;
+                if (sepiaGames.Contains(game.Id)) return ColorConverters.ConvertHexToArgb(Settings.SepiaHex) ?? sepiaArgbFallback;
             }
 
             switch (GetMonochromeType(colorExtractionResults.QuantiserResult)) {
@@ -40,7 +40,7 @@ namespace DynamicThemeColor.Filters {
                 case MonochromeType.Sepia:
                     if (!addonSettings().CacheDisabled && game != null)
                         sepiaGames.Add(game.Id);
-                    return MaterialColorHelper.ConvertHexToArgb(Settings.SepiaHex) ?? sepiaArgbFallback;
+                    return ColorConverters.ConvertHexToArgb(Settings.SepiaHex) ?? sepiaArgbFallback;
                 case MonochromeType.None:
                     if (!addonSettings().CacheDisabled && game != null)
                         otherGames.Add(game.Id);

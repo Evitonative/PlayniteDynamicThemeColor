@@ -12,8 +12,7 @@ using MaterialColorUtilities.Palettes;
 using Playnite.SDK;
 using Playnite.SDK.Models;
 
-namespace DynamicThemeColor {
-    // TODO: per game overrides for at least seed from settings/other gui
+namespace DynamicThemeColor.Core {
     public class ThemingEngine {
         private readonly IPlayniteAPI playniteApi;
         private readonly Func<AddonSettings> addonSettings;
@@ -70,7 +69,7 @@ namespace DynamicThemeColor {
             uint filteredSeed = ApplySeedFilters(colorExtractionResults, game);
 
             CorePalette palette = MaterialColorHelper.GetPalette(filteredSeed, settings.PaletteStyle);
-            ThemePalette themePalette = new ThemePalette(palette, filteredSeed);
+            ThemePalette themePalette = new ThemePalette(palette);
             ApplyPaletteFilters(themePalette, colorExtractionResults, game);
 
             PaletteCache.Set(game.Id, themePalette);
@@ -83,7 +82,7 @@ namespace DynamicThemeColor {
                 uint fallbackSeed = ConvertHexToArgb(settings.FallbackSeedColor);
 
                 CorePalette palette = MaterialColorHelper.GetPalette(fallbackSeed, settings.PaletteStyle);
-                ApplyResolvedTheme(new ThemePalette(palette, fallbackSeed));
+                ApplyResolvedTheme(new ThemePalette(palette));
                 return;
             }
 
@@ -175,7 +174,7 @@ namespace DynamicThemeColor {
         }
 
         private static uint ConvertHexToArgb(string hex) {
-            return MaterialColorHelper.ConvertHexToArgb(hex) ?? 0xFFFFFFFF;
+            return ColorConverters.ConvertHexToArgb(hex) ?? 0xFFFFFFFF;
         }
 
         private static uint GetMaterialColorValue(ColorScheme.MaterialColor mat, ThemePalette palette) {
