@@ -17,6 +17,7 @@
 
             <DataTemplate DataType="{x:Type vm:FilterItemViewModel}">
                 <TextBlock Text="{Binding DisplayName}"
+                           ToolTip="{Binding Tooltip}"
                            VerticalAlignment="Center">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
@@ -25,6 +26,15 @@
                                     <Setter Property="Foreground" Value="{DynamicResource TextBrushDarker}"/>
                                     <Setter Property="TextDecorations" Value="Strikethrough"/>
                                 </DataTrigger>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsEnabled}" Value="False"/>
+                                        <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextBrushDark}"/>
+                                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
@@ -55,12 +65,22 @@
                             Margin="{StaticResource Layout.Spacing.Between}"
                             ListBody="{Binding ElementName=GameListBody}"
                             EditingEnabled="True" RemovingEnabled="True"
-                            AddCommand="{Binding AddGameFilterCommand}"/>
+                            AddCommand="{Binding AddGameFilterCommand}">
+
+                            <rl:RankableToolbarHeader.AdditionalButtons>
+                                <Button Content="⏻"
+                                        ToolTip="{DynamicResource LOCDTCFiltersEnableDisableFilterButtonHint}"
+                                        Command="{Binding UpdateGameFilterEnabledCommand}"/>
+                            </rl:RankableToolbarHeader.AdditionalButtons>
+                        </rl:RankableToolbarHeader>
                     </Grid>
                 </GroupBox.Header>
 
                 <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
-                    <rl:RankableListBody ItemsSource="{Binding GameFilters}" x:Name="GameListBody" />
+                    <rl:RankableListBody
+                        ItemsSource="{Binding GameFilters}"
+                        SelectedItem="{Binding SelectedGameFilter, Mode=TwoWay}"
+                        x:Name="GameListBody" />
                 </StackPanel>
             </GroupBox>
 
@@ -85,12 +105,21 @@
                             Margin="{StaticResource Layout.Spacing.Between}"
                             ListBody="{Binding ElementName=SeedListBody}"
                             EditingEnabled="True" RemovingEnabled="True"
-                            AddCommand="{Binding AddSeedFilterCommand}"/>
+                            AddCommand="{Binding AddSeedFilterCommand}">
+                            <rl:RankableToolbarHeader.AdditionalButtons>
+                                <Button Content="⏻"
+                                        ToolTip="{DynamicResource LOCDTCFiltersEnableDisableFilterButtonHint}"
+                                        Command="{Binding UpdateSeedFilterEnabledCommand}"/>
+                            </rl:RankableToolbarHeader.AdditionalButtons>
+                        </rl:RankableToolbarHeader>
                     </Grid>
                 </GroupBox.Header>
 
                 <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
-                    <rl:RankableListBody ItemsSource="{Binding SeedFilters}" x:Name="SeedListBody" />
+                    <rl:RankableListBody
+                        ItemsSource="{Binding SeedFilters}"
+                        SelectedItem="{Binding SelectedSeedFilter, Mode=TwoWay}"
+                        x:Name="SeedListBody" />
                 </StackPanel>
             </GroupBox>
 
@@ -115,12 +144,22 @@
                             Margin="{StaticResource Layout.Spacing.Between}"
                             ListBody="{Binding ElementName=PaletteListBody}"
                             EditingEnabled="True" RemovingEnabled="True"
-                            AddCommand="{Binding AddPaletteFilterCommand}"/>
+                            AddCommand="{Binding AddPaletteFilterCommand}">
+
+                            <rl:RankableToolbarHeader.AdditionalButtons>
+                                <Button Content="⏻"
+                                        ToolTip="{DynamicResource LOCDTCFiltersEnableDisableFilterButtonHint}"
+                                        Command="{Binding UpdatePaletteFilterEnabledCommand}"/>
+                            </rl:RankableToolbarHeader.AdditionalButtons>
+                        </rl:RankableToolbarHeader>
                     </Grid>
                 </GroupBox.Header>
 
                 <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
-                    <rl:RankableListBody ItemsSource="{Binding PaletteFilters}" x:Name="PaletteListBody" />
+                    <rl:RankableListBody
+                        ItemsSource="{Binding PaletteFilters}"
+                        SelectedItem="{Binding SelectedPaletteFilter, Mode=TwoWay}"
+                        x:Name="PaletteListBody" />
                 </StackPanel>
             </GroupBox>
 
@@ -145,12 +184,21 @@
                             Margin="{StaticResource Layout.Spacing.Between}"
                             ListBody="{Binding ElementName=BrushesListBody}"
                             EditingEnabled="True" RemovingEnabled="True"
-                            AddCommand="{Binding AddBrushFilterCommand}"/>
+                            AddCommand="{Binding AddBrushFilterCommand}">
+                            <rl:RankableToolbarHeader.AdditionalButtons>
+                                <Button Content="⏻"
+                                        ToolTip="{DynamicResource LOCDTCFiltersEnableDisableFilterButtonHint}"
+                                        Command="{Binding UpdateBrushFilterEnabledCommand}"/>
+                            </rl:RankableToolbarHeader.AdditionalButtons>
+                        </rl:RankableToolbarHeader>
                     </Grid>
                 </GroupBox.Header>
 
                 <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
-                    <rl:RankableListBody ItemsSource="{Binding BrushFilters}" x:Name="BrushesListBody"/>
+                    <rl:RankableListBody
+                        ItemsSource="{Binding BrushFilters}"
+                        SelectedItem="{Binding SelectedBrushFilter, Mode=TwoWay}"
+                        x:Name="BrushesListBody"/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

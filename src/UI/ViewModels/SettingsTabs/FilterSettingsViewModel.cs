@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using DynamicThemeColor.Core;
 using DynamicThemeColor.Model;
@@ -19,10 +20,53 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
         public ObservableCollection<FilterItemViewModel> BrushFilters { get; set; } = new ObservableCollection<FilterItemViewModel>();
         private readonly List<Guid> sessionAddedInstances = new List<Guid>();
 
-        public RelayCommand AddGameFilterCommand { get; }
-        public RelayCommand AddSeedFilterCommand { get; }
-        public RelayCommand AddPaletteFilterCommand { get; }
-        public RelayCommand AddBrushFilterCommand { get; }
+        private FilterItemViewModel selectedGameFilter;
+        public FilterItemViewModel SelectedGameFilter {
+            get => selectedGameFilter;
+            set {
+                selectedGameFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private FilterItemViewModel selectedSeedFilter;
+        public FilterItemViewModel SelectedSeedFilter {
+            get => selectedSeedFilter;
+            set {
+                selectedSeedFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private FilterItemViewModel selectedPaletteFilter;
+        public FilterItemViewModel SelectedPaletteFilter {
+            get => selectedPaletteFilter;
+            set {
+                if (Equals(value, selectedPaletteFilter)) return;
+                selectedPaletteFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private FilterItemViewModel selectedBrushFilter;
+        public FilterItemViewModel SelectedBrushFilter {
+            get => selectedBrushFilter;
+            set {
+                if (Equals(value, selectedBrushFilter)) return;
+                selectedBrushFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand AddGameFilterCommand { get; }
+        public ICommand AddSeedFilterCommand { get; }
+        public ICommand AddPaletteFilterCommand { get; }
+        public ICommand AddBrushFilterCommand { get; }
+
+        public ICommand UpdateGameFilterEnabledCommand { get; }
+        public ICommand UpdateSeedFilterEnabledCommand { get; }
+        public ICommand UpdatePaletteFilterEnabledCommand { get; }
+        public ICommand UpdateBrushFilterEnabledCommand { get; }
 
         private AddonSettings Settings => addon.AddonSettings;
 
@@ -36,6 +80,11 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             AddSeedFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Seed));
             AddPaletteFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Palette));
             AddBrushFilterCommand = new RelayCommand(() => ExecuteAddFilter(FilterStage.Brush));
+
+            UpdateGameFilterEnabledCommand = new RelayCommand(() => ExecuteUpdateFilterEnabled(FilterStage.Game), () => SelectedGameFilter != null);
+            UpdateSeedFilterEnabledCommand = new RelayCommand(() => ExecuteUpdateFilterEnabled(FilterStage.Seed), () => SelectedSeedFilter != null);
+            UpdatePaletteFilterEnabledCommand = new RelayCommand(() => ExecuteUpdateFilterEnabled(FilterStage.Palette), () => SelectedPaletteFilter != null);
+            UpdateBrushFilterEnabledCommand = new RelayCommand(() => ExecuteUpdateFilterEnabled(FilterStage.Brush), () => SelectedBrushFilter != null);
 
             WarmupFilterInstances();
         }
@@ -216,6 +265,29 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             Settings.EditFilterAfterAdding = viewModel.EditOnAdd;
             if (viewModel.EditOnAdd) itemVm.EditFilter();
         }
+
+        private void ExecuteUpdateFilterEnabled(FilterStage stage) {
+            FilterItemViewModel selectedItem;
+
+            switch (stage) {
+                case FilterStage.Game:
+                    selectedItem = SelectedGameFilter;
+                    break;
+                case FilterStage.Seed:
+                    selectedItem = SelectedSeedFilter;
+                    break;
+                case FilterStage.Palette:
+                    selectedItem = SelectedPaletteFilter;
+                    break;
+                case FilterStage.Brush:
+                    selectedItem = SelectedBrushFilter;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(stage), stage, null);
+            }
+
+            selectedItem.IsEnabled = !selectedItem.IsEnabled;
+        }
     }
 
     public class FilterItemViewModel : ObservableObject, IEditableItem {
@@ -236,11 +308,16 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             set {
                 if (FilterConfiguration.IsEnabled == value) return;
                 FilterConfiguration.IsEnabled = value;
+                OnPropertyChanged();
                 OnPropertyChanged(nameof(DisplayName));
+                OnPropertyChanged(nameof(Tooltip));
             }
         }
 
         public string DisplayName => Instance.Name ?? attribute.Name;
+        public string Tooltip => IsEnabled
+            ? DisplayName
+            : $"[{ResourceProvider.GetString("LOCDTCFiltersFilterDisabledHintPrefix")}] {DisplayName}";
 
         public void EditFilter() {
             EnsureStronglyTypedSettings();
