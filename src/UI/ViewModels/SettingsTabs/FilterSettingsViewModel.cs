@@ -24,10 +24,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
         public RelayCommand AddPaletteFilterCommand { get; }
         public RelayCommand AddBrushFilterCommand { get; }
 
-        public AddonSettings Settings {
-            get => addon.AddonSettings;
-            set => addon.AddonSettings = value;
-        }
+        private AddonSettings Settings => addon.AddonSettings;
 
         private readonly ILogger logger = LogManager.GetLogger();
         private readonly Addon addon;

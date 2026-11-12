@@ -10,10 +10,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
         public Array AvailableStyles { get; } = Enum.GetValues(typeof(Style));
         public RelayCommand PickColorCommand { get; }
 
-        public AddonSettings Settings {
-            get => addon.AddonSettings;
-            set => addon.AddonSettings = value;
-        }
+        public AddonSettings Settings => addon.AddonSettings;
 
         private readonly Addon addon;
 

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 
 namespace DynamicThemeColor.UI.Views {
-    public partial class FilterInstanceSettingsView : UserControl {
+    public partial class FilterInstanceSettingsView {
         public FilterInstanceSettingsView() {
             InitializeComponent();
         }

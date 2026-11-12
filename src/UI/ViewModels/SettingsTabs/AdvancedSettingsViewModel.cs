@@ -20,10 +20,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
         public ICommand ReloadFiltersCommand { get; }
         public ICommand RefreshFilterInstancesCommand { get; }
 
-        public AddonSettings Settings {
-            get => addon.AddonSettings;
-            set => addon.AddonSettings = value;
-        }
+        public AddonSettings Settings => addon.AddonSettings;
 
         private readonly Addon addon;
         private readonly FilterSettingsViewModel filtersSettings;

@@ -1,7 +1,5 @@
-﻿using System.Windows.Controls;
-
-namespace DynamicThemeColor.UI.Views {
-    public partial class AddFilterView : UserControl {
+﻿namespace DynamicThemeColor.UI.Views {
+    public partial class AddFilterView {
         public AddFilterView() {
             InitializeComponent();
         }
