@@ -12,7 +12,7 @@ using DynamicThemeColor.UI.Views;
 using Playnite.SDK;
 
 namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
-    public class FilterSettingsViewModel : ISettings {
+    public class FilterSettingsViewModel : ObservableObject, ISettings {
         public ObservableCollection<FilterItemViewModel> GameFilters { get; set; } = new ObservableCollection<FilterItemViewModel>();
         public ObservableCollection<FilterItemViewModel> SeedFilters { get; set; } = new ObservableCollection<FilterItemViewModel>();
         public ObservableCollection<FilterItemViewModel> PaletteFilters { get; set; } = new ObservableCollection<FilterItemViewModel>();
@@ -285,6 +285,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
 
             IsEnabled = viewModel.IsEnabled;
             OnPropertyChanged(nameof(DisplayName));
+            OnPropertyChanged(nameof(IsEnabled));
         }
 
         private void EnsureStronglyTypedSettings() {

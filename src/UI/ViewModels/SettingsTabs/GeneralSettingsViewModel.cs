@@ -6,7 +6,7 @@ using MaterialColorUtilities.Palettes;
 using Playnite.SDK;
 
 namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
-    public class GeneralSettingsViewModel : ISettings {
+    public class GeneralSettingsViewModel : ObservableObject, ISettings {
         public Array AvailableStyles { get; } = Enum.GetValues(typeof(Style));
         public RelayCommand PickColorCommand { get; }
 

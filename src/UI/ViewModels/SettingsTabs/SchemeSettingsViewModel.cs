@@ -7,7 +7,7 @@ using DynamicThemeColor.Model;
 using Playnite.SDK;
 
 namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
-    public class SchemeSettingsViewModel : ISettings{
+    public class SchemeSettingsViewModel : ObservableObject, ISettings{
         public ObservableCollection<SchemeItemViewModel> ActiveSchemes { get; } = new ObservableCollection<SchemeItemViewModel>();
         public ObservableCollection<SchemeItemViewModel> OtherSchemes { get; } = new ObservableCollection<SchemeItemViewModel>();
         public bool HasOtherSchemes => OtherSchemes.Count > 0;
