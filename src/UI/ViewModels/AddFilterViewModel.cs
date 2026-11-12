@@ -30,6 +30,8 @@ namespace DynamicThemeColor.UI.ViewModels {
         public AddFilterViewModel(IEnumerable<FilterDescriptorNew> candidates, FilterStage stage, bool editOnAdd) {
             Candidates = candidates
                 .Select(c => new FilterCandidateViewModel(c.Attribute))
+                .OrderBy(a => a.Name)
+                .ThenBy(a => a.Version)
                 .ToList();
             SelectedItem = null;
             EditOnAdd = editOnAdd;
