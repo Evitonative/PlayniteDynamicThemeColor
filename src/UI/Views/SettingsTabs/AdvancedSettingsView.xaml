@@ -29,6 +29,31 @@
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal"
                                 Margin="{StaticResource Layout.Padding.GroupBox}">
+                        <TextBlock Text="{DynamicResource LOCDTCAdvancedGeneralTitle}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </GroupBox.Header>
+
+                <StackPanel Margin="{StaticResource Layout.Padding.GroupBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Row="0" Grid.Column="0"
+                                Content="{DynamicResource LOCDTCAdvancedGeneralResetSettingsButton}"
+                                ToolTip="{DynamicResource LOCDTCAdvancedGeneralResetSettingsButtonHint}"
+                                Command="{Binding ResetSettingsCommand}"
+                                Margin="{StaticResource Layout.Spacing.Item}"
+                                VerticalAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Margin="{StaticResource Layout.Spacing.Section}">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="{StaticResource Layout.Padding.GroupBox}">
                         <TextBlock Text="{DynamicResource LOCDTCAdvancedCacheTitle}"
                                    VerticalAlignment="Center" />
                     </StackPanel>
@@ -70,7 +95,8 @@
                                 VerticalAlignment="Center" />
                     </Grid>
 
-                    <Expander Header="{DynamicResource LOCDTCAdvancedCacheGames}">
+                    <Expander Header="{DynamicResource LOCDTCAdvancedCacheGames}"
+                              Visibility="{Binding GamesAreCached, Converter={StaticResource BoolToVis}}">
                         <ListBox ItemsSource="{Binding CachedGames}"
                                  HorizontalAlignment="Stretch"
                                  Background="Transparent"
@@ -115,19 +141,26 @@
                 <Grid Margin="{StaticResource Layout.Padding.GroupBox}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition />
                     </Grid.RowDefinitions>
 
                     <Button Grid.Row="0" Grid.Column="0"
+                            Content="{DynamicResource LOCDTCAdvancedSchemeEngineSchemeSelectButton}"
+                            ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineSchemeSelectButtonHint}"
+                            Command="{Binding SchemeSelectCommand}"
+                            Margin="{StaticResource Layout.Spacing.Item}"
+                            VerticalAlignment="Center" />
+
+                    <Button Grid.Row="0" Grid.Column="1"
                             Content="{DynamicResource LOCDTCAdvancedSchemeEngineThemeSchemeClearButton}"
                             ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint}"
                             Command="{Binding ClearSchemeThemeCombinationsCommand}"
-                            Margin="{StaticResource Layout.Spacing.Item}"
+                            Margin="{StaticResource Layout.Spacing.ItemBetween}"
                             VerticalAlignment="Center" />
 
                     <Button Grid.Row="1" Grid.Column="0"
@@ -137,11 +170,11 @@
                             Margin="{StaticResource Layout.Spacing.Item}"
                             VerticalAlignment="Center" />
 
-                    <Button Grid.Row="2" Grid.Column="0"
+                    <Button Grid.Row="1" Grid.Column="1"
                             Content="{DynamicResource LOCDTCAdvancedSchemeEngineRefreshBrushesButton}"
                             ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint}"
                             Command="{Binding RefreshBrushesCommand}"
-                            Margin="{StaticResource Layout.Spacing.Item}"
+                            Margin="{StaticResource Layout.Spacing.ItemBetween}"
                             VerticalAlignment="Center" />
                 </Grid>
             </GroupBox>
@@ -158,12 +191,8 @@
                 <Grid Margin="{StaticResource Layout.Padding.GroupBox}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
 
                     <Button Grid.Row="0" Grid.Column="0"
                             Content="{DynamicResource LOCDTCAdvancedFilterRegistryReloadFiltersButton}"
@@ -172,11 +201,11 @@
                             Margin="{StaticResource Layout.Spacing.Item}"
                             VerticalAlignment="Center" />
 
-                    <Button Grid.Row="1" Grid.Column="0"
+                    <Button Grid.Row="0" Grid.Column="1"
                             Content="{DynamicResource LOCDTCAdvancedFilterRegistryRefreshFilterInstancesButton}"
                             ToolTip="{DynamicResource LOCDTCAdvancedFilterRegistryRefreshFilterInstancesButtonHint}"
                             Command="{Binding RefreshFilterInstancesCommand}"
-                            Margin="{StaticResource Layout.Spacing.Item}"
+                            Margin="{StaticResource Layout.Spacing.ItemBetween}"
                             VerticalAlignment="Center" />
                 </Grid>
             </GroupBox>

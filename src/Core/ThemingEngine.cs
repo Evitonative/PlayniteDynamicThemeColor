@@ -16,12 +16,12 @@ namespace DynamicThemeColor.Core {
     public class ThemingEngine {
         private readonly IPlayniteAPI playniteApi;
         private readonly Func<AddonSettings> addonSettings;
-        private readonly SchemeEngine schemeEngine;
+        private readonly Func<SchemeEngine> schemeEngine;
         private readonly ILogger logger = LogManager.GetLogger();
         private readonly Dictionary<string, object> originalResources =  new Dictionary<string, object>();
         public readonly ThemePaletteCache PaletteCache;
 
-        public ThemingEngine(IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings, SchemeEngine schemeEngine) {
+        public ThemingEngine(IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings, Func<SchemeEngine> schemeEngine) {
             this.playniteApi = playniteApi;
             this.addonSettings = addonSettings;
             this.schemeEngine = schemeEngine;
@@ -101,7 +101,7 @@ namespace DynamicThemeColor.Core {
             Dictionary<string, uint> resolvedVariables = ResolveVariables(palette);
 
             playniteApi.MainView.UIDispatcher.Invoke(() => {
-                foreach (KeyValuePair<string, ColorScheme.IBrushDefinition> kvp in schemeEngine.ActiveBrushes) {
+                foreach (KeyValuePair<string, ColorScheme.IBrushDefinition> kvp in schemeEngine().ActiveBrushes) {
                     string brushKey = kvp.Key;
                     ColorScheme.IColorReference brushDef = kvp.Value;
 
@@ -124,7 +124,7 @@ namespace DynamicThemeColor.Core {
         private Dictionary<string, uint> ResolveVariables(ThemePalette palette) {
             Dictionary<string, uint> resolved = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (KeyValuePair<string, ColorScheme.IColorReference> kvp in schemeEngine.ActiveVariables) {
+            foreach (KeyValuePair<string, ColorScheme.IColorReference> kvp in schemeEngine().ActiveVariables) {
                 ResolveSingleVariable(kvp.Key, palette, resolved, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
             }
 
@@ -142,7 +142,7 @@ namespace DynamicThemeColor.Core {
                 return ConvertHexToArgb(settings.FallbackSeedColor);
             }
 
-            if (!schemeEngine.ActiveVariables.TryGetValue(varName, out ColorScheme.IColorReference colorRef)) {
+            if (!schemeEngine().ActiveVariables.TryGetValue(varName, out ColorScheme.IColorReference colorRef)) {
                 logger.Warn($"Variable '{varName}' was referenced but could not be found in active variables.");
                 return ConvertHexToArgb(settings.FallbackSeedColor);
             }

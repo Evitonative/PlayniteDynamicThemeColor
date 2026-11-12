@@ -29,8 +29,7 @@ namespace DynamicThemeColor.UI.ViewModels {
             General = new GeneralSettingsViewModel(addon);
             Schemes = new SchemeSettingsViewModel(addon);
             Filters = new FilterSettingsViewModel(addon);
-            Advanced = new AdvancedSettingsViewModel(addon, Filters);
-
+            Advanced = new AdvancedSettingsViewModel(addon, this, Filters);
         }
 
         public void BeginEdit() {

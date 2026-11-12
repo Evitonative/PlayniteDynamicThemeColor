@@ -11,26 +11,38 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
     public class AdvancedSettingsViewModel : ObservableObject, ISettings {
         public ObservableCollection<CachedGameItemViewModel> CachedGames { get; } = new ObservableCollection<CachedGameItemViewModel>();
         public int CachedGamesCount => addon.ThemingEngine.PaletteCache.Count;
+        public bool GamesAreCached => CachedGamesCount > 0;
 
+        public ICommand ResetSettingsCommand { get; }
         public ICommand ClearCacheCommand { get; }
         public RelayCommand<CachedGameItemViewModel> RemoveCachedGameCommand { get; }
+        public ICommand SchemeSelectCommand { get; }
         public ICommand ClearSchemeThemeCombinationsCommand { get; }
         public ICommand ReprepareSchemesCommand { get; }
         public ICommand RefreshBrushesCommand { get; }
         public ICommand ReloadFiltersCommand { get; }
         public ICommand RefreshFilterInstancesCommand { get; }
 
-        public AddonSettings Settings => addon.AddonSettings;
+        public AddonSettings Settings {
+            get => addon.AddonSettings;
+            private set => addon.AddonSettings = value;
+        }
 
         private readonly Addon addon;
+        private readonly SettingsViewModel settingsMain;
         private readonly FilterSettingsViewModel filtersSettings;
 
-        public AdvancedSettingsViewModel(Addon addon, FilterSettingsViewModel filtersSettings) {
+        public AdvancedSettingsViewModel(Addon addon,
+            SettingsViewModel settingsViewModel,
+            FilterSettingsViewModel filtersSettings) {
             this.addon = addon;
+            settingsMain = settingsViewModel;
             this.filtersSettings = filtersSettings;
 
+            ResetSettingsCommand = new RelayCommand(ExecuteResetSettings);
             ClearCacheCommand = new RelayCommand(ExecuteClearCache);
             RemoveCachedGameCommand = new RelayCommand<CachedGameItemViewModel>(ExecuteRemoveCachedItem);
+            SchemeSelectCommand = new RelayCommand(ExecuteSchemeSelectCommand);
             ClearSchemeThemeCombinationsCommand = new RelayCommand(ExecuteClearSchemeThemeCombinations);
             ReprepareSchemesCommand = new RelayCommand(ExecuteReprepareSchemes);
             RefreshBrushesCommand = new RelayCommand(ExecuteRefreshBrushes);
@@ -65,6 +77,32 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
 
             OnPropertyChanged(nameof(CachedGamesCount));
             OnPropertyChanged(nameof(CachedGames));
+            OnPropertyChanged(nameof(GamesAreCached));
+        }
+
+        private void ExecuteResetSettings() {
+            Settings = new AddonSettings();
+            Settings.EnsureAllEnumsPresent();
+
+            ExecuteClearCache();
+            settingsMain.Schemes.ActiveSchemes.Clear();
+            settingsMain.Schemes.OtherSchemes.Clear();
+            settingsMain.Filters.GameFilters.Clear();
+            settingsMain.Filters.SeedFilters.Clear();
+            settingsMain.Filters.PaletteFilters.Clear();
+            settingsMain.Filters.BrushFilters.Clear();
+
+            addon.SchemeEngine.PrepareSchemes();
+            addon.SchemeEngine.RefreshBrushes();
+
+            Settings.SchemeOptionOverrides.Clear();
+            settingsMain.Schemes.LoadSchemeCollections();
+
+            settingsMain.EndEdit();
+            settingsMain.General.OnPropertyChanged(string.Empty);
+            settingsMain.Schemes.OnPropertyChanged(string.Empty);
+            settingsMain.Filters.OnPropertyChanged(string.Empty);
+            settingsMain.Advanced.OnPropertyChanged(string.Empty);
         }
 
         private void ExecuteClearCache() {
@@ -77,6 +115,10 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             if (item == null) return;
             addon.ThemingEngine.PaletteCache.Remove(item.GameId);
             RefreshCachedGames();
+        }
+
+        private void ExecuteSchemeSelectCommand() {
+            addon.SchemeEngine.RefreshBrushes(forceUserColorPick: true);
         }
 
         private void ExecuteClearSchemeThemeCombinations() {

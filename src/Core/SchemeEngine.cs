@@ -136,7 +136,7 @@ namespace DynamicThemeColor.Core {
             }
         }
 
-        public void RefreshBrushes() {
+        public void RefreshBrushes(bool forceUserColorPick = false) {
             string currentDesktopTheme = playniteApi.ApplicationSettings.DesktopTheme;
             string currentFullscreenTheme = playniteApi.ApplicationSettings.FullscreenTheme;
             bool fullscreenEnabled = playniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen;
@@ -144,7 +144,7 @@ namespace DynamicThemeColor.Core {
 
             logger.Trace($"Refreshing brushes. Mode: {(fullscreenEnabled ? "Fullscreen" : "Desktop")}, Active Theme: '{currentTheme}'");
 
-            Guid bestMatchingScheme = TryDiscoverBestScheme(currentTheme, fullscreenEnabled);
+            Guid bestMatchingScheme = TryDiscoverBestScheme(currentTheme, fullscreenEnabled, forceUserColorPick);
             logger.Debug($"Best matching scheme resolved to: '{bestMatchingScheme}'");
 
             List<Guid> chain = new List<Guid>();
@@ -153,7 +153,7 @@ namespace DynamicThemeColor.Core {
             logger.Trace($"Active scheme inheritance chain built: [{string.Join(" -> ", chain)}]");
         }
 
-        private Guid TryDiscoverBestScheme(string currentTheme, bool fullscreenEnabled) {
+        private Guid TryDiscoverBestScheme(string currentTheme, bool fullscreenEnabled, bool forceUserColorPick) {
             logger.Trace($"Searching for best scheme matching theme '{currentTheme}' (Fullscreen: {fullscreenEnabled}) among {RegisteredSchemes.Count} registered schemes.");
 
             List<RegisteredColorScheme> candidates = RegisteredSchemes.Values
@@ -161,9 +161,9 @@ namespace DynamicThemeColor.Core {
                 .Where(s => s.Scheme.Themes.Any(supportedTheme => currentTheme.IndexOf(supportedTheme, StringComparison.OrdinalIgnoreCase) >= 0))
                 .ToList();
 
-            if (candidates.Count > 1) {
+            if (candidates.Count > 1 || forceUserColorPick) {
                 logger.Debug($"Found {candidates.Count} matching scheme candidates, prompting user.");
-                if (PromptUserToPickScheme(candidates, currentTheme, out RegisteredColorScheme userPickedScheme))
+                if (PromptUserToPickScheme(candidates, currentTheme, forceUserColorPick, out RegisteredColorScheme userPickedScheme))
                     return userPickedScheme.Scheme.Id;
             }
 
@@ -254,8 +254,8 @@ namespace DynamicThemeColor.Core {
             }
         }
 
-        private bool PromptUserToPickScheme(IReadOnlyCollection<RegisteredColorScheme> candidates, string theme, out RegisteredColorScheme scheme) {
-            if (addonSettings().RememberedSchemeForThemes.TryGetValue(theme, out Guid schemeId)) {
+        private bool PromptUserToPickScheme(IReadOnlyCollection<RegisteredColorScheme> candidates, string theme, bool forceUserColorPick, out RegisteredColorScheme scheme) {
+            if (addonSettings().RememberedSchemeForThemes.TryGetValue(theme, out Guid schemeId) && !forceUserColorPick) {
                 RegisteredColorScheme foundCandidate = candidates.FirstOrDefault(s => s.Scheme.Id == schemeId);
                 if (foundCandidate != null) {
                     scheme = foundCandidate;

@@ -56,7 +56,16 @@
     <sys:String x:Key="LOCDTCFiltersEnableDisableFilterButtonHint">Enable/Disable selected filter</sys:String>
 
     <!-- Advanced Tab -->
-    <sys:String x:Key="LOCDTCAdvancedWarning">Warning: These are advanced settings meant mostly for debugging purposes. They may cause unexpected behaviour. Proceed at your own risk.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedWarning">Warning: These are advanced settings meant mostly for debugging purposes.
+        Read the hover tooltips before pressing anything.
+        They may cause unexpected behaviour, even if you read the tooltip.
+        If you have unsaved changes save them first.
+        If this breaks something restart Playnite.
+        Proceed at your own risk.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedGeneralTitle">General</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedGeneralResetSettingsButton">Reset All Settings</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedGeneralResetSettingsButtonHint">Options in the Settings UI will not update. Playnite should be restarted after.</sys:String>
+
     <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheDisable">Disabled Cache</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheCount">Cached Games:</sys:String>
@@ -65,6 +74,8 @@
     <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGameHint">Remove Game From Cache.</sys:String>
 
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineTitle">Scheme Engine</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineSchemeSelectButton">Reselect Current Scheme</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineSchemeSelectButtonHint">Reselect the currently applied scheme.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButton">Clear All Connections Between Themes And Schemes</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint">This takes effect once you hit save. You may immediately be prompted to pick a new scheme.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButton">Reload All Schemes</sys:String>

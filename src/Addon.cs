@@ -49,7 +49,7 @@ namespace DynamicThemeColor {
             addonSettings.EnsureAllEnumsPresent();
 
             SchemeEngine = new SchemeEngine(PlayniteApi, Id, () => AddonSettings, SavePluginSettings);
-            ThemingEngine = new ThemingEngine(PlayniteApi, () => AddonSettings, SchemeEngine);
+            ThemingEngine = new ThemingEngine(PlayniteApi, () => AddonSettings, () => SchemeEngine);
             SettingsView = new SettingsViewModel(this);
 
             ThemingEngine.ApplyFallbackPalette();
