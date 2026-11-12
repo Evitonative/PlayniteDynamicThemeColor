@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using DynamicThemeColor.Model;
+using DynamicThemeColor.Model.Filters;
+using JetBrains.Annotations;
 using Playnite.SDK;
 
 namespace DynamicThemeColor.UI.Views {
     public class AddFilterViewModel : ObservableObject {
-        public IEnumerable<FilterDescriptor> Candidates { get; }
-        private readonly FilterStage stage;
+        public List<FilterCandidateViewModel> Candidates { get; }
         public string DescriptionMessage { get; }
 
-        private FilterDescriptor selectedItem;
-        public FilterDescriptor SelectedItem {
+        private FilterCandidateViewModel selectedItem;
+        [CanBeNull]
+        public FilterCandidateViewModel SelectedItem {
             get => selectedItem;
             set => SetValue(ref selectedItem, value);
         }
@@ -24,10 +27,11 @@ namespace DynamicThemeColor.UI.Views {
 
         public RelayCommand<Window> SelectCommand { get; }
 
-        public AddFilterViewModel(IEnumerable<FilterDescriptor> candidates, FilterStage stage) {
-            Candidates = candidates;
-            this.stage = stage;
-            SelectedItem = Candidates?.FirstOrDefault();
+        public AddFilterViewModel(IEnumerable<FilterDescriptorNew> candidates, FilterStage stage) {
+            Candidates = candidates
+                .Select(c => new FilterCandidateViewModel(c.Attribute))
+                .ToList();
+            SelectedItem = null;
 
             DescriptionMessage = string.Format(
                 ResourceProvider.GetString("LOCDTCFilterSelectDescription"), stage);
@@ -37,6 +41,20 @@ namespace DynamicThemeColor.UI.Views {
         private static void ExecuteSelect(Window window) {
             if (window == null) return;
             window.DialogResult = true;
+        }
+    }
+
+    public class FilterCandidateViewModel {
+        private readonly SchemeFilterAttribute attribute;
+
+        public Guid FilterId => attribute.FilterId;
+        public string Name => attribute.Name;
+        public string Author => attribute.Author;
+        public int Version => attribute.Version;
+        public string Description => attribute.Description;
+
+        public FilterCandidateViewModel(SchemeFilterAttribute attribute) {
+            this.attribute = attribute;
         }
     }
 }

@@ -9,13 +9,10 @@ using Playnite.SDK.Models;
 
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
+    [SchemeFilter("6afe64ec-78b8-4bb5-bb74-09bd3a20b085",
+        "Lightness Filter", "Evito", 1,
+        "Adjust the saturation for the primary color.")]
     public class LightnessFilter : SchemeFilter<LightnessFilterSettings> {
-        public override Guid Id => Guid.Parse("6afe64ec-78b8-4bb5-bb74-09bd3a20b085");
-        public override string Name => "Lightness Filter";
-        public override string Author => "Evito";
-        public override int Version => 1;
-        public override string Description => "Adjust the saturation for the primary color.";
-
         public override uint ApplySeedFilter(uint currentSeed, ColorExtractionResults colorExtractionResults, Game game,
             IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {
             return AdjustLightness(currentSeed, Settings.Lightness);

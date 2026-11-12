@@ -47,8 +47,9 @@
                         <GridView>
                             <GridViewColumn Header="{DynamicResource LOCDTCFilterSelectColumnName}" Width="250">
                                 <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type model:FilterDescriptor}">
-                                        <TextBlock Text="{Binding Name}"
+                                    <DataTemplate>
+                                        <TextBlock d:DataContext="{d:DesignInstance Type=views:FilterCandidateViewModel}"
+                                                   Text="{Binding Name}"
                                                    VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -56,8 +57,9 @@
 
                             <GridViewColumn Header="{DynamicResource LOCDTCGenericColumnAuthor}" Width="Auto">
                                 <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type model:FilterDescriptor}">
-                                        <TextBlock Text="{Binding Author}"
+                                    <DataTemplate>
+                                        <TextBlock d:DataContext="{d:DesignInstance Type=views:FilterCandidateViewModel}"
+                                                   Text="{Binding Author}"
                                                    VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -65,8 +67,9 @@
 
                             <GridViewColumn Header="{DynamicResource LOCDTCGenericColumnVersion}" Width="Auto">
                                 <GridViewColumn.CellTemplate>
-                                    <DataTemplate DataType="{x:Type model:FilterDescriptor}">
-                                        <TextBlock Text="{Binding Version}"
+                                    <DataTemplate>
+                                        <TextBlock d:DataContext="{d:DesignInstance Type=views:FilterCandidateViewModel}"
+                                                   Text="{Binding Version}"
                                                    VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

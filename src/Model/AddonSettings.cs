@@ -96,26 +96,26 @@ namespace DynamicThemeColor.Model {
         }
 
         // Filters
-        private List<FilterConfiguration> gameFilters = new List<FilterConfiguration>();
-        public List<FilterConfiguration> GameFilters {
+        private ICollection<FilterConfiguration> gameFilters = new ObservableCollection<FilterConfiguration>();
+        public ICollection<FilterConfiguration> GameFilters {
             get => gameFilters;
             set => SetValue(ref gameFilters, value);
         }
 
-        private List<FilterConfiguration> seedFilters = new List<FilterConfiguration>();
-        public List<FilterConfiguration> SeedFilters {
+        private ICollection<FilterConfiguration> seedFilters = new ObservableCollection<FilterConfiguration>();
+        public ICollection<FilterConfiguration> SeedFilters {
             get => seedFilters;
             set => SetValue(ref seedFilters, value);
         }
 
-        private List<FilterConfiguration> paletteFilters = new List<FilterConfiguration>();
-        public List<FilterConfiguration> PaletteFilters {
+        private ICollection<FilterConfiguration> paletteFilters = new ObservableCollection<FilterConfiguration>();
+        public ICollection<FilterConfiguration> PaletteFilters {
             get => paletteFilters;
             set => SetValue(ref paletteFilters, value);
         }
 
-        private IEnumerable<FilterConfiguration> brushFilters = new List<FilterConfiguration>();
-        public IEnumerable<FilterConfiguration> BrushFilters {
+        private ICollection<FilterConfiguration> brushFilters = new ObservableCollection<FilterConfiguration>();
+        public ICollection<FilterConfiguration> BrushFilters {
             get => brushFilters;
             set => SetValue(ref brushFilters, value);
         }

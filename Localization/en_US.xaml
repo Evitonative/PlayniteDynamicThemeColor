@@ -70,6 +70,12 @@
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButton">Refresh All Brushes</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint">Usually this is also done on save.</sys:String>
 
+    <sys:String x:Key="LOCDTCAdvancedFilterRegistryTitle">Filter Registry</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedFilterRegistryReloadFiltersButton">Reload Filters</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedFilterRegistryReloadFiltersButtonHint">Reloads filter classes.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedFilterRegistryRefreshFilterInstancesButton">Refresh Filter Instances</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedFilterRegistryRefreshFilterInstancesButtonHint">Recreates all instances of filters from settings.</sys:String>
+
     <!-- Scheme Select Dialog -->
     <sys:String x:Key="LOCDTCSchemeSelectWindowTitel">Select Scheme</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectDescription">You have multiple schemes that support your current theme "{0}". Please select one.</sys:String>
@@ -83,6 +89,7 @@
     <sys:String x:Key="LOCDTCFilterSelectDescription">Select the filter for the filter stage {0}.</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectEditNow">Edit Filter after adding it</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectFailed">Filter could not be addded.</sys:String>
 
     <!-- Filter Settings Dialog -->
     <sys:String x:Key="LOCDTCFilterSettingsWindowTitel">Filter Settings | {0}</sys:String>

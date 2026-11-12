@@ -8,13 +8,10 @@ using Playnite.SDK.Models;
 
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
+    [SchemeFilter("12b95ffc-3465-465a-baa4-470ec8d6ad88",
+        "[TESTING] Random Brush Color", "Evito", 1,
+        "Makes every brush a random color for testing.")]
     public class RandomBrushColorFilter : SchemeFilter {
-        public override Guid Id { get; } = Guid.Parse("12b95ffc-3465-465a-baa4-470ec8d6ad88");
-        public override string Name => "[TESTING] Random Brush Color";
-        public override string Author => "Evito";
-        public override int Version => 1;
-        public override string Description => "Makes every brush a random color for testing.";
-
         public override uint ApplyBrushFilter(
             string brushKey, uint brushArgb,
             ColorExtractionResults colorExtractionResults,

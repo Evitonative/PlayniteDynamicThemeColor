@@ -8,17 +8,14 @@ using Playnite.SDK.Models;
 
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
+    [SchemeFilter("679d71ea-63a3-424f-9d03-ebfb3c5490d8",
+        "Custom Color for Games", "Evito", 1,
+        "Override the seed color of a game.")]
     public class GameOverrideSeedColor : SchemeFilter<GameOverrideSeedColorSettings> {
-        public const string FilterId = "679d71ea-63a3-424f-9d03-ebfb3c5490d8";
         private const uint fallbackColor = 0xFF1CD8FC;
-
-        public override Guid Id => Guid.Parse(FilterId);
         public override string Name{
-            get => "Custom Color for " + (!string.IsNullOrWhiteSpace(Settings.GameName) ? Settings.GameName : "a Game");
+            get => "Custom Color for " + (!string.IsNullOrWhiteSpace(Settings.GameName) ? Settings.GameName : "Games");
         }
-        public override string Author => "Evito";
-        public override int Version => 1;
-        public override string Description => "Override the seed color of a game.";
 
         public override uint ApplySeedFilter(uint currentSeed, ColorExtractionResults colorExtractionResults, Game game,
             IPlayniteAPI playniteApi, Func<AddonSettings> addonSettings) {

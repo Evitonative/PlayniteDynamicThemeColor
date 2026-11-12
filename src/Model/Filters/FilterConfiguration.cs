@@ -9,6 +9,12 @@ namespace DynamicThemeColor.Model.Filters {
             set => SetValue(ref filterId, value);
         }
 
+        private Guid instanceId;
+        public Guid InstanceId {
+            get => instanceId;
+            set => SetValue(ref instanceId, value);
+        }
+
         private bool isEnabled = true;
         public bool IsEnabled {
             get => isEnabled;

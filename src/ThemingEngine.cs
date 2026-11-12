@@ -208,7 +208,7 @@ namespace DynamicThemeColor {
             AddonSettings settings = addonSettings();
             return settings.GameFilters
                 .Where(f => f.IsEnabled)
-                .Select(FilterRegistry.CreateInstance)
+                .Select(f => !FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance) ? null : instance)
                 .Where(f => f != null)
                 .Aggregate(false, (keepGame, filter) => {
                     bool? result = filter.ApplyGameFilter(game);
@@ -221,7 +221,7 @@ namespace DynamicThemeColor {
             AddonSettings settings = addonSettings();
             return settings.SeedFilters
                 .Where(f => f.IsEnabled)
-                .Select(FilterRegistry.CreateInstance)
+                .Select(f => !FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance) ? null : instance)
                 .Where(f => f != null)
                 .Aggregate(seedArgb, (current, filter) =>
                     filter.ApplySeedFilter(current, colorExtractionResults, game, playniteApi, addonSettings));
@@ -230,8 +230,8 @@ namespace DynamicThemeColor {
         private void ApplyPaletteFilters(ThemePalette palette, ColorExtractionResults colorExtractionResults, Game game) {
             AddonSettings settings = addonSettings();
             foreach (FilterConfiguration config in settings.PaletteFilters.Where(f => f.IsEnabled)) {
-                SchemeFilter filter = FilterRegistry.CreateInstance(config);
-                filter?.ApplyPaletteFilter(palette, colorExtractionResults, game, playniteApi, addonSettings);
+                if (!FilterRegistry.TryGetFilterInstance(config.InstanceId, out SchemeFilter instance)) continue;
+                instance?.ApplyPaletteFilter(palette, colorExtractionResults, game, playniteApi, addonSettings);
             }
         }
 
@@ -239,7 +239,7 @@ namespace DynamicThemeColor {
             AddonSettings settings = addonSettings();
             return settings.BrushFilters
                 .Where(f => f.IsEnabled)
-                .Select(FilterRegistry.CreateInstance)
+                .Select(f => !FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance) ? null : instance)
                 .Where(f => f != null)
                 .Aggregate(brushArgb, (current, filter) =>
                     filter.ApplyBrushFilter(brushKey, current, colorExtractionResults, game, playniteApi, addonSettings));

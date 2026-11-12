@@ -1,6 +1,7 @@
 ﻿using System;
 using DynamicThemeColor.Utils;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Playnite.SDK;
 using Playnite.SDK.Models;
@@ -8,52 +9,16 @@ using Playnite.SDK.Models;
 namespace DynamicThemeColor.Model.Filters {
     public abstract class SchemeFilter {
         /// <summary>
-        /// A unique but never changing id for this filter.
-        ///
-        /// Use <code>Guid.Parse("{UUIDv4}")</code> to set it.
-        ///
-        /// You can use https://www.uuidgenerator.net/version4 to generate it.
-        /// </summary>
-        public abstract Guid Id { get; }
-
-        /// <summary>
         /// The name of the filter
         ///
         /// This will be shown to the user.
         /// </summary>
-        [NotNull]
-        public abstract string Name { get; }
-
-        /// <summary>
-        /// The author of the filter.
-        ///
-        /// This will be shown to the user.
-        /// </summary>
-        [NotNull]
-        public abstract string Author { get; }
-
-        /// <summary>
-        /// The version of the filter.
-        ///
-        /// Currently only shown to the user.
-        /// May later be used for validation or update logic.
-        /// </summary>
-        public abstract int Version { get; }
-
-        /// <summary>
-        /// Description of what the filter does.
-        ///
-        /// This will be shown to the user.
-        /// </summary>
         [CanBeNull]
-        public abstract string Description { get; }
+        public virtual string Name { get; }
 
         [CanBeNull]
-        internal virtual object SettingsObject {
-            get => null;
-            // ReSharper disable once ValueParameterNotUsed
-            set { }
-        }
+        [JsonIgnore]
+        public virtual FilterConfiguration FilterConfiguration { get; set; }
 
         /// <summary>
         /// Prefilter Games before anything is done for a game.
@@ -155,15 +120,23 @@ namespace DynamicThemeColor.Model.Filters {
     }
 
     public abstract class SchemeFilter<TSettings> : SchemeFilter where TSettings : class, new() {
-        protected TSettings Settings { get; private set; } = new TSettings();
+        protected TSettings Settings {
+            get => filterConfiguration.Settings as TSettings;
+            private set {
+                if (FilterConfiguration != null) FilterConfiguration.Settings = value;
+            }
+        }
 
-        internal override object SettingsObject {
-            get => Settings;
+        private FilterConfiguration filterConfiguration;
+        public override FilterConfiguration FilterConfiguration {
+            get => filterConfiguration;
             set {
-                switch (value)
-                {
+                filterConfiguration = value;
+                if (value == null) return;
+                switch (value.Settings) {
                     case null:
-                        Settings = new TSettings(); return;
+                        Settings = new TSettings();
+                        return;
                     case TSettings typed:
                         Settings = typed; return;
                     case JObject jObj:

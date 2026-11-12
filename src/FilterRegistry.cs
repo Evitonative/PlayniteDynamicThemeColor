@@ -4,14 +4,21 @@ using System.Linq;
 using System.Reflection;
 using DynamicThemeColor.Model.Filters;
 using JetBrains.Annotations;
-using Newtonsoft.Json.Linq;
 
 namespace DynamicThemeColor {
     public static class FilterRegistry {
-        private static readonly Dictionary<Guid, FilterDescriptor> filters =
-            new Dictionary<Guid, FilterDescriptor>();
+        private static readonly Dictionary<Guid, FilterDescriptorNew> filters =
+            new Dictionary<Guid, FilterDescriptorNew>();
+
+        private static readonly Dictionary<Guid, SchemeFilter> filterInstances =
+            new Dictionary<Guid, SchemeFilter>();
 
         static FilterRegistry() {
+            ReloadFilters();
+        }
+
+        internal static void ReloadFilters() {
+            filters.Clear();
             IEnumerable<Type> filterTypes = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => !t.IsAbstract
                             && typeof(SchemeFilter).IsAssignableFrom(t)
@@ -19,74 +26,89 @@ namespace DynamicThemeColor {
                             && t.Namespace.StartsWith("DynamicThemeColor.Filters"));
 
             foreach (Type type in filterTypes) {
-                if (!(Activator.CreateInstance(type) is SchemeFilter instance)) continue;
-                filters.Add(instance.Id, new FilterDescriptor(instance, type));
+                SchemeFilterAttribute attr = type.GetCustomAttribute<SchemeFilterAttribute>();
+                if (attr == null) continue;
+                FilterDescriptorNew descriptor = new FilterDescriptorNew(type, attr);
+                filters.Add(attr.FilterId, descriptor);
             }
         }
 
+        /// <summary>
+        /// Load a filter instance into memory.
+        /// </summary>
+        /// <param name="config">Configuration of describing an existing instance of a filter.</param>
+        /// <returns>
+        /// false: this instance was already loaded
+        /// true: instance successfully loaded
+        /// </returns>
+        /// <exception cref="KeyNotFoundException">When the filter does not exist.</exception>
+        /// <exception cref="InvalidOperationException">The provided filter type does not extend SchemeFilter</exception>
+        public static bool TryCreateFilterInstance(FilterConfiguration config) {
+            if (!filters.TryGetValue(config.FilterId, out FilterDescriptorNew descriptor)) throw new KeyNotFoundException();
+            if (filterInstances.ContainsKey(config.InstanceId)) return false;
+            if (!(Activator.CreateInstance(descriptor.FilterType) is SchemeFilter instance)) throw new InvalidOperationException();
+
+            instance.FilterConfiguration = config;
+
+            filterInstances.Add(config.InstanceId, instance);
+            return true;
+        }
+
         [CanBeNull]
-        public static SchemeFilter CreateSimpleInstance(Guid filterId) {
-            if (!filters.TryGetValue(filterId, out FilterDescriptor descriptor))
+        public static FilterConfiguration CreateNewFilterInstance(Guid filterId) {
+            Guid instanceId = Guid.NewGuid();
+            FilterConfiguration config = new FilterConfiguration {
+                InstanceId = instanceId,
+                FilterId = filterId,
+                IsEnabled = true,
+                Settings = null,
+            };
+
+            try {
+                if (!TryCreateFilterInstance(config)) return null;
+            } catch (KeyNotFoundException) {
                 return null;
-
-            if (!(Activator.CreateInstance(descriptor.FilterType) is SchemeFilter filter)) return null;
-            return filter;
-        }
-
-        [CanBeNull]
-        public static SchemeFilter CreateInstance([NotNull] FilterConfiguration config) {
-            SchemeFilter filter = CreateSimpleInstance(config.FilterId);
-            if (filter == null) return null;
-
-            object defaultSettings = filter.SettingsObject;
-
-            if (defaultSettings == null) {
-                config.Settings = null;
-                return filter;
+            } catch (InvalidOperationException) {
+                return null;
             }
 
-            switch (config.Settings) {
-                case JObject jObj:
-                    filter.SettingsObject = jObj.ToObject(defaultSettings.GetType());
-                    config.Settings = filter.SettingsObject;
-                    break;
-                case null:
-                    config.Settings = defaultSettings;
-                    break;
-                default:
-                    filter.SettingsObject = config.Settings;
-                    break;
+            if (TryGetFilterInstance(instanceId, out SchemeFilter instance)) {
+                config.Settings = instance.FilterConfiguration?.Settings;
             }
 
-            return filter;
+            return config;
         }
 
-        public static IReadOnlyDictionary<Guid, FilterDescriptor> GetAvailableFilters() => filters;
+        public static bool TryGetFilterInstance(Guid instanceId, out SchemeFilter instance) {
+            return filterInstances.TryGetValue(instanceId, out instance);
+        }
 
-        [CanBeNull]
-        public static FilterDescriptor GetFilter(Guid id) {
-            return filters.TryGetValue(id, out FilterDescriptor descriptor) ? descriptor : null;
+        internal static bool RemoveFilterInstance(Guid instanceId) {
+            return filterInstances.Remove(instanceId);
+        }
+
+        public static IEnumerable<FilterDescriptorNew> GetAllFilters() {
+            return filters.Values;
+        }
+
+        internal static void ClearFilterInstances() {
+            filterInstances.Clear();
         }
 
         public static void ClearFilterCaches() {
-            foreach (SchemeFilter filter in filters.Keys.Select(CreateSimpleInstance)) {
+            foreach (SchemeFilter filter in filterInstances.Values) {
                 filter?.ClearCache();
             }
         }
     }
 
-    public class FilterDescriptor {
-        private readonly SchemeFilter instance;
-        public Guid Id => instance.Id;
-        public string Name => instance.Name;
-        public string Author => instance.Author;
-        public int Version => instance.Version;
-        public string Description => instance.Description;
+    public readonly struct FilterDescriptorNew {
         public Type FilterType { get; }
+        public SchemeFilterAttribute Attribute { get; }
 
-        public FilterDescriptor(SchemeFilter instance, Type filterType) {
-            this.instance = instance;
+        public FilterDescriptorNew(Type filterType, SchemeFilterAttribute attribute) {
             FilterType = filterType;
+            Attribute = attribute;
         }
     }
 }

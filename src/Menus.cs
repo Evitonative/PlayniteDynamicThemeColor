@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using DynamicThemeColor.Filters;
@@ -15,6 +16,10 @@ namespace DynamicThemeColor {
         public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs menuItemsArgs) {
             string menuRoot = ResourceProvider.GetString("LOCDTCContextMain");
 
+            Guid? blacklistFilterId = typeof(GameBlacklistFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
+            Guid? whitelistFilterId = typeof(GameWhitelistFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
+            Guid? seedOverrideFilterId = typeof(GameOverrideSeedColor).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
+
             yield return new GameMenuItem {
                 Description = ResourceProvider.GetString("LOCDTCContextCopyGameId"),
                 Action = (args) => {
@@ -25,75 +30,24 @@ namespace DynamicThemeColor {
                 MenuSection = menuRoot,
             };
 
-            yield return new GameMenuItem {
-                Description = ResourceProvider.GetString("LOCDTCContextBlacklistGame"),
-                Action = (args) => {
-                    bool shiftHeld = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-                    bool? result = AddListFilter(
-                        Guid.Parse(GameBlacklistFilter.FilterId),
-                        args.Games.FirstOrDefault(),
-                        ResourceProvider.GetString("LOCDTCContextBlacklistGame"),
-                        ResourceProvider.GetString("LOCDTCContextBlacklistGameDuplicate"));
-                    switch (result) {
-                        case true:
-                            if (!shiftHeld) PlayniteApi.Dialogs.ShowMessage(
-                                ResourceProvider.GetString("LOCDTCContextBlacklistGameAdded"),
-                                ResourceProvider.GetString("LOCDTCContextBlacklistGame"),
-                                MessageBoxButton.OK, MessageBoxImage.Information);
-                            return;
-                        case false:
-                            PlayniteApi.Dialogs.ShowMessage(
-                                ResourceProvider.GetString("LOCDTCContextBlacklistGameFailed"),
-                                ResourceProvider.GetString("LOCDTCContextBlacklistGame"),
-                                MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        case null:
-                            return;
-                    }
-                },
-                MenuSection = menuRoot,
-            };
+            if (blacklistFilterId.HasValue)
+                yield return GetBlackWhitelistGameMenuItem(blacklistFilterId.Value, "Blacklist", menuRoot);
 
-            yield return new GameMenuItem {
-                Description = ResourceProvider.GetString("LOCDTCContextWhitelistGame"),
-                Action = (args) => {
-                    bool shiftHeld = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-                    bool? result = AddListFilter(
-                        Guid.Parse(GameWhitelistFilter.FilterId),
-                        args.Games.FirstOrDefault(),
-                        ResourceProvider.GetString("LOCDTCContextWhitelistGame"),
-                        ResourceProvider.GetString("LOCDTCContextWhitelistGameDuplicate"));
-                    switch (result) {
-                        case true:
-                            if (!shiftHeld) PlayniteApi.Dialogs.ShowMessage(
-                                ResourceProvider.GetString("LOCDTCContextWhitelistGameAdded"),
-                                ResourceProvider.GetString("LOCDTCContextWhitelistGame"),
-                                MessageBoxButton.OK, MessageBoxImage.Information);
-                            return;
-                        case false:
-                            PlayniteApi.Dialogs.ShowMessage(
-                                ResourceProvider.GetString("LOCDTCContextWhitelistGameFailed"),
-                                ResourceProvider.GetString("LOCDTCContextWhitelistGame"),
-                                MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        case null:
-                            return;
-                    }
-                },
-                MenuSection = menuRoot,
-            };
+            if (whitelistFilterId.HasValue)
+                yield return GetBlackWhitelistGameMenuItem(whitelistFilterId.Value, "Whitelist", menuRoot);
 
-            yield return new GameMenuItem {
+            if (seedOverrideFilterId.HasValue) yield return new GameMenuItem {
                 Description = ResourceProvider.GetString("LOCDTCContextOverrideGameSeed"),
                 Action = (args) => {
                     Game game = args.Games.FirstOrDefault();
                     if (game == null) return;
 
-                    Guid filterId = Guid.Parse(GameOverrideSeedColor.FilterId);
+                    Guid filterId = seedOverrideFilterId.Value;
                     bool exists = AddonSettings.SeedFilters
                         .Where(f => f.FilterId == filterId)
-                        .Select(FilterRegistry.CreateInstance)
-                        .Select(f => f?.SettingsObject)
+                        .Select(f => FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance) ? instance : null)
+                        .Where(f => f != null)
+                        .Select(f => f.FilterConfiguration?.Settings)
                         .Where(f => f != null)
                         .OfType<GameOverrideSeedColorSettings>()
                         .Any(s => Guid.TryParse(s.GameId, out Guid id) && id == game.Id);
@@ -106,30 +60,64 @@ namespace DynamicThemeColor {
 
                         if (result != MessageBoxResult.Yes) return;
 
-                        AddonSettings.SeedFilters.RemoveAll(f =>
-                            f.FilterId == filterId &&
-                            FilterRegistry.CreateInstance(f)?.SettingsObject is GameOverrideSeedColorSettings s &&
-                            Guid.TryParse(s.GameId, out Guid id) &&
-                            id == game.Id);
+                        IEnumerable<FilterConfiguration> itemsToRemove = AddonSettings.SeedFilters
+                            .Where(f => f.FilterId == filterId)
+                            .Where(f => {
+                                if (!FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance)) return false;
+                                if (!(instance.FilterConfiguration?.Settings is GameOverrideSeedColorSettings s)) return false;
+                                if (!Guid.TryParse(s.GameId, out Guid id)) return false;
+                                return id == game.Id;
+                            }).ToList();
+
+                        foreach (FilterConfiguration removeConfig in itemsToRemove) {
+                            AddonSettings.SeedFilters.Remove(removeConfig);
+                        }
                     }
 
                     if(!MaterialColorHelper.ExecutePickColor(out string newColor)) return;
 
-                    SchemeFilter simpleInstance = FilterRegistry.CreateSimpleInstance(filterId);
-                    if (!(simpleInstance?.SettingsObject is GameOverrideSeedColorSettings settings)) return;
+                    FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId);
+                    if (filterConfig == null) return;
+                    if (!FilterRegistry.TryGetFilterInstance(filterConfig.InstanceId, out SchemeFilter filterInstance)) return;
+                    if (!(filterInstance.FilterConfiguration?.Settings is GameOverrideSeedColorSettings settings)) return;
 
                     settings.GameId = game.Id.ToString();
                     settings.GameName = game.Name;
                     settings.Hex = newColor;
 
-                    FilterConfiguration config = new FilterConfiguration {
-                        FilterId = filterId,
-                        IsEnabled = true,
-                        Settings = settings,
-                    };
-
-                    AddonSettings.SeedFilters.Add(config);
+                    AddonSettings.SeedFilters.Add(filterConfig);
                     SettingsView.EndEditRefresh();
+                },
+                MenuSection = menuRoot,
+            };
+        }
+
+        private GameMenuItem GetBlackWhitelistGameMenuItem(Guid filterId, string translationKey, string menuRoot) {
+            return new GameMenuItem {
+                Description = ResourceProvider.GetString($"LOCDTCContext{translationKey}Game"),
+                Action = (args) => {
+                    bool shiftHeld = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+                    bool? result = AddListFilter(
+                        filterId,
+                        args.Games.FirstOrDefault(),
+                        ResourceProvider.GetString($"LOCDTCContext{translationKey}Game"),
+                        ResourceProvider.GetString($"LOCDTCContext{translationKey}GameDuplicate"));
+                    switch (result) {
+                        case true:
+                            if (!shiftHeld) PlayniteApi.Dialogs.ShowMessage(
+                                ResourceProvider.GetString($"LOCDTCContext{translationKey}GameAdded"),
+                                ResourceProvider.GetString($"LOCDTCContext{translationKey}Game"),
+                                MessageBoxButton.OK, MessageBoxImage.Information);
+                            return;
+                        case false:
+                            PlayniteApi.Dialogs.ShowMessage(
+                                ResourceProvider.GetString($"LOCDTCContext{translationKey}GameFailed"),
+                                ResourceProvider.GetString($"LOCDTCContext{translationKey}Game"),
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        case null:
+                            return;
+                    }
                 },
                 MenuSection = menuRoot,
             };
@@ -140,8 +128,9 @@ namespace DynamicThemeColor {
 
             bool exists = AddonSettings.GameFilters
                 .Where(f => f.FilterId == filterId)
-                .Select(FilterRegistry.CreateInstance)
-                .Select(f => f?.SettingsObject)
+                .Select(f => FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance) ? instance : null)
+                .Where(f => f != null)
+                .Select(f => f.FilterConfiguration?.Settings)
                 .Where(f => f != null)
                 .OfType<GameContextMenuAddedFilterSettings>()
                 .Any(s => Guid.TryParse(s.GameId, out Guid id) && id == game.Id);
@@ -153,29 +142,33 @@ namespace DynamicThemeColor {
 
                 if (result != MessageBoxResult.Yes) return null;
 
-                AddonSettings.GameFilters.RemoveAll(f =>
-                    f.FilterId == filterId &&
-                    FilterRegistry.CreateInstance(f)?.SettingsObject is GameContextMenuAddedFilterSettings s &&
-                    Guid.TryParse(s.GameId, out Guid id) &&
-                    id == game.Id);
+                IEnumerable<FilterConfiguration> itemsToRemove = AddonSettings.GameFilters
+                    .Where(f => f.FilterId == filterId)
+                    .Where(f => {
+                        if (!FilterRegistry.TryGetFilterInstance(f.InstanceId, out SchemeFilter instance)) return false;
+                        if (!(instance.FilterConfiguration?.Settings is GameContextMenuAddedFilterSettings s)) return false;
+                        if (!Guid.TryParse(s.GameId, out Guid id)) return false;
+                        return id == game.Id;
+                    }).ToList();
+
+                foreach (FilterConfiguration removeConfig in itemsToRemove) {
+                    AddonSettings.GameFilters.Remove(removeConfig);
+                }
 
                 SettingsView.EndEditRefresh();
                 return null;
             }
 
-            SchemeFilter simpleInstance = FilterRegistry.CreateSimpleInstance(filterId);
-            if (!(simpleInstance?.SettingsObject is GameContextMenuAddedFilterSettings settings)) return false;
+
+            FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId);
+            if (filterConfig == null) return false;
+            if (!FilterRegistry.TryGetFilterInstance(filterConfig.InstanceId, out SchemeFilter filterInstance)) return false;
+            if (!(filterInstance.FilterConfiguration?.Settings is GameContextMenuAddedFilterSettings settings)) return false;
 
             settings.GameId = game.Id.ToString();
             settings.GameName = game.Name;
 
-            FilterConfiguration config = new FilterConfiguration {
-                FilterId = filterId,
-                IsEnabled = true,
-                Settings = settings,
-            };
-
-            AddonSettings.GameFilters.Add(config);
+            AddonSettings.GameFilters.Add(filterConfig);
             SettingsView.EndEditRefresh();
             return true;
         }

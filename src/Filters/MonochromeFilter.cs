@@ -11,18 +11,15 @@ using Playnite.SDK.Models;
 
 namespace DynamicThemeColor.Filters {
     [UsedImplicitly]
+    [SchemeFilter("dc90aca7-ce80-4867-bc05-229ae6fc6963",
+        "Monochrome Filter", "Evito", 1,
+        "Detect sepia and black and white artwork and color them appropriately instead of cyan.")]
     public class MonochromeFilter : SchemeFilter<MonochromeFilterSettings> {
         private const uint sepiaArgbFallback = 0xFFFF7A00;
         private static readonly HashSet<Guid> bwGames = new HashSet<Guid>();
         private static readonly HashSet<Guid> sepiaGames = new HashSet<Guid>();
         private static readonly HashSet<Guid> otherGames = new HashSet<Guid>();
         private static MonochromeFilterSettings sharedSettings;
-
-        public override Guid Id { get; } = Guid.Parse("dc90aca7-ce80-4867-bc05-229ae6fc6963");
-        public override string Name => "Monochrome Filter";
-        public override string Author => "Evito";
-        public override int Version => 1;
-        public override string Description => "Detect sepia and black and white artwork and color them appropriately instead of cyan.";
 
         public override uint ApplySeedFilter(
             uint currentSeed, ColorExtractionResults colorExtractionResults,
