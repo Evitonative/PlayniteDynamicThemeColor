@@ -14,7 +14,7 @@ namespace DynamicThemeColor.Core {
     public class SchemeEngine {
         private const string bundledSchemesFolderName = "assets/schemes";
         private const string themeSchemeFileName = "dtc-scheme.json";
-        private const string schemesFolderName = "schemes";
+        public const string SchemesFolderName = "schemes";
 
         private static readonly Guid defaultSchemeId = Guid.Parse("acf38ef2-09da-4e3e-a24a-8cd8719fb2bc");
         private static readonly ILogger logger = LogManager.GetLogger();
@@ -90,7 +90,7 @@ namespace DynamicThemeColor.Core {
 
             // In Extension Setting
             string extensionSettingsPath = Path.Combine(playniteExtensionsDataPath, addonId.ToString());
-            string settingsSchemesPath = Path.Combine(extensionSettingsPath, schemesFolderName);
+            string settingsSchemesPath = Path.Combine(extensionSettingsPath, SchemesFolderName);
 
             if (!Directory.Exists(settingsSchemesPath)) {
                 logger.Debug($"Creating schemes folder at {settingsSchemesPath}");

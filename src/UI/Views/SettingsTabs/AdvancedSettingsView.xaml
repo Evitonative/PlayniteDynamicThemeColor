@@ -147,30 +147,38 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" Grid.Column="0"
+
+                    <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                            Content="{DynamicResource LOCDTCAdvancedAdvancedOpenSchemesFolderButton}"
+                            Command="{Binding OpenSchemesFolderCommand}"
+                            Margin="{StaticResource Layout.Spacing.Item}"
+                            VerticalAlignment="Center" />
+
+                    <Button Grid.Row="1" Grid.Column="0"
                             Content="{DynamicResource LOCDTCAdvancedSchemeEngineSchemeSelectButton}"
                             ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineSchemeSelectButtonHint}"
                             Command="{Binding SchemeSelectCommand}"
                             Margin="{StaticResource Layout.Spacing.Item}"
                             VerticalAlignment="Center" />
 
-                    <Button Grid.Row="0" Grid.Column="1"
+                    <Button Grid.Row="1" Grid.Column="1"
                             Content="{DynamicResource LOCDTCAdvancedSchemeEngineThemeSchemeClearButton}"
                             ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint}"
                             Command="{Binding ClearSchemeThemeCombinationsCommand}"
                             Margin="{StaticResource Layout.Spacing.ItemBetween}"
                             VerticalAlignment="Center" />
 
-                    <Button Grid.Row="1" Grid.Column="0"
+                    <Button Grid.Row="2" Grid.Column="0"
                             Content="{DynamicResource LOCDTCAdvancedSchemeEngineReprepareButton}"
                             ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineReprepareButtonHint}"
                             Command="{Binding ReprepareSchemesCommand}"
                             Margin="{StaticResource Layout.Spacing.Item}"
                             VerticalAlignment="Center" />
 
-                    <Button Grid.Row="1" Grid.Column="1"
+                    <Button Grid.Row="2" Grid.Column="1"
                             Content="{DynamicResource LOCDTCAdvancedSchemeEngineRefreshBrushesButton}"
                             ToolTip="{DynamicResource LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint}"
                             Command="{Binding RefreshBrushesCommand}"

@@ -74,6 +74,7 @@
     <sys:String x:Key="LOCDTCAdvancedCacheRemoveSingleGameHint">Remove Game From Cache.</sys:String>
 
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineTitle">Scheme Engine</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedAdvancedOpenSchemesFolderButton">Open Schemes Folder</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineSchemeSelectButton">Reselect Current Scheme</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineSchemeSelectButtonHint">Reselect the currently applied scheme.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButton">Clear All Connections Between Themes And Schemes</sys:String>

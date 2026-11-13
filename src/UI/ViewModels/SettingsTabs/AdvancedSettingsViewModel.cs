@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Input;
 using DynamicThemeColor.Core;
 using DynamicThemeColor.Model;
@@ -14,6 +16,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
         public bool GamesAreCached => CachedGamesCount > 0;
 
         public ICommand ResetSettingsCommand { get; }
+        public ICommand OpenSchemesFolderCommand { get; }
         public ICommand ClearCacheCommand { get; }
         public RelayCommand<CachedGameItemViewModel> RemoveCachedGameCommand { get; }
         public ICommand SchemeSelectCommand { get; }
@@ -40,6 +43,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             this.filtersSettings = filtersSettings;
 
             ResetSettingsCommand = new RelayCommand(ExecuteResetSettings);
+            OpenSchemesFolderCommand = new RelayCommand(ExecuteOpenSchemesFolder);
             ClearCacheCommand = new RelayCommand(ExecuteClearCache);
             RemoveCachedGameCommand = new RelayCommand<CachedGameItemViewModel>(ExecuteRemoveCachedItem);
             SchemeSelectCommand = new RelayCommand(ExecuteSchemeSelectCommand);
@@ -103,6 +107,12 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             settingsMain.Schemes.OnPropertyChanged(string.Empty);
             settingsMain.Filters.OnPropertyChanged(string.Empty);
             settingsMain.Advanced.OnPropertyChanged(string.Empty);
+        }
+
+        private void ExecuteOpenSchemesFolder() {
+            string extensionSettingsPath = Path.Combine(addon.PlayniteApi.Paths.ExtensionsDataPath, addon.Id.ToString());
+            string settingsSchemesPath = Path.Combine(extensionSettingsPath, SchemeEngine.SchemesFolderName);
+            Process.Start(new ProcessStartInfo(settingsSchemesPath) { UseShellExecute = true });
         }
 
         private void ExecuteClearCache() {
