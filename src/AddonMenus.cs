@@ -88,6 +88,7 @@ namespace DynamicThemeColor {
 
                     AddonSettings.SeedFilters.Add(filterConfig);
                     SettingsView.EndEditRefresh();
+                    SavePluginSettings(AddonSettings);
                 },
                 MenuSection = menuRoot,
             };
@@ -157,6 +158,7 @@ namespace DynamicThemeColor {
                 }
 
                 SettingsView.EndEditRefresh();
+                SavePluginSettings(AddonSettings);
                 return null;
             }
 
@@ -171,6 +173,7 @@ namespace DynamicThemeColor {
 
             AddonSettings.GameFilters.Add(filterConfig);
             SettingsView.EndEditRefresh();
+            SavePluginSettings(AddonSettings);
             return true;
         }
     }
