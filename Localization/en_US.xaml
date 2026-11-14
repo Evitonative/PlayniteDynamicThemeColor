@@ -10,7 +10,7 @@
     <!-- General Tab -->
     <!-- View Targets -->
     <sys:String x:Key="LOCDTCViewTargetsTitle">Active Views</sys:String>
-    <sys:String x:Key="LOCDTCViewTargetHint">Which views dynamic theming should be applied.</sys:String>
+    <sys:String x:Key="LOCDTCViewTargetHint">Views dynamic theming should be applied.</sys:String>
     <sys:String x:Key="LOCDTCViewTargetDetails">Details View</sys:String>
     <sys:String x:Key="LOCDTCViewTargetGrid">Grid View</sys:String>
     <sys:String x:Key="LOCDTCViewTargetList">List View</sys:String>
@@ -18,7 +18,7 @@
 
     <!-- Asset Priority Order -->
     <sys:String x:Key="LOCDTCAssetPriorityOrderTitle">Asset Priority</sys:String>
-    <sys:String x:Key="LOCDTCAssetPriorityOrderHint">The order in which game assets should be attempted to be loaded.&#x0a;&#x0a;Lower values will have lower priority.</sys:String>
+    <sys:String x:Key="LOCDTCAssetPriorityOrderHint" xml:space="preserve">The order in which game assets should be attempted to be loaded.&#x0a;Lower values will have lower priority.</sys:String>
     <sys:String x:Key="LOCDTCAssetPriorityMoveUpHint">Move Up</sys:String>
     <sys:String x:Key="LOCDTCAssetPriorityMoveDownHint">Move Down</sys:String>
 
@@ -27,13 +27,13 @@
     <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyle">Palette Style</sys:String>
     <sys:String x:Key="LOCDTCExtractionFallbackPaletteStyleHint">Which style should be used when generating the color palette.</sys:String>
     <sys:String x:Key="LOCDTCExtractionColorSelectionRange">Color Selection Range</sys:String>
-    <sys:String x:Key="LOCDTCExtractionColorSelectionRangeHint">How many top-score colors from the image are considered for generating the reference color. Fewer colors deliver more accurate results, more colors results in more variety.</sys:String>
+    <sys:String x:Key="LOCDTCExtractionColorSelectionRangeHint" xml:space="preserve">How many colors should be considered for generating the reference color.&#x0a;Fewer colors deliver more accurate results, more colors result in more variety.</sys:String>
     <sys:String x:Key="LOCDTCExtractionFallbackSeedColor">Fallback Color</sys:String>
     <sys:String x:Key="LOCDTCExtractionFallbackSeedColorHint">This color will be used when no color can be extracted for an image.</sys:String>
 
     <!-- LOCDTCUseFallbackOnMissing -->
     <sys:String x:Key="LOCDTCUseFallbackOnMissing">Use fallback when asset is missing</sys:String>
-    <sys:String x:Key="LOCDTCUseFallbackOnMissingHint">If enabled the fallback color will be used if a game as no assets available.&#x0a;If disabled themes default colors will be restored.</sys:String>
+    <sys:String x:Key="LOCDTCUseFallbackOnMissingHint" xml:space="preserve">If enabled the fallback color will be used if a game has no assets available.&#x0a;If disabled theme's default colors will be restored.</sys:String>
 
     <!-- Schemes Tab -->
     <sys:String x:Key="LOCDTCActiveSchemes">Active Schemes</sys:String>
@@ -45,29 +45,25 @@
 
     <!-- Filters Tab -->
     <sys:String x:Key="LOCDTCFiltersGameFilters">Game Filter</sys:String>
-    <sys:String x:Key="LOCDTCFiltersGameFiltersHint">Game filters can be used to exclude a game from having its palette applied.</sys:String>
+    <sys:String x:Key="LOCDTCFiltersGameFiltersHint" xml:space="preserve">Game filters are applied before generating color for a game.&#x0a;It can be used to skip a game, applying the default palette.</sys:String>
     <sys:String x:Key="LOCDTCFiltersSeedFilters">Seed Filters</sys:String>
-    <sys:String x:Key="LOCDTCFiltersSeedFiltersHint">Seed filters are applied after the dominant color has been extracted from the artwork.</sys:String>
+    <sys:String x:Key="LOCDTCFiltersSeedFiltersHint" xml:space="preserve">Seed filters are applied after the dominant color has been extracted from the artwork.&#x0a;The seed color is the basis from which the color palette will be generated.</sys:String>
     <sys:String x:Key="LOCDTCFiltersPaletteFilters">Palette Filters</sys:String>
     <sys:String x:Key="LOCDTCFiltersPaletteFiltersHint">Palette filters are applied after a color palette has been generated from the seed color.</sys:String>
     <sys:String x:Key="LOCDTCFiltersBrushFilters">Brush Filters</sys:String>
-    <sys:String x:Key="LOCDTCFiltersBrushFiltersHint">Brush filters are applied just before color is applied to components, it's the last change to change a color.</sys:String>
+    <sys:String x:Key="LOCDTCFiltersBrushFiltersHint" xml:space="preserve">Brush filters are applied just before color is applied to components.&#x0a;It's the last chance to change a color.</sys:String>
     <sys:String x:Key="LOCDTCFiltersFilterDisabledHintPrefix">Disabled</sys:String>
     <sys:String x:Key="LOCDTCFiltersEnableDisableFilterButtonHint">Enable/Disable selected filter</sys:String>
 
     <!-- Advanced Tab -->
-    <sys:String x:Key="LOCDTCAdvancedWarning">Warning: These are advanced settings meant mostly for debugging purposes.
-        Read the hover tooltips before pressing anything.
-        They may cause unexpected behaviour, even if you read the tooltip.
-        If you have unsaved changes save them first.
-        If this breaks something restart Playnite.
-        Proceed at your own risk.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedWarning" xml:space="preserve">Warning: These are advanced settings meant mostly for debugging purposes.&#x0a;&#x0a;Read the hover tooltips before pressing anything.&#x0a;They may cause unexpected behavior, even if you read the tooltip.&#x0a;If you have unsaved changes, save them first.&#x0a;If this breaks something restart Playnite.&#x0a;&#x0a;Proceed at your own risk.</sys:String>
+
     <sys:String x:Key="LOCDTCAdvancedGeneralTitle">General</sys:String>
     <sys:String x:Key="LOCDTCAdvancedGeneralResetSettingsButton">Reset All Settings</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedGeneralResetSettingsButtonHint">Options in the Settings UI will not update. Playnite should be restarted after.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedGeneralResetSettingsButtonHint">Restart Playnite after!</sys:String>
 
     <sys:String x:Key="LOCDTCAdvancedCacheTitle">Cache</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedCacheDisable">Disabled Cache</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedCacheDisable">Disable Cache</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheCount">Cached Games:</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheClear">Clear Cache</sys:String>
     <sys:String x:Key="LOCDTCAdvancedCacheGames">Cached Games</sys:String>
@@ -78,57 +74,58 @@
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineSchemeSelectButton">Reselect Current Scheme</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineSchemeSelectButtonHint">Reselect the currently applied scheme.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButton">Clear All Connections Between Themes And Schemes</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint">This takes effect once you hit save. You may immediately be prompted to pick a new scheme.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineThemeSchemeClearButtonHint" xml:space="preserve">This takes effect once you hit save.&#x0a;&#x0a;You may immediately be prompted to pick a new scheme.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButton">Reload All Schemes</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButtonHint">You probably also want to reload the brushes if you use this.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineReprepareButtonHint">You probably want to reload the brushes if you use this.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButton">Refresh All Brushes</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint">Usually this is also done on save.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedSchemeEngineRefreshBrushesButtonHint">This is also done on save.</sys:String>
 
     <sys:String x:Key="LOCDTCAdvancedFilterRegistryTitle">Filter Registry</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedFilterRegistryReloadFiltersButton">Reload Filters</sys:String>
-    <sys:String x:Key="LOCDTCAdvancedFilterRegistryReloadFiltersButtonHint">Reloads filter classes.</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedFilterRegistryReloadFiltersButton">Reload Filter List</sys:String>
+    <sys:String x:Key="LOCDTCAdvancedFilterRegistryReloadFiltersButtonHint">Reloads list of existing filters.</sys:String>
     <sys:String x:Key="LOCDTCAdvancedFilterRegistryRefreshFilterInstancesButton">Refresh Filter Instances</sys:String>
     <sys:String x:Key="LOCDTCAdvancedFilterRegistryRefreshFilterInstancesButtonHint">Recreates all instances of filters from settings.</sys:String>
 
     <!-- Scheme Select Dialog -->
-    <sys:String x:Key="LOCDTCSchemeSelectWindowTitel">Select Scheme</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectWindowTitle">Select Scheme</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectDescription">You have multiple schemes that support your current theme "{0}". Please select one.</sys:String>
     <sys:String x:Key="LOCDTCSchemeSelectColumnSchemeName">Scheme Name</sys:String>
-    <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Remember my choice</sys:String>
-    <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">You can delete your choices at any time in the advanced settings.</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectRememberChoice">Remember choice</sys:String>
+    <sys:String x:Key="LOCDTCSchemeSelectRememberChoiceHint">Delete your choices at any time in the advanced settings.</sys:String>
 
     <!-- Filter Select Dialog -->
     <sys:String x:Key="LOCDTCFilterSelectNoFiltersForStage">No filters available for {0}.</sys:String>
-    <sys:String x:Key="LOCDTCFilterSelectWindowTitel">Select Filter</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectWindowTitle">Select Filter</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectDescription">Select the filter for the filter stage {0}.</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectEditNow">Edit Filter after adding it</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectFailed">Filter could not be added.</sys:String>
 
     <!-- Filter Settings Dialog -->
-    <sys:String x:Key="LOCDTCFilterSettingsWindowTitel">Filter Settings | {0}</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsWindowTitle">Filter Settings | {0}</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsDescription">These settings only apply for this instance of the filter.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterEnabled">Filter Enabled</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettings">Filter Options</sys:String>
-    <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettingsHint">These settings are provided by the filter. Text may not be localised.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettingsHint">These settings are provided by the filter. Text may not be localized.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterNone">This filter does not offer any options for this stage.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterSettingResetHint">Reset Option</sys:String>
 
     <!-- Context Menu -->
-    <sys:String x:Key="LOCDTCContextMain">Dynamic Theme Color</sys:String>
     <sys:String x:Key="LOCDTCContextCopyGameId">Copy Game ID</sys:String>
     <sys:String x:Key="LOCDTCContextBlacklistGame">Blacklist Game</sys:String>
     <sys:String x:Key="LOCDTCContextWhitelistGame">Whitelist Game</sys:String>
-    <sys:String x:Key="LOCDTCContextBlacklistGameAdded">Game successfully blacklisted. You can remove game from the blacklist in the filters tab of the Dynamic Theme Color plugin settings. (Shift-click to not show this message)</sys:String>
-    <sys:String x:Key="LOCDTCContextWhitelistGameAdded">Game successfully whitelisted. You can remove game from the whitelist in the filters tab of the Dynamic Theme Color plugin settings. (Shift-click to not show this message)</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGameAdded" xml:space="preserve">Game successfully blacklisted. You can remove the game from the blacklist in the filters tab of the Dynamic Theme Color plugin settings.&#x0a;&#x0a;(Shift-click to not show this message)</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGameAdded" xml:space="preserve">Game successfully whitelisted. You can remove the game from the whitelist in the filters tab of the Dynamic Theme Color plugin settings.&#x0a;&#x0a;(Shift-click to not show this message)</sys:String>
     <sys:String x:Key="LOCDTCContextBlacklistGameFailed">Failed to blacklist game.</sys:String>
     <sys:String x:Key="LOCDTCContextWhitelistGameFailed">Failed to whitelist game.</sys:String>
-    <sys:String x:Key="LOCDTCContextBlacklistGameDuplicate">The game is already blacklisted. Do you want to unblacklist it instead? If the game is not currently blacklisted for you, click yes and try blacklisting it again.</sys:String>
-    <sys:String x:Key="LOCDTCContextWhitelistGameDuplicate">The game is already whitelisted. Do you want to unwhitelist it instead? If the game is not currently whitelisted for you, click yes and try whitelisting it again.</sys:String>
+    <sys:String x:Key="LOCDTCContextBlacklistGameDuplicate" xml:space="preserve">The game is already blacklisted. Do you want to unblacklist it instead?&#x0a;&#x0a;If the game is not currently blacklisted for you, click yes and try blacklisting it again.</sys:String>
+    <sys:String x:Key="LOCDTCContextWhitelistGameDuplicate" xml:space="preserve">The game is already whitelisted. Do you want to unwhitelist it instead?&#x0a;&#x0a;If the game is not currently whitelisted for you, click yes and try whitelisting it again.</sys:String>
     <sys:String x:Key="LOCDTCContextOverrideGameSeed">Override Game Color</sys:String>
-    <sys:String x:Key="LOCDTCContextOverrideGameSeedPreviousFound">The game already has it's color overriden. Do you want to override the existing entry?</sys:String>
+    <sys:String x:Key="LOCDTCContextOverrideGameSeedPreviousFound" xml:space="preserve">The game already has its color overridden.&#x0a;&#x0a;Do you want to override the existing entry?</sys:String>
 
     <!-- Generics -->
+    <sys:String x:Key="LOCDTCGenericDTC">Dynamic Theme Color</sys:String>
+
     <sys:String x:Key="LOCDTCGenericCancel">Cancel</sys:String>
     <sys:String x:Key="LOCDTCGenericSelect">Select</sys:String>
     <sys:String x:Key="LOCDTCGenericSave">Save</sys:String>

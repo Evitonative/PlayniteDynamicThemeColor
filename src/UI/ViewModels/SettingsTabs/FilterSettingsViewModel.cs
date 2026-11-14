@@ -191,7 +191,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             if (!compatibleFilters.Any()) {
                 addon.PlayniteApi.Dialogs.ShowMessage(
                     string.Format(ResourceProvider.GetString("LOCDTCFilterSelectNoFiltersForStage"), Enum.GetName(typeof(FilterStage), stage)),
-                    ResourceProvider.GetString("LOCDTCFilterSelectWindowTitel"));
+                    ResourceProvider.GetString("LOCDTCFilterSelectWindowTitle"));
                 return;
             }
 
@@ -201,7 +201,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
                 ShowCloseButton = true,
             });
 
-            window.Title = ResourceProvider.GetString("LOCDTCFilterSelectWindowTitel");
+            window.Title = ResourceProvider.GetString("LOCDTCFilterSelectWindowTitle");
             window.Width = 550;
             window.SizeToContent = SizeToContent.Height;
             window.MinHeight = 200;
@@ -228,7 +228,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
                 !FilterRegistry.TryGetFilterInstance(filterConfig.InstanceId, out SchemeFilter instance)) {
                 addon.PlayniteApi.Dialogs.ShowMessage(
                     ResourceProvider.GetString("LOCDTCFilterSelectFailed"),
-                    ResourceProvider.GetString("LOCDTCFilterSelectWindowTitel"),
+                    ResourceProvider.GetString("LOCDTCFilterSelectWindowTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -239,7 +239,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             if (attr == null) {
                 addon.PlayniteApi.Dialogs.ShowMessage(
                     ResourceProvider.GetString("LOCDTCFilterSelectFailed"),
-                    ResourceProvider.GetString("LOCDTCFilterSelectWindowTitel"),
+                    ResourceProvider.GetString("LOCDTCFilterSelectWindowTitle"),
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -331,7 +331,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             });
 
             window.Title = string.Format(
-                ResourceProvider.GetString("LOCDTCFilterSettingsWindowTitel"),
+                ResourceProvider.GetString("LOCDTCFilterSettingsWindowTitle"),
                 DisplayName);
             window.Width = 550;
             window.MinWidth = 400;

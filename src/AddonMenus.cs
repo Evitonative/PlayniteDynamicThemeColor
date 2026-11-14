@@ -15,7 +15,7 @@ using Playnite.SDK.Plugins;
 namespace DynamicThemeColor {
     public partial class Addon {
         public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs menuItemsArgs) {
-            string menuRoot = ResourceProvider.GetString("LOCDTCContextMain");
+            string menuRoot = ResourceProvider.GetString("LOCDTCGenericDTC");
 
             Guid? blacklistFilterId = typeof(BlacklistFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;
             Guid? whitelistFilterId = typeof(WhitelistFilter).GetCustomAttribute<SchemeFilterAttribute>()?.FilterId;

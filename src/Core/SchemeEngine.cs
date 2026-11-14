@@ -272,7 +272,7 @@ namespace DynamicThemeColor.Core {
                 ShowCloseButton = true,
             });
 
-            window.Title = ResourceProvider.GetString("LOCDTCSchemeSelectWindowTitel");
+            window.Title = ResourceProvider.GetString("LOCDTCSchemeSelectWindowTitle");
             window.Width = 550;
             window.SizeToContent = SizeToContent.Height;
             window.MinHeight = 200;
