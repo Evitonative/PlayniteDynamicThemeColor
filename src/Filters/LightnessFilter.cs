@@ -82,24 +82,24 @@ namespace DynamicThemeColor.Filters {
 
     public class LightnessFilterSettings {
         [DoubleSliderSetting(
-            Label = "Lightness",
+            Label = "Lightness", Stages = new []{ FilterStage.Seed, FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Boost (or reduce) the lightness of the accent color\n\nThis potentially results in poor contrast. Use with care.",
             Min = -1.0, Max = 1.0, Step = 0.01)]
         public double Lightness { get; [UsedImplicitly] set; } = 0.0;
 
         [EnumDropdownSetting(
-            Label = "Applicable Palette",
+            Label = "Applicable Palette", Stages = new []{ FilterStage.Palette },
             Tooltip = "Which palettes accent should be modified.")]
         public ColorScheme.MaterialPalette Palette { get; [UsedImplicitly] set; } = ColorScheme.MaterialPalette.Primary;
 
         [IntSliderSetting(
-            Label = "Minimum Tone",
+            Label = "Minimum Tone", Stages = new []{ FilterStage.Palette },
             Tooltip = "Minium Tone (generally darker color) that should be effected by the filter.",
             Min = 0, Max = 100, Step = 1)]
         public int PaletteToneMin { get; [UsedImplicitly] set; } = 70;
 
         [IntSliderSetting(
-            Label = "Maximum Tone",
+            Label = "Maximum Tone", Stages = new []{ FilterStage.Palette },
             Tooltip = "Maximum Tone (generally darker color) that should be effected by the filter.",
             Min = 0, Max = 100, Step = 1)]
         public int PaletteToneMax { get; [UsedImplicitly] set; } = 100;

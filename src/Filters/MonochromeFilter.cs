@@ -176,52 +176,52 @@ namespace DynamicThemeColor.Filters {
 
     public class MonochromeFilterSettings {
         [BoolToggleSetting(
-            Label = "Use Settings from seed stage",
+            Label = "Use Settings from seed stage", Stages = new []{ FilterStage.Seed, FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Reuse the settings from the seed stage for all stages.\n" +
                       "If the filter is not applied in the seed stage the settings for the current stage will be used instead.\n" +
                       "This option must also be enabled on the seed stage itself.")]
         public bool SeedStageSettings { get; [UsedImplicitly] set; } = true;
 
         [BoolToggleSetting(
-            Label ="Invert the B&W Theme.",
+            Label ="Invert the B&W Theme.", Stages = new []{ FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Inverts the colors used for the palette.")]
         public bool Invert { get; [UsedImplicitly] set; } = false;
 
         [BoolToggleSetting(
-            Label = "Disable Sepia Detection",
+            Label = "Disable Sepia Detection", Stages = new[] { FilterStage.Seed, FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Don't act on sepia art.")]
         public bool DisableSepia { get; [UsedImplicitly] set; } = false;
 
         [ColorSetting(
-            Label = "Sepia Hex Color",
+            Label = "Sepia Hex Color", Stages = new[] { FilterStage.Seed },
             Tooltip = "Seed color used when a sepia image is detect.")]
         public string SepiaHex { get; [UsedImplicitly] set; } = "#FF7A00";
 
         [BoolToggleSetting(
-            Label = "Disable B&W Detection",
+            Label = "Disable B&W Detection", Stages = new[] { FilterStage.Seed, FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Don't act on black and white art.")]
         public bool DisableBw { get; [UsedImplicitly] set; } = false;
 
         [DoubleSliderSetting(
-            Label = "Chroma Chroma Threshold",
+            Label = "Chroma Chroma Threshold", Stages = new[] { FilterStage.Seed, FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Upper limit for the arts average chrome to be consider sepia.",
             Min = 0.0, Max = 50.0, Step = 0.5)]
         public double SepiaChromaThreshold { get; [UsedImplicitly] set; } = 15.0;
 
         [DoubleSliderSetting(
-            Label = "Sepia Hue Minimum Threshold",
+            Label = "Sepia Hue Minimum Threshold", Stages = new[] { FilterStage.Seed, FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Lower limit for the arts average hue to be consider sepia.",
             Min = 0.0, Max = 100.0, Step = 1.0)]
         public double SepiaHueMinThreshold { get; [UsedImplicitly] set; } = 25.0;
 
         [DoubleSliderSetting(
-            Label = "Sepia Hue Maximum Threshold",
+            Label = "Sepia Hue Maximum Threshold", Stages = new[] { FilterStage.Seed, FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Upper limit for the arts average hue to be consider sepia.",
             Min = 0.0, Max = 100.0, Step = 1.0)]
         public double SepiaHueMaxThreshold { get; [UsedImplicitly] set; } = 65.0;
 
         [DoubleSliderSetting(
-            Label = "B&W Chroma Threshold",
+            Label = "B&W Chroma Threshold", Stages = new[] { FilterStage.Seed, FilterStage.Palette, FilterStage.Brush },
             Tooltip = "Upper limit for the arts average chrome to be consider black and white.",
             Min = 0.0, Max = 50.0, Step = 0.5)]
         public double BwChromaThreshold { get; [UsedImplicitly] set; } = 12.0;

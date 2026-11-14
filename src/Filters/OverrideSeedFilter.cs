@@ -27,7 +27,7 @@ namespace DynamicThemeColor.Filters {
 
     public class OverrideSeedColorSettings : ContextMenuAddedFilterSettings {
         [ColorSetting(
-            Label = "Hex Color",
+            Label = "Hex Color", Stages =  new []{ FilterStage.Seed },
             Tooltip = "Seed color used for the game.")]
         public string Hex { get; [UsedImplicitly] set; } = "#80FF80";
 

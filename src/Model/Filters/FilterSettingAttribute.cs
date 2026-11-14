@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 
 namespace DynamicThemeColor.Model.Filters {
     public abstract class FilterSettingAttribute : Attribute {
         public string Label { get; set; }
         public string Tooltip { get; set; }
+        public FilterStage[] Stages { get; set; } = Enum.GetValues(typeof(FilterStage)).Cast<FilterStage>().ToArray();
     }
 
     public class IntSliderSetting : FilterSettingAttribute {

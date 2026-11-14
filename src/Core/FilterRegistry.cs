@@ -37,25 +37,27 @@ namespace DynamicThemeColor.Core {
         /// Load a filter instance into memory.
         /// </summary>
         /// <param name="config">Configuration of describing an existing instance of a filter.</param>
+        /// <param name="stage">The stage the filter is used in.</param>
         /// <returns>
         /// false: this instance was already loaded
         /// true: instance successfully loaded
         /// </returns>
         /// <exception cref="KeyNotFoundException">When the filter does not exist.</exception>
         /// <exception cref="InvalidOperationException">The provided filter type does not extend SchemeFilter</exception>
-        public static bool TryCreateFilterInstance(FilterConfiguration config) {
+        public static bool TryCreateFilterInstance(FilterConfiguration config, FilterStage stage) {
             if (!filters.TryGetValue(config.FilterId, out FilterDescriptorNew descriptor)) throw new KeyNotFoundException();
             if (filterInstances.ContainsKey(config.InstanceId)) return false;
             if (!(Activator.CreateInstance(descriptor.FilterType) is SchemeFilter instance)) throw new InvalidOperationException();
 
             instance.FilterConfiguration = config;
+            instance.AppliedStage = stage;
 
             filterInstances.Add(config.InstanceId, instance);
             return true;
         }
 
         [CanBeNull]
-        public static FilterConfiguration CreateNewFilterInstance(Guid filterId) {
+        public static FilterConfiguration CreateNewFilterInstance(Guid filterId, FilterStage stage) {
             Guid instanceId = Guid.NewGuid();
             FilterConfiguration config = new FilterConfiguration {
                 InstanceId = instanceId,
@@ -65,7 +67,7 @@ namespace DynamicThemeColor.Core {
             };
 
             try {
-                if (!TryCreateFilterInstance(config)) return null;
+                if (!TryCreateFilterInstance(config, stage)) return null;
             } catch (KeyNotFoundException) {
                 return null;
             } catch (InvalidOperationException) {

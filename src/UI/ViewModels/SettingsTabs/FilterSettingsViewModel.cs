@@ -11,6 +11,7 @@ using DynamicThemeColor.Model;
 using DynamicThemeColor.Model.Filters;
 using DynamicThemeColor.UI.Views;
 using Playnite.SDK;
+using Playnite.SDK.Data;
 
 namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
     public class FilterSettingsViewModel : ObservableObject, ISettings {
@@ -111,15 +112,15 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
 
         public void WarmupFilterInstances() {
             FilterRegistry.ClearFilterInstances();
-            foreach (FilterConfiguration config in Settings.GameFilters) WarmupFilter(config);
-            foreach (FilterConfiguration config in Settings.SeedFilters) WarmupFilter(config);
-            foreach (FilterConfiguration config in Settings.PaletteFilters) WarmupFilter(config);
-            foreach (FilterConfiguration config in Settings.BrushFilters) WarmupFilter(config);
+            foreach (FilterConfiguration config in Settings.GameFilters) WarmupFilter(config, FilterStage.Game);
+            foreach (FilterConfiguration config in Settings.SeedFilters) WarmupFilter(config, FilterStage.Seed);
+            foreach (FilterConfiguration config in Settings.PaletteFilters) WarmupFilter(config, FilterStage.Palette);
+            foreach (FilterConfiguration config in Settings.BrushFilters) WarmupFilter(config, FilterStage.Brush);
             return;
 
-            void WarmupFilter(FilterConfiguration config) {
+            void WarmupFilter(FilterConfiguration config, FilterStage stage) {
                 try {
-                    FilterRegistry.TryCreateFilterInstance(config);
+                    FilterRegistry.TryCreateFilterInstance(config, stage);
                 } catch (KeyNotFoundException) {
                     logger.Warn($"Could not create filter instance {config.InstanceId}. Filter is using a not loaded filter {config.FilterId}");
                 }
@@ -221,7 +222,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             Guid? filterId = viewModel.SelectedItem?.FilterId;
             if (!filterId.HasValue) return;
 
-            FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId.Value);
+            FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId.Value, stage);
 
             if (filterConfig == null ||
                 !FilterRegistry.TryGetFilterInstance(filterConfig.InstanceId, out SchemeFilter instance)) {
@@ -343,7 +344,7 @@ namespace DynamicThemeColor.UI.ViewModels.SettingsTabs {
             );
             window.Loaded += (sender, args) => window.MaxHeight = double.PositiveInfinity;
 
-            FilterInstanceSettingsViewModel viewModel = new FilterInstanceSettingsViewModel(filterSettingsClone, FilterConfiguration);
+            FilterInstanceSettingsViewModel viewModel = new FilterInstanceSettingsViewModel(filterSettingsClone, FilterConfiguration, Instance.AppliedStage);
             FilterInstanceSettingsView selectorView = new FilterInstanceSettingsView { DataContext = viewModel };
             window.Content = selectorView;
 

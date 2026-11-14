@@ -20,6 +20,9 @@ namespace DynamicThemeColor.Model.Filters {
         [JsonIgnore]
         public virtual FilterConfiguration FilterConfiguration { get; internal set; }
 
+        [JsonIgnore]
+        public FilterStage AppliedStage { get; internal set; }
+
         /// <summary>
         /// Prefilter Games before anything is done for a game.
         /// </summary>

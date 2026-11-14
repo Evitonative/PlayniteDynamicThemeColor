@@ -77,7 +77,7 @@ namespace DynamicThemeColor {
 
                     if(!ColorPicker.ExecutePickColor(out string newColor)) return;
 
-                    FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId);
+                    FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId, FilterStage.Seed);
                     if (filterConfig == null) return;
                     if (!FilterRegistry.TryGetFilterInstance(filterConfig.InstanceId, out SchemeFilter filterInstance)) return;
                     if (!(filterInstance.FilterConfiguration?.Settings is OverrideSeedColorSettings settings)) return;
@@ -161,7 +161,7 @@ namespace DynamicThemeColor {
             }
 
 
-            FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId);
+            FilterConfiguration filterConfig = FilterRegistry.CreateNewFilterInstance(filterId, FilterStage.Game);
             if (filterConfig == null) return false;
             if (!FilterRegistry.TryGetFilterInstance(filterConfig.InstanceId, out SchemeFilter filterInstance)) return false;
             if (!(filterInstance.FilterConfiguration?.Settings is ContextMenuAddedFilterSettings settings)) return false;

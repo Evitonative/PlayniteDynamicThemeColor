@@ -103,15 +103,15 @@
     <sys:String x:Key="LOCDTCFilterSelectDescription">Select the filter for the filter stage {0}.</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectColumnName">Filter Name</sys:String>
     <sys:String x:Key="LOCDTCFilterSelectEditNow">Edit Filter after adding it</sys:String>
-    <sys:String x:Key="LOCDTCFilterSelectFailed">Filter could not be addded.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSelectFailed">Filter could not be added.</sys:String>
 
     <!-- Filter Settings Dialog -->
     <sys:String x:Key="LOCDTCFilterSettingsWindowTitel">Filter Settings | {0}</sys:String>
-    <sys:String x:Key="LOCDTCFilterSettingsDescription">These settings only apply for this instance of the filter. Some options may only apply to specific stages.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsDescription">These settings only apply for this instance of the filter.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterEnabled">Filter Enabled</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettings">Filter Options</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterProvidedSettingsHint">These settings are provided by the filter. Text may not be localised.</sys:String>
-    <sys:String x:Key="LOCDTCFilterSettingsFilterNone">This filter does not offer any options.</sys:String>
+    <sys:String x:Key="LOCDTCFilterSettingsFilterNone">This filter does not offer any options for this stage.</sys:String>
     <sys:String x:Key="LOCDTCFilterSettingsFilterSettingResetHint">Reset Option</sys:String>
 
     <!-- Context Menu -->
